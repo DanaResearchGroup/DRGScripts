@@ -1,0 +1,16 @@
+executable = job.sh
+
++JobName   = "xa1001"   <---- Change the job name each time
+
+log        = log.txt
+output     = out.txt
+error      = err.txt
+
+should_transfer_files = No
+request_cpus = 1
+RequestMemory = 2500MB
+
+universe = vanilla
+
+queue
+
