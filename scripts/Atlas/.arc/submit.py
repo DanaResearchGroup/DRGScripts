@@ -70,6 +70,39 @@ source /Local/ce_dana/g09/bsd/g09.login
 
 """,
 
+        # Molpro
+        'molpro': """Universe      = vanilla
+
++JobName      = "{name}"
+
+log           = job.log
+output        = out.txt
+error         = err.txt
+
+getenv        = True
++PATH         = "/Local/ce_dana/molpro-mpp-2021.2.1/bin:$PATH"
+
+should_transfer_files = no
+
+executable = job.sh
+
+request_cpus  = {cpus}
+request_memory = {memory}MB
+
+queue
+
+""",
+        # will be renamed to ``job.sh`` when uploaded
+        'molpro_job': """#!/bin/csh
+
+touch initial_time
+
+/Local/ce_dana/molpro-mpp-2021.2.1/bin/molpro -n {cpus} -t 1 input.in
+
+touch final_time
+
+""",
+
         # Orca
         'orca': """Universe      = vanilla
 
