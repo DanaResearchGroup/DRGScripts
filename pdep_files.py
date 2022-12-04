@@ -1,8 +1,6 @@
 import os
 import re
 
-directory='/home/nelly/Desktop/xmr2001_try_script/pdep/'
-
 # iterate over files in that directory. Return list of paths and list of files names
 def getListPathsNames (directory):
     for filename in os.listdir(directory):
@@ -58,7 +56,16 @@ def max_isomers_above_treshold(treshold,pdep_isomers_max_dict):
             del pdep_isomers_max_dict[pdep]
     return pdep_isomers_max_dict
 
+#returns a list of paths to pdep files which are max and above the user's treshold
+def create_paths_to_pdep(pdep_isomers_max_dict,directory):
+    lists_paths=[]
+    for pdep in pdep_isomers_max_dict.keys():
+        file_path = os.path.join(directory, "network"+str(pdep)+"_"+str(pdep_isomers_max_dict[pdep])+".py")
+        lists_paths.append(file_path)
+    return lists_paths
+
 if __name__ == "__main__":
+    directory = '/home/nelly/Desktop/xmr2001_try_script/pdep/'
 
     #The user can edit the treshold number of isomers number. Above that, an input file for ARC will be created
     treshold_num_isomers=25
@@ -69,4 +76,5 @@ if __name__ == "__main__":
     dict_pdepnum_isomernum = get_Pdep_and_Isomers_nums(list_files_names)
     pdep_isomers_max_dict=max_Isomernum_in_Pdep(dict_pdepnum_isomernum)
     pdep_isomers_above_treshold=max_isomers_above_treshold(treshold_num_isomers,pdep_isomers_max_dict)
-    
+    lists_paths=create_paths_to_pdep(pdep_isomers_above_treshold,directory)
+    print(lists_paths)
