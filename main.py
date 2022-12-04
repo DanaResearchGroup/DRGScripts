@@ -3,8 +3,8 @@ from arc import ARC
 from arc.species import ARCSpecies
 from arc.common import read_yaml_file
 
-network_path = '/home/nelly/Desktop/xmr1014_try_script/network28_57.py'
-arc_path='/home/nelly/Desktop/xmr1014_try_script/input.yml'
+network_path = '/home/nelly/Desktop/xmr2001_try_script/network28_64.py'
+arc_path='/home/nelly/Desktop/xmr2001_try_script/input.yml'
 project_name_arc_input="pdep_28"
 
 """load_input_file returns a tuple of dicts. The 3rd dict is species_dict & the 4th dict is network_dict"""
@@ -14,11 +14,6 @@ network_dict = tuple_from_input_file[4]
 pdep_network_name = list(network_dict.keys())[0]
 pdep_isomers = network_dict[pdep_network_name].isomers #configuration object
 pdep_isomers=[str(isomer) for isomer in pdep_isomers] #list of isomer strings
-#print(*pdep_isomers, sep='\n')
-#print(type(pdep_isomers[0]))
-# for key in network_isomers_list.keys():
-#     print("\n",key," ",type(key),"\n", network_isomers_list[key], ' : ', type(network_isomers_list[key]))
-
 labels_adj_dict=dict()
 
 for species in species_dict.values():
@@ -32,12 +27,7 @@ for species in species_dict.values():
         print(species.to_adjacency_list().split('\n', 1)[1])
         labels_adj_dict[species.label]=species.to_adjacency_list().split('\n', 1)[1]
 
-        #labels_list.append(species.label)
-        #adj_list.append(species.to_adjacency_list())
-
 print(f'\nGot {len(list(labels_adj_dict.keys()))} isomers with group additivity in thermo in this network.')
-#print(*labels_list, sep='\n')
-#print(*adj_list, sep='\n')
 
 """create an input file for ARC with RMG library as an output"""
 
@@ -50,7 +40,7 @@ def adj_to_arc( smiles, adjc):
         print(i, " bad adjc_list: ", smiles, "\n", adjc)
         pass
 
-arc_1 = ARC(project="xmr1008_non_converged",
+arc_1 = ARC(project=project_name_arc_input,
             level_of_theory='CBS-QB3',
             # adjc list to ARC
             species=list([adj_to_arc(key, labels_adj_dict[key]) for key in labels_adj_dict.keys()]),
