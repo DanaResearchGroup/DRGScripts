@@ -3,6 +3,8 @@ import re
 
 # iterate over files in that directory. Return list of paths and list of files names
 def getListPathsNames (directory):
+    list_files_paths=[]
+    list_files_names=[]
     for filename in os.listdir(directory):
         f = os.path.join(directory, filename)
         # checking if it is a file
@@ -64,17 +66,25 @@ def create_paths_to_pdep(pdep_isomers_max_dict,directory):
         lists_paths.append(file_path)
     return lists_paths
 
+#This Method uses all the above methods. It gets a directory and returns a list of relevant string paths of pdep files/
+#For example: ['/home/nelly/Desktop/xmr2001_try_script/pdep/network28_64.py',
+# '/home/nelly/Desktop/xmr2001_try_script/pdep/network123_29.py', '/home/nelly/Desktop/xmr2001_try_script/pdep/network57_26.py']
+def get_list_of_paths(directory):
+    list_files_paths = []
+    list_files_names = []
+    list_files_paths, list_files_names = getListPathsNames(directory)
+    dict_pdepnum_isomernum = get_Pdep_and_Isomers_nums(list_files_names)
+    pdep_isomers_max_dict = max_Isomernum_in_Pdep(dict_pdepnum_isomernum)
+    pdep_isomers_above_treshold = max_isomers_above_treshold(treshold_num_isomers, pdep_isomers_max_dict)
+    lists_paths = create_paths_to_pdep(pdep_isomers_above_treshold, directory)
+    return lists_paths
+
 if __name__ == "__main__":
+    """Edit the directory to a locally copied directory of pdep from RMG run on server"""
     directory = '/home/nelly/Desktop/xmr2001_try_script/pdep/'
 
     #The user can edit the treshold number of isomers number. Above that, an input file for ARC will be created
+    """Edit the treshold_num_isomers"""
     treshold_num_isomers=25
 
-    list_files_paths=[]
-    list_files_names=[]
-    list_files_paths, list_files_names = getListPathsNames(directory)
-    dict_pdepnum_isomernum = get_Pdep_and_Isomers_nums(list_files_names)
-    pdep_isomers_max_dict=max_Isomernum_in_Pdep(dict_pdepnum_isomernum)
-    pdep_isomers_above_treshold=max_isomers_above_treshold(treshold_num_isomers,pdep_isomers_max_dict)
-    lists_paths=create_paths_to_pdep(pdep_isomers_above_treshold,directory)
-    print(lists_paths)
+    list_relevant_paths = get_list_of_paths(directory)
