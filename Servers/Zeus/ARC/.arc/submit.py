@@ -6,7 +6,7 @@ sorted in a dictionary with server names as keys
 
 submit_scripts = {
     'local': {
-        'gaussian': """#!/bin/sh
+        'gaussian': """#!/bin/bash -l
 
 #PBS -q zeus_all_q
 #PBS -N {name}
@@ -14,20 +14,20 @@ submit_scripts = {
 #PBS -o out.txt
 #PBS -e err.txt
 
+. ~/.bashrc
+
 PBS_O_WORKDIR={pwd}
 cd $PBS_O_WORKDIR
 
-GAUSS_SCRDIR=/home/{un}/scratch/g09/$PBS_JOBID
-export $GAUSS_SCRDIR
-mkdir -p $GAUSS_SCRDIR
+source /usr/local/g09/setup.sh
 
-. ~/.bashrc
+GAUSS_SCRDIR=/gtmp/$PBS_JOBID
+mkdir -p $GAUSS_SCRDIR
+export GAUSS_SCRDIR=$GAUSS_SCRDIR
 
 which g09
 
 touch initial_time
-
-source /usr/local/g09/setup.sh
 
 g09 < input.gjf > input.log
 
