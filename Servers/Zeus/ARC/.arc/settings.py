@@ -10,20 +10,21 @@ import string
 servers = {
     'local': {  # Each Zeus node containes 80 cores and 378 GB RAM
         'cluster_soft': 'PBS',
-        'un': 'alon',
+        'un': 'kaplan.kfir',
         'cpus': 16,  # 20
         'memory': 160,  # 360 / 4.0
     },
 }
 
 global_ess_settings = {
-    'gaussian': ['local'],
+    'gaussian': 'local',
+    'molpro': 'local',
 }
 
-supported_ess = ['gaussian']
+supported_ess = ['gaussian', 'molpro']
 
 default_job_settings = {
-    'job_total_memory_gb': 32,
+    'job_total_memory_gb': 80,
     'job_cpu_cores': 16,
 }
 
