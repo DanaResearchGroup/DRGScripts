@@ -1,7 +1,4 @@
-
-
 # User specific aliases and functions
-# Note: Change the <user> keyword of the last "st" command to your own username (without the "<" and ">)
 
 
 # RMG-Py
@@ -37,5 +34,4 @@ alias t3code='cd $t3_path'
 alias runs='cd ~/runs'
 alias rmg='python-jl $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
 alias sb='qsub submit.sh'
-alias st='qstat -u <user>'
-
+alias st='qstat -u $USER'
