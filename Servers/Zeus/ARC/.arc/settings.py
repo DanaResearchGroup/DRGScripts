@@ -18,9 +18,10 @@ servers = {
 
 global_ess_settings = {
     'gaussian': ['local'],
+    'molpro': ['local']
 }
 
-supported_ess = ['gaussian']
+supported_ess = ['gaussian', 'molpro']
 
 default_job_settings = {
     'job_total_memory_gb': 32,
