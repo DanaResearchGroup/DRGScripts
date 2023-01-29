@@ -50,7 +50,7 @@ touch final_time
 PBS_O_WORKDIR={pwd}
 cd $PBS_O_WORKDIR
 
-MOLPRO_SCRDIR=/tmp/{un}/scratch/molpro/$PBS_JOBID
+MOLPRO_SCRDIR=/gtmp/{un}/scratch/molpro/$PBS_JOBID
 export MOLPRO_SCRDIR=$MOLPRO_SCRDIR
 mkdir -p $MOLPRO_SCRDIR
 
@@ -73,6 +73,8 @@ else
 fi
        
 rm -rf $MOLPRO_SCRDIR
+
+cd $PBS_O_WORKDIR
 
 touch final_time
     
