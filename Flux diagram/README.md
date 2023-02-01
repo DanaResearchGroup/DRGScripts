@@ -11,7 +11,7 @@ This script simulates your Shock Tube system through different time intervals an
 For instance, Argon's label in `cti` file is `Ar`, but in Smiles its label is `[Ar]`. For elements, you should consider Cantera's notation. Two cases are considered in the script: `Ar` and `Ne`.<br><br>
 - Run the script `cte_replace_labels_to_smiles v2.ipynb` under Cantera environmemt.
 
-## What to expect for?
+## Output:<br>
 Ignition delay time plot in the folder:<br><br>
 ![Idt](idt_plot.png)<br><br>
 
