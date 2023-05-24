@@ -19,12 +19,12 @@ You will need to edit the file `settings.py` and change the following lines:
 servers = {
     'azure': {
         'cluster_soft': 'Slurm',
-        'address': '{IPADDRESS}', # This line - IP address of the scheduler if it changes
-        'un': '{USERNAME}', # This line - your username
-        'key': '/home/mambauser/.ssh/ubuntu.pem', # This line - path to private key
+        'address': '{IPADDRESS}', # Edit line - IP address of the scheduler if it changes
+        'un': '{USERNAME}', # Edit line - your username
+        'key': '/home/mambauser/.ssh/ubuntu.pem', # Edit line - path to private key
         'cpus': 16,
         'memory': 32,
-        'path': '/mount/nfsshareslurm/nfs/{USERNAME}', # This line - path to shared folder. You will only need to edit the username part of the path
+        'path': '/mount/nfsshareslurm/nfs/{USERNAME}', # Edit line - path to shared folder. You will only need to edit the username part of the path
     },
 }
 ```
