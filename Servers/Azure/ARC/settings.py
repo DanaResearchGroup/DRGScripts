@@ -13,7 +13,7 @@ servers = {
         'address': '{IPADDRESS}',
         'un': '{USERNAME}',
         'key': '/home/mambauser/.ssh/ubuntu.pem',
-        'cpus': 16,
+        'cpus': 8,
         'memory': 32,
         'path': '/mount/nfsshareslurm/nfs/{USERNAME}',
     },

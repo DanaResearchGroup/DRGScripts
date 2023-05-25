@@ -4,7 +4,8 @@ submit_scripts = {
 #SBATCH -p hpc
 #SBATCH -J {name}
 #SBATCH -N 1
-##SBATCH -n {cpus}
+#SBATCH -n {cpus}
+#SBATCH --cpus-per-task=2
 #SBATCH -o out.txt
 #SBATCH -e err.txt
 
@@ -44,6 +45,8 @@ touch final_time
 #SBATCH -p hpc
 #SBATCH -J {name}
 #SBATCH -N 1
+#SBATCH -n {cpus}
+#SBATCH --cpus-per-task=2
 #SBATCH -o out.txt
 #SBATCH -e err.txt
 
@@ -67,7 +70,7 @@ echo "============================================================"
 touch initial_time
 
 # Run Molpro
-molpro -n {cpus} -d $MOLPRO_TMPDIR input.in output.out
+molpro -n {cpus} -d $MOLPRO_TMPDIR input.in -o output.out
 
 rm -rf $MOLPRO_TMPDIR
 
