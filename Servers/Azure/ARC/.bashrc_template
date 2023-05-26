@@ -1,0 +1,5 @@
+alias st='squeue -o "%.18i %.9P %.8u %.18j %.2t %.N %.C %.m" -u $USER'
+
+alias stall='squeue -o "%.18i %.9P %.8u %.18j %.2t %.N %.C %.m"'
+
+alias scancelall='scancel -u $USER'
