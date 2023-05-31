@@ -1,0 +1,7 @@
+alias st='squeue -o "%.5i %.9P %.8u %.18j %.2t %.M %.25N %.8C %.10m" -u $USER | awk "{printf(\"%5s %9s %8s %18s %2s %10s %25s %8s %10s\\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9)}"'
+
+alias stall='squeue -o "%.18i %.9P %.8u %.18j %.2t %.N %.C %.m" | awk "{printf(\"%5s %9s %8s %18s %2s %10s %25s %8s %10s\\n\", \$1, \$2, \$3, \$4, \$5, \$6, \$7, \$8, \$9)}"'
+
+alias scancelall='scancel -u $USER'
+
+alias sb='sbatch submit.sl'
