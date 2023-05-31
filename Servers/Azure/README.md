@@ -22,7 +22,7 @@ servers = {
         'address': '{IPADDRESS}', # Edit line - IP address of the scheduler if it changes
         'un': '{USERNAME}', # Edit line - your username
         'key': '/home/mambauser/.ssh/ubuntu.pem', # Edit line - path to private key
-        'cpus': 8,
+        'cpus': 16,
         'memory': 32,
         'path': '/mount/nfsshareslurm/nfs/{USERNAME}', # Edit line - path to shared folder. You will only need to edit the username part of the path
     },

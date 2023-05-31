@@ -4,8 +4,8 @@ submit_scripts = {
 #SBATCH -p hpc
 #SBATCH -J {name}
 #SBATCH -N 1
-#SBATCH -n {cpus}
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task={cpus}
+#SBATCH --mem={memory}
 #SBATCH -o out.txt
 #SBATCH -e err.txt
 
@@ -45,8 +45,8 @@ touch final_time
 #SBATCH -p hpc
 #SBATCH -J {name}
 #SBATCH -N 1
-#SBATCH -n {cpus}
-#SBATCH --cpus-per-task=2
+#SBATCH --cpus-per-task={cpus}
+#SBATCH --mem={memory}
 #SBATCH -o out.txt
 #SBATCH -e err.txt
 
