@@ -35,15 +35,15 @@ default_job_settings = {
     'job_cpu_cores': 16,
 }
 
-default_levels_of_theory = {'conformer': 'wb97xd/def2-svp',  # it's recommended to choose a method with dispersion
-                            'ts_guesses': 'wb97xd/def-2svp',
-                            'opt': 'wb97xd/def2-tzvp',  # good default for Gaussian
+default_levels_of_theory = {'conformer': 'wb97x-d/def2-svp',  # it's recommended to choose a method with dispersion
+                            'ts_guesses': 'wb97x-d/def-2svp',
+                            'opt': 'wb97x-d/def2-tzvp',  # good default for Gaussian
                             # 'opt': 'wb97m-v/def2tzvp',  # good default for QChem
-                            'freq': 'wb97xd/def2-tzvp',  # should be the same level as opt (to calc freq at min E)
-                            'scan': 'wb97xd/def2-tzvp',  # should be the same level as freq (to project out rotors)
+                            'freq': 'wb97x-d/def2-tzvp',  # should be the same level as opt (to calc freq at min E)
+                            'scan': 'wb97x-d/def2-tzvp',  # should be the same level as freq (to project out rotors)
                             'sp': 'ccsd(t)-f12/cc-pvtz-f12',  # This should be a level for which BAC is available
                             # 'sp': 'b3lyp/6-311+g(3df,2p)',
-                            'irc': 'wb97xd/def2-tzvp',  # should be the same level as opt
+                            'irc': 'wb97x-d/def2-tzvp',  # should be the same level as opt
                             'orbitals': 'wb97x-d3/def2-tzvp',  # save orbitals for visualization
                             'scan_for_composite': 'B3LYP/CBSB7',  # This is the frequency level of CBS-QB3
                             'freq_for_composite': 'B3LYP/CBSB7',  # This is the frequency level of CBS-QB3
