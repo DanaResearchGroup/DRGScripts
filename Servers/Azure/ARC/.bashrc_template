@@ -5,3 +5,16 @@ alias stall='squeue -o "%.18i %.9P %.8u %.18j %.2t %.N %.C %.m" | awk "{printf(\
 alias scancelall='scancel -u $USER'
 
 alias sb='sbatch submit.sl'
+
+export arc_path=~/Code/ARC/
+export t3_path=~/Code/T3/
+export rmgpy_path=~/Code/RMG-Py/
+export rmgdb_path=~/Code/RMG-database/
+
+
+alias rmg='python-jl $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arkane='python-jl $rmgpy_path/Arkane.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arc='python $arc_path/ARC.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arcrestart='python $arc_path/ARC.py restart.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias restartarc='python $arc_path/ARC.py restart.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias t3='python $t3_path/T3.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
