@@ -14,21 +14,21 @@ So how do you set this up?
         1. `conda update -n base --all`
         2. `conda install mamba -n base -c conda-forge`
    2. If your environments are already installed, then please ensure that rmg_env works properly. You can do this by activating the rmg environment and running `python-jl rmg.py --help` (for rmg_env - this should run without error). If you get an error, then you will need to reinstall the environment.
-3. Ensure you have a `.arc` folder in your home directory with customised settings and submission scripts. You can download them in this repository. Please see below [here](#file-settingspy) for more information on editing the settings file.
-4. [**Optional**] Ensure you have a `.t3` folder in your home directory with customised settings and submission scripts. These have not been created yet, but will be soon. If you would like to use T3, please contact me and we can work on it together.
-5. Ensure you have the `ubuntu-image_key.pem`. This should be placed into your `.ssh` folder in your home directory. If you do not have this, you can get it from the Dropbox folder - `DanaResearchGroup/Azure/SHH Private Key/`. If you do not have access to this folder, please contact me.
+3. Ensure you have the `ubuntu-image_key.pem`. This should be placed into your `.ssh` folder in your home directory. If you do not have this, you can get it from the Dropbox folder - `DanaResearchGroup/Azure/SHH Private Key/`. If you do not have access to this folder, please contact me.
     1. Once this file is in your `.ssh` folder, you will need to change the permissions of the file. You can do this by typing `chmod 600 ~/.ssh/ubuntu-image_key.pem` in your terminal. 
     2. You will also need to add this key to your ssh agent. You can do this by typing `ssh-add ~/.ssh/ubuntu-image_key.pem` in your terminal.
- 6. You are now ready to submit jobs to Azure!
- 7. In order to now run the job, you can either run it via your local terminal or through VSCode, although the latter is more for debugging purposes - If you are interested in debugging then go [here](#debugging-via-vscode).
- 8. To run the job via your local terminal, you will need first install `screen`. You can do this by typing `sudo apt install screen` in your terminal. You will only need to do this once.
- 9. Open a local terminal to where your `input.yml` file is located. Then, as you would on Atlas, you set up a screen - `screen -S <name>`.
- 10. Activate then the relevant environment - `conda activate rmg_env` or `conda activate arc_env` or `conda activate t3_env`.
- 11. Then, type either `rmg` or `arc` or `t3` to run the job.
- 12. Congratulations! You now have a running input file that is communicating with the scheduler and submitting jobs to Azure.
- 13. Let's now check the status of a job - to do this, in another terminal you will need to ssh into the Azure Scheduler using your username. You can do this by typing `ssh <username>@<IPADDRESS>`. 
- 14. When you are in, you can type `squeue` to see the status of your jobs. You can also type `sinfo` to see the status of the nodes. Alternatively, I have created universal aliases for these commands, so you can type `st` or `stall` to see the status of your jobs and everyone else's jobs, respectively. You can also type `scancelall` to cancel all of your jobs.
- 15. If you would like to see the output of a job, you will need to navigate to the folder through Azure Scheduler like so:
+4. Ensure you have a `.arc` folder in your home directory with customised settings and submission scripts. You can download them in this repository. Please see below [here](#file-settingspy) for more information on editing the settings file.
+5. [**Optional**] Ensure you have a `.t3` folder in your home directory with customised settings and submission scripts. These have not been created yet, but will be soon. If you would like to use T3, please contact me and we can work on it together.
+6. You are now ready to submit jobs to Azure!
+7. In order to now run the job, you can either run it via your local terminal or through VSCode, although the latter is more for debugging purposes - If you are interested in debugging then go [here](#debugging-via-vscode).
+8. To run the job via your local terminal, you will need first install `screen`. Youcan do this by typing `sudo apt install screen` in your terminal. You will only needto do this once.
+9. Open a local terminal to where your `input.yml` file is located. Then, as youwould on Atlas, you set up a screen - `screen -S <name>`.
+10. Activate then the relevant environment - `conda activate rmg_env` or `condaactivate arc_env` or `conda activate t3_env`.
+11. Then, type either `rmg` or `arc` or `t3` to run the job.
+12. Congratulations! You now have a running input file that is communicating withthe scheduler and submitting jobs to Azure.
+13. Let's now check the status of a job - to do this, in another terminal you willneed to ssh into the Azure Scheduler using your username. You can do this by typing`ssh <username>@<IPADDRESS>`. 
+14. When you are in, you can type `squeue` to see the status of your jobs. You canalso type `sinfo` to see the status of the nodes. Alternatively, I have createduniversal aliases for these commands, so you can type `st` or `stall` to see thestatus of your jobs and everyone else's jobs, respectively. You can also type`scancelall` to cancel all of your jobs.
+15. If you would like to see the output of a job, you will need to navigate to the folder through Azure Scheduler like so:
         1. `cd /mount/nfsshareslurm/nfs/<username>/runs/ARC_Projects/<projectname>/`
         2. `ls` to see the output files
         3. `cat <outputfile>` to see the output of the file
