@@ -12,10 +12,10 @@ servers = {
         'cluster_soft': 'Slurm',
         'address': '{IPADDRESS}',
         'un': '{USERNAME}',
-        'key': '/home/mambauser/.ssh/ubuntu.pem',
+        'key': '/home/{LOCAL_USERNAME}/.ssh/ubuntu.pem',
         'cpus': 16,
         'memory': 32,
-        'path': '/mount/nfsshareslurm/nfs/{USERNAME}',
+        'path': '/mount/nfsshareslurm/nfs/',
     },
 }
 

@@ -13,9 +13,9 @@ So how do you set this up?
    1. If you have already installed `anaconda` or `miniconda`, then don't worry about it. However, I do strongly suggest you do run the following and then you should use the command `mamba` instead of `conda`:
         1. `conda update -n base --all`
         2. `conda install mamba -n base -c conda-forge`
-   2. If your environments are already installed, then please ensure that rmg_env works properly. You can do this by activating each environment and running `python-jl rmg.py --help` (for rmg_env - this should run without error). If you get an error, then you will need to reinstall the environment.
+   2. If your environments are already installed, then please ensure that rmg_env works properly. You can do this by activating the rmg environment and running `python-jl rmg.py --help` (for rmg_env - this should run without error). If you get an error, then you will need to reinstall the environment.
 3. Ensure you have a `.arc` folder in your home directory with customised settings and submission scripts. You can download them in this repository. Please see below [here](#file-settingspy) for more information on editing the settings file.
-4. Ensure you have a `.t3` folder in your home directory with customised settings and submission scripts. These have not been created yet, but will be soon. If you would like to use T3, please contact me and we can work on it together.
+4. [**Optional**] Ensure you have a `.t3` folder in your home directory with customised settings and submission scripts. These have not been created yet, but will be soon. If you would like to use T3, please contact me and we can work on it together.
 5. Ensure you have the `ubuntu-image_key.pem`. This should be placed into your `.ssh` folder in your home directory. If you do not have this, you can get it from the Dropbox folder - `DanaResearchGroup/Azure/SHH Private Key/`. If you do not have access to this folder, please contact me.
     1. Once this file is in your `.ssh` folder, you will need to change the permissions of the file. You can do this by typing `chmod 600 ~/.ssh/ubuntu-image_key.pem` in your terminal. 
     2. You will also need to add this key to your ssh agent. You can do this by typing `ssh-add ~/.ssh/ubuntu-image_key.pem` in your terminal.
@@ -32,6 +32,11 @@ So how do you set this up?
         1. `cd /mount/nfsshareslurm/nfs/<username>/runs/ARC_Projects/<projectname>/`
         2. `ls` to see the output files
         3. `cat <outputfile>` to see the output of the file
+
+> **Note**: You can make accessing the mounted driver easier by creating a soft link in your home directory. You can do this by typing the following in your terminal:
+> ```bash
+>ln -s /mount/ /shared/home/<USERNAME>/mount
+>```
    
 ## File: settings.py
 
@@ -44,10 +49,10 @@ servers = {
         'cluster_soft': 'Slurm',
         'address': '{IPADDRESS}', # Edit line - IP address of the scheduler if it changes
         'un': '{USERNAME}', # Edit line - your username
-        'key': '/home/mambauser/.ssh/ubuntu.pem', # Edit line - path to private key
+        'key': '/home/{LOCAL_USERNAME}/.ssh/ubuntu-image_key.pem', # Edit line - path to private key
         'cpus': 16,
         'memory': 32,
-        'path': '/mount/nfsshareslurm/nfs/{USERNAME}', # Edit line - path to shared folder. You will only need to edit the username part of the path
+        'path': '/mount/nfsshareslurm/nfs/',
     },
 }
 ```
@@ -65,7 +70,7 @@ Now, to access the scheduler from out of office, you will need to do the followi
 4. Change the permissions of the file by typing `chmod 600 ~/.ssh/authorized_keys`.
 5. Now, you should be able to access the scheduler from your out of office machine.
 
-### Windows
+### Windows [Work in Progress]
 
 3. On your out of office machine, open a Command Prompt or PowerShell window and type `notepad %userprofile%\.ssh\authorized_keys`. Paste the output from the previous step into this file and save it.
 4. Change the permissions of the authorized_keys file by typing `icacls %userprofile%\.ssh\authorized_keys /inheritance:r /grant:r "%username%":"(R)"`. This command removes any inherited permissions from the file and grants read access to the current user only.
