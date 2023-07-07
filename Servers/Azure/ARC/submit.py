@@ -16,7 +16,7 @@ source /opt/qchem/qcenv.sh
 export QC=/opt/qchem
 
 # Get Current Directory
-export CWD=$(pwd)
+export CWD="{pwd}"
 
 # Set up scratch directory
 export SCRATCH=/mnt/{un}/scratch/$SLURM_JOB_ID
@@ -34,7 +34,7 @@ echo "Job ID : $SLURM_JOB_ID"
 echo "Job Name : $SLURM_JOB_NAME"
 echo "Starting on : $(date)"
 echo "Running on node : $SLURMD_NODENAME"
-echo "Current directory : $(pwd)"
+echo "Current directory : "{pwd}""
 echo "============================================================"
 
 # Change permissions for {un} directory on the VM storage
@@ -57,10 +57,10 @@ qchem -slurm -nt {cpus} input.in output.out
 sudo rm -vrf $SCRATCH
 
 # Copy all the files back to the current directory
-cp -r $QC_RUN/* $CWD
+cp -vfr $QC_RUN/* "{pwd}"
 
 # Change directory back to the current directory
-cd $CWD
+cd "{pwd}"
 
 # Create a file to measure the time of execution
 touch final_time
@@ -89,14 +89,14 @@ echo "Job ID : $SLURM_JOB_ID"
 echo "Job Name : $SLURM_JOB_NAME"
 echo "Starting on : $(date)"
 echo "Running on node : $SLURMD_NODENAME"
-echo "Current directory : $(pwd)"
+echo "Current directory : "{pwd}""
 echo "============================================================"
 
 # Create a file to measure the time of execution
 touch initial_time
 
 # Get Current Directory
-export CWD=$(pwd)
+export CWD="{pwd}"
 
 # Create a directory on the VM storage
 export MOLPRO_RUN=/mnt/{un}/molpro/{name}
@@ -115,10 +115,10 @@ cd $MOLPRO_RUN
 sudo rm -rf $MOLPRO_TMPDIR
 
 # Copy all the files back to the current directory
-cp -r $MOLPRO_RUN/* $CWD
+cp -vfr $MOLPRO_RUN/* "{pwd}"
 
 # Change directory back to the current directory
-cd $CWD
+cd "{pwd}"
 
 # Create a file to measure the time of execution
 touch final_time
