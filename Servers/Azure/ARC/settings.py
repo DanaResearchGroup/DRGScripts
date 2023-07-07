@@ -12,9 +12,9 @@ servers = {
         'cluster_soft': 'Slurm',
         'address': '{IPADDRESS}',
         'un': '{USERNAME}',
-        'key': '/home/{LOCAL_USERNAME}/.ssh/ubuntu.pem',
+        'key': '/home/{LOCAL_USERNAME}/.ssh/ubuntu-image_key.pem',
         'cpus': 16,
-        'memory': 32,
+        'memory': 60,
         'path': '/mount/nfsshareslurm/nfs/',
     },
 }
@@ -31,7 +31,7 @@ supported_ess = ['qchem',
 ts_adapters = ['heuristics', 'AutoTST', 'GCN', 'KinBot']
 
 default_job_settings = {
-    'job_total_memory_gb': 32,
+    'job_total_memory_gb': 60,
     'job_cpu_cores': 16,
 }
 
