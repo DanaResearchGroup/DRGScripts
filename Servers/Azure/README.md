@@ -51,7 +51,7 @@ servers = {
         'un': '{USERNAME}', # Edit line - your username
         'key': '/home/{LOCAL_USERNAME}/.ssh/ubuntu-image_key.pem', # Edit line - path to private key
         'cpus': 16,
-        'memory': 32,
+        'memory': 60,
         'path': '/mount/nfsshareslurm/nfs/',
     },
 }
