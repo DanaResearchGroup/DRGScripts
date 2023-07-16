@@ -76,6 +76,51 @@ rm -rf $MOLPRO_SCRDIR
 
 touch final_time
     
-        """
+        """,
+        'orca': """#!/bin/bash -l
+
+#PBS -q mafat_new_q
+#PBS -N {name}
+#PBS -l select=1:{cpus}=16:mem={memory}
+#PBS -o out.txt
+#PBS -e err.txt
+
+. ~/.bashrc
+
+export OrcaDir=/usr/local/orca-5.0.4
+export PATH=$PATH:$OrcaDir
+
+export OMPI_Dir=/usr/local/openmpi-4.1.1
+export PATH=$PATH:$OMPI_Dir
+
+export LD_LIBRARY_PATH=/usr/local/openmpi-4.1.1/lib:$LD_LIBRARY_PATH
+
+PBS_O_WORKDIR={pwd}
+cd $PBS_O_WORKDIR
+
+touch initial_time
+
+ORCA_SCRDIR=/gtmp/$PBS_JOBID
+mkdir -p $ORCA_SCRDIR
+export ORCA_SCRDIR=$ORCA_SCRDIR
+cd $ORCA_SCRDIR 
+
+source /usr/local/orca-5.0.4/setup.sh
+source /usr/local/openmpi-4.1.1/setup.sh
+
+which orca
+
+cp "$PBS_O_WORKDIR/input.in" .
+
+${OrcaDir}/orca input.in > input.log
+
+cd $PBS_O_WORKDIR
+cp "$ORCA_SCRDIR/input.log" .
+cp "$ORCA_SCRDIR/input_property.txt" .
+
+touch final_time
+
+rm -vrf $ORCA_SCRDIR
+        """,
         },
 }
