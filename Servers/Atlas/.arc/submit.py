@@ -47,7 +47,7 @@ getenv        = True
 +g09root      = "/Local/ce_dana"
 +PATH         = "$(g09root)/g09:$PATH"
 +GAUSS_EXEDIR = "$(g09root)/g09:$GAUSS_EXEDIR"
-environment   = "GAUSS_EXEDIR=/Local/ce_dana/g09 GAUSS_SCRDIR=/storage/ce_dana/{un}/scratch/g09/ g09root=/Local/ce_dana"
+environment   = "GAUSS_EXEDIR=/Local/ce_dana/g09 GAUSS_SCRDIR=/storage/ce_dana/{un}/scratch/g09/{name}/ g09root=/Local/ce_dana"
 
 should_transfer_files = no
 
@@ -62,11 +62,17 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'gaussian_job': """#!/bin/csh
 
-touch start
+touch initial_time
+
+mkdir -p $GAUSS_SCRDIR
 
 source /Local/ce_dana/g09/bsd/g09.login
 
-/Local/ce_dana/g09/g09 < input.gjf > input.log
+/Local/ce_dana/g09/g09 < input.gjf > output.out
+
+rm -rf $GAUSS_SCRDIR
+
+touch final_time
 
 """,
 
@@ -81,6 +87,7 @@ error         = err.txt
 
 getenv        = True
 +PATH         = "/Local/ce_dana/molpro-mpp-2021.2.1/bin:$PATH"
+environment   = "MOLPRO_SCRDIR=/storage/ce_dana/{un}/scratch/molpro/{name}/ SUBMIT_DIR={pwd}"
 
 should_transfer_files = no
 
@@ -97,7 +104,17 @@ queue
 
 touch initial_time
 
-/Local/ce_dana/molpro-mpp-2022.2.3/bin/molpro -n {cpus} -t 1 input.in
+mkdir -p $MOLPRO_SCRDIR
+cd $MOLPRO_SCRDIR
+
+cp "$SUBMIT_DIR/input.in" .
+
+/Local/ce_dana/molpro-mpp-2022.2.3/bin/molpro -n {cpus} -t 1 output.out
+
+cp input.* "$SUBMIT_DIR/"
+if [ ! -f geometry.* ]; then echo "Geometry files don't exist at this time" else cp geometry*.* "$SUBMIT_DIR/" fi
+
+rm -rf $MOLPRO_SCRDIR
 
 touch final_time
 
@@ -130,6 +147,8 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'orca_job': """#!/bin/bash -l
 
+touch initial_time
+
 export OrcaDir=/Local/ce_dana/orca_4_0_1_2_linux_x86-64_openmpi202
 export PATH=$PATH:$OrcaDir
 
@@ -147,10 +166,12 @@ cd $WorkDir
 
 cp "$SubmitDir/input.in" .
 
-${OrcaDir}/orca input.in > input.log
+${OrcaDir}/orca input.in > output.out
 cp * "$SubmitDir/"
 
 rm -rf $WorkDir
+
+touch final_time
 
 """,
     },
