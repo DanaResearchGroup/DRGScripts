@@ -47,7 +47,7 @@ getenv        = True
 +g09root      = "/Local/ce_dana"
 +PATH         = "$(g09root)/g09:$PATH"
 +GAUSS_EXEDIR = "$(g09root)/g09:$GAUSS_EXEDIR"
-environment   = "GAUSS_EXEDIR=/Local/ce_dana/g09 GAUSS_SCRDIR=/storage/ce_dana/{un}/scratch/g09/ g09root=/Local/ce_dana"
+environment   = "GAUSS_EXEDIR=/Local/ce_dana/g09 GAUSS_SCRDIR=/storage/ce_dana/{un}/scratch/g09/{name}/ g09root=/Local/ce_dana"
 
 should_transfer_files = no
 
@@ -62,11 +62,17 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'gaussian_job': """#!/bin/csh
 
-touch start
+touch initial_time
+
+mkdir -p $GAUSS_SCRDIR
 
 source /Local/ce_dana/g09/bsd/g09.login
 
-/Local/ce_dana/g09/g09 < input.gjf > input.log
+/Local/ce_dana/g09/g09 < input.gjf > output.out
+
+rm -vrf $GAUSS_SCRDIR
+
+touch final_time
 
 """,
 
@@ -81,6 +87,7 @@ error         = err.txt
 
 getenv        = True
 +PATH         = "/Local/ce_dana/molpro-mpp-2021.2.1/bin:$PATH"
+environment   = "MOLPRO_SCRDIR=/storage/ce_dana/{un}/scratch/molpro/{name}/ SUBMIT_DIR={pwd}"
 
 should_transfer_files = no
 
@@ -95,10 +102,36 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'molpro_job': """#!/bin/csh
 
+# Create a file to store the initial time
 touch initial_time
 
-/Local/ce_dana/molpro-mpp-2022.2.3/bin/molpro -n {cpus} -t 1 input.in
+# Command to create scratch directory and change directory to it
+mkdir -p $MOLPRO_SCRDIR
+cd $MOLPRO_SCRDIR
 
+# Command to copy input files
+cp "$SUBMIT_DIR/input.in" .
+
+# Command to run Molpro
+/Local/ce_dana/molpro-mpp-2022.2.3/bin/molpro -n {cpus} -t 1 -d $MOLPRO_SCRDIR input.in -o output.out
+
+# Command to copy output files
+cp output.* "$SUBMIT_DIR/"
+
+# Command to copy geometry files if they exist
+if ( ! -e `find . -name "geometry.*" -print -quit` ) then
+    echo "Geometry files don't exist at this time"
+else
+    cp geometry.* "$SUBMIT_DIR/"
+endif
+
+# Clean up of scratch directory
+rm -vrf $MOLPRO_SCRDIR
+
+#Change directory back to the original directory
+cd $SUBMIT_DIR
+
+# Create a file to store the final time
 touch final_time
 
 """,
@@ -130,6 +163,8 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'orca_job': """#!/bin/bash -l
 
+touch initial_time
+
 export OrcaDir=/Local/ce_dana/orca_4_0_1_2_linux_x86-64_openmpi202
 export PATH=$PATH:$OrcaDir
 
@@ -138,7 +173,7 @@ export PATH=$PATH:$OMPI_Dir
 
 export LD_LIBRARY_PATH=/Local/ce_dana/openmpi-2.0.2/lib:$LD_LIBRARY_PATH
 
-SubmitDir=`pwd`
+SubmitDir={pwd}
 
 which orca
 
@@ -147,10 +182,12 @@ cd $WorkDir
 
 cp "$SubmitDir/input.in" .
 
-${OrcaDir}/orca input.in > input.log
+${OrcaDir}/orca input.in > output.out
 cp * "$SubmitDir/"
 
 rm -rf $WorkDir
+
+touch final_time
 
 """,
     },
