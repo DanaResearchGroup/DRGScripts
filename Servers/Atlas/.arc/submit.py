@@ -70,7 +70,7 @@ source /Local/ce_dana/g09/bsd/g09.login
 
 /Local/ce_dana/g09/g09 < input.gjf > output.out
 
-rm -rf $GAUSS_SCRDIR
+rm -vrf $GAUSS_SCRDIR
 
 touch final_time
 
@@ -102,20 +102,36 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'molpro_job': """#!/bin/csh
 
+# Create a file to store the initial time
 touch initial_time
 
+# Command to create scratch directory and change directory to it
 mkdir -p $MOLPRO_SCRDIR
 cd $MOLPRO_SCRDIR
 
+# Command to copy input files
 cp "$SUBMIT_DIR/input.in" .
 
-/Local/ce_dana/molpro-mpp-2022.2.3/bin/molpro -n {cpus} -t 1 output.out
+# Command to run Molpro
+/Local/ce_dana/molpro-mpp-2022.2.3/bin/molpro -n {cpus} -t 1 -d $MOLPRO_SCRDIR input.in -o output.out
 
-cp input.* "$SUBMIT_DIR/"
-if [ ! -f geometry.* ]; then echo "Geometry files don't exist at this time" else cp geometry*.* "$SUBMIT_DIR/" fi
+# Command to copy output files
+cp output.* "$SUBMIT_DIR/"
 
-rm -rf $MOLPRO_SCRDIR
+# Command to copy geometry files if they exist
+if ( ! -e `find . -name "geometry.*" -print -quit` ) then
+    echo "Geometry files don't exist at this time"
+else
+    cp geometry.* "$SUBMIT_DIR/"
+endif
 
+# Clean up of scratch directory
+rm -vrf $MOLPRO_SCRDIR
+
+#Change directory back to the original directory
+cd $SUBMIT_DIR
+
+# Create a file to store the final time
 touch final_time
 
 """,
@@ -157,7 +173,7 @@ export PATH=$PATH:$OMPI_Dir
 
 export LD_LIBRARY_PATH=/Local/ce_dana/openmpi-2.0.2/lib:$LD_LIBRARY_PATH
 
-SubmitDir=`pwd`
+SubmitDir={pwd}
 
 which orca
 
