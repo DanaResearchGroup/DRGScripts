@@ -3,6 +3,7 @@ submit_scripts = {
         'qchem': """#!/bin/bash -l
 #SBATCH -p hpc,htc
 #SBATCH -J {name}
+#SBATCH --account={un}
 #SBATCH -N 1
 #SBATCH --cpus-per-task={cpus}
 #SBATCH --mem={memory}
@@ -67,6 +68,7 @@ touch final_time
         'molpro': """#!/bin/bash -l
 #SBATCH -p hpc,htc
 #SBATCH -J {name}
+#SBATCH --account={un}
 #SBATCH -N 1
 #SBATCH --ntasks-per-node={cpus}
 #SBATCH --mem={memory}
