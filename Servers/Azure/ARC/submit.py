@@ -9,11 +9,9 @@ submit_scripts = {
 #SBATCH -o out.txt
 #SBATCH -e err.txt
 
-# Source QChem environment
-source /opt/qchem/qcenv.sh
-
-# Set up Qchem
-export QC=/opt/qchem
+# Load QChem module
+module load easybuild/EasyBuild
+module load QChem-6.1
 
 # Get Current Directory
 export CWD="{pwd}"
@@ -75,6 +73,10 @@ touch final_time
 #SBATCH -o out.txt
 #SBATCH -e err.txt
 
+# Load Molpro module
+module load easybuild/EasyBuild
+module load Molpro-2022.3.1
+
 # Set up scratch directory
 export SCRATCH=/mnt/{un}/scratch/molpro/{name}
 if [ -d $SCRATCH ]; then
@@ -110,7 +112,7 @@ cp input.in $MOLPRO_RUN
 cd $MOLPRO_RUN
 
 # Run Molpro
-/opt/molpro/bin/molpro -n{cpus} -d $MOLPRO_TMPDIR input.in -o output.out
+molpro -n{cpus} -d $MOLPRO_TMPDIR input.in -o output.out
 
 sudo rm -rf $MOLPRO_TMPDIR
 
