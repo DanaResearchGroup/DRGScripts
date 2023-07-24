@@ -127,6 +127,66 @@ cd "{pwd}"
 # Create a file to measure the time of execution
 touch final_time
 
-"""
+    """,
+        'orca': """#!/bin/bash -l
+#SBATCH -p hpc,htc
+#SBATCH -J {name}
+#SBATCH --account={un}
+#SBATCH -N 1
+#SBATCH --ntasks-per-node={cpus}
+#SBATCH --mem={memory}
+#SBATCH -o out.txt
+#SBATCH -e err.txt
+
+# Load ORCA module
+. /etc/profile.d/z00_lmod.sh
+module load ORCA
+
+# Set up scratch directory
+export ORCA_SCRDIR=/mnt/{un}/orca/{name}
+if [ -d $ORCA_SCRDIR ]; then
+        sudo rm -rf $ORCA_SCRDIR
+fi
+sudo mkdir -p $ORCA_SCRDIR
+sudo chmod 777 $ORCA_SCRDIR
+
+echo "============================================================"
+echo "Job ID : $SLURM_JOB_ID"
+echo "Job Name : $SLURM_JOB_NAME"
+echo "Starting on : $(date)"
+echo "Running on node : $SLURMD_NODENAME"
+echo "Current directory : "{pwd}""
+echo "============================================================"
+
+# Create a file to measure the time of execution
+touch initial_time
+
+# Get Current Directory
+export CWD="{pwd}"
+
+# Now, copy the input file to the VM storage
+cp input.in $ORCA_SCRDIR
+
+# Change directory to the VM storage
+cd $ORCA_SCRDIR
+
+# ORCA requires the full dir path to be used when running in parallel, hence this variable and the subsequent run
+export ORCA_DIR=$(which orca)
+
+# Run Orca
+$ORCA_DIR input.in > input.log
+
+# Copy all the files back to the current directory
+cd $CWD
+cp "$ORCA_SCRDIR/input.log" .
+cp "$ORCA_SCRDIR/input_property.txt" .
+
+sudo rm -vrf $ORCA_SCRDIR
+
+# Create a file to measure the time of execution
+touch final_time
+
+    """
+
     },
 }
