@@ -9,7 +9,7 @@ submit_scripts = {
     'local': {
         'gaussian': """#!/bin/bash -l
 
-#PBS -q zeus_long_q
+#PBS -q mafat_new_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}
 #PBS -o out.txt
@@ -34,14 +34,14 @@ touch initial_time
 
 g09 < input.gjf > input.log
 
-rm -rf $GAUSS_SCRDIR
+rm -vrf $GAUSS_SCRDIR
 
 touch final_time
 
         """,
         'molpro': """#!/bin/bash -l
 
-#PBS -q zeus_long_q
+#PBS -q mafat_new_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}
 #PBS -o out.txt
@@ -72,7 +72,7 @@ else
 	cp geometry.* ""$PBS_O_WORKDIR"/"
 fi
        
-rm -rf $MOLPRO_SCRDIR
+rm -vrf $MOLPRO_SCRDIR
 
 touch final_time
     
