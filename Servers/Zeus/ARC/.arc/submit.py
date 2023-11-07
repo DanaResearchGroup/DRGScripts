@@ -81,7 +81,7 @@ touch final_time
 
 #PBS -q mafat_new_q
 #PBS -N {name}
-#PBS -l select=1:{cpus}=16:mem={memory}
+#PBS -l select=1:ncpus={cpus}:mem={memory}
 #PBS -o out.txt
 #PBS -e err.txt
 
