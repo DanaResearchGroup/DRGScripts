@@ -41,7 +41,7 @@ touch final_time
         """,
         'molpro': """#!/bin/bash -l
 
-#PBS -q mafat_new_q
+#PBS -q zeus_long_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}
 #PBS -o out.txt
@@ -112,7 +112,7 @@ which orca
 
 cp "$PBS_O_WORKDIR/input.in" .
 
-${OrcaDir}/orca input.in > input.log
+${{OrcaDir}}/orca input.in > input.log
 
 cd $PBS_O_WORKDIR
 cp "$ORCA_SCRDIR/input.log" .
