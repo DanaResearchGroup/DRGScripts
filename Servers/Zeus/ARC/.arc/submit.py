@@ -9,7 +9,7 @@ submit_scripts = {
     'local': {
         'gaussian': """#!/bin/bash -l
 
-#PBS -q zeus_long_q
+#PBS -q mafat_new_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}
 #PBS -o out.txt
@@ -34,7 +34,7 @@ touch initial_time
 
 g09 < input.gjf > input.log
 
-rm -rf $GAUSS_SCRDIR
+rm -vrf $GAUSS_SCRDIR
 
 touch final_time
 
@@ -72,7 +72,7 @@ else
 	cp geometry.* ""$PBS_O_WORKDIR"/"
 fi
        
-rm -rf $MOLPRO_SCRDIR
+rm -vrf $MOLPRO_SCRDIR
 
 touch final_time
     
@@ -81,7 +81,7 @@ touch final_time
 
 #PBS -q mafat_new_q
 #PBS -N {name}
-#PBS -l select=1:{cpus}=16:mem={memory}
+#PBS -l select=1:ncpus={cpus}:mem={memory}
 #PBS -o out.txt
 #PBS -e err.txt
 
@@ -112,7 +112,7 @@ which orca
 
 cp "$PBS_O_WORKDIR/input.in" .
 
-${OrcaDir}/orca input.in > input.log
+${{OrcaDir}}/orca input.in > input.log
 
 cd $PBS_O_WORKDIR
 cp "$ORCA_SCRDIR/input.log" .
