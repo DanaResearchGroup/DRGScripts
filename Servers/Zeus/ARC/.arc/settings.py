@@ -17,7 +17,7 @@ servers = {
 }
 
 global_ess_settings = {
-    'gaussian': ['local'],
+    'gaussian': 'local',
     'orca': 'local',
     'molpro': 'local',
 }
