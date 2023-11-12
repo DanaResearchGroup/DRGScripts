@@ -34,6 +34,8 @@ touch initial_time
 
 g09 < input.gjf > input.log
 
+cp check.chk check_copy.txt
+
 rm -vrf $GAUSS_SCRDIR
 
 touch final_time
