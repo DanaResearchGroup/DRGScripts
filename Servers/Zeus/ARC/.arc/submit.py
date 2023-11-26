@@ -22,19 +22,29 @@ cd $PBS_O_WORKDIR
 
 source /usr/local/g09/setup.sh
 
-GAUSS_SCRDIR=/gtmp/$PBS_JOBID
+GAUSS_SCRDIR=/gtmp/{un}/scratch/g09/$PBS_JOBID
 
 mkdir -p $GAUSS_SCRDIR
 
 export GAUSS_SCRDIR=$GAUSS_SCRDIR
 
-which g09
-
 touch initial_time
+
+cd $GAUSS_SCRDIR
+
+cp "$PBS_O_WORKDIR/input.gjf" $GAUSS_SCRDIR
+
+cp "$PBS_O_WORKDIR/check.chk" $GAUSS_SCRDIR
 
 g09 < input.gjf > input.log
 
+cp input.* "$PBS_O_WORKDIR/"
+
+cp check.* "$PBS_O_WORKDIR/"
+
 rm -vrf $GAUSS_SCRDIR
+
+cd $PBS_O_WORKDIR
 
 touch final_time
 
