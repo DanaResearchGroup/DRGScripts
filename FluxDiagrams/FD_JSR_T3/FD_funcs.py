@@ -101,12 +101,18 @@ def add_images_to_nodes(dict_species, dot_file_path, image_folder_path):
     # Iterate over all edges and change the fontsize
     for edge in graph.get_edges():
         edge.set('fontsize', "28")
+        # Get and update penwidth for edge by factor to keep proportion (this is the arrow width)
+        current_edge_penwidth = float(edge.get_attributes().get('penwidth'))
+        updated_penwidth = current_edge_penwidth * 3
+        edge.set('penwidth', str(updated_penwidth))
 
     # Iterate over nodes and add images
     for node in graph.get_nodes():
         # Assume node names are enclosed in double quotes
         node_name = node.get_name().strip('"')
-        if node_name != r'\n':
+        #For some reason, get_nodes(), which is a list of nodes in graphs, gives another extra node with label "\\n"
+        #This redundant node is remove 
+        if node_name.strip() != "\\n":
             # Check if the node has xlabel attribute
             if 'xlabel' in node.get_attributes():
                 # Get the current attributes
@@ -122,10 +128,13 @@ def add_images_to_nodes(dict_species, dot_file_path, image_folder_path):
                 smiles = dict_species[node_name]
 
             image_path = os.path.join(image_folder_path, f"{smiles}.png")
-        # Add the image to the node
-        if os.path.exists(image_path):
-            node.set_image(image_path)
-            node.set_label('')
+            # Add the image to the node
+            if os.path.exists(image_path):
+                node.set_image(image_path)
+                node.set_label('')
+
+        else:
+            graph.del_node(node)
 
     # Save the new .dot file
     modified_dot_path = os.path.join(os.path.dirname(dot_file_path),'flux_diagram_2.0_s_modified.dot')
