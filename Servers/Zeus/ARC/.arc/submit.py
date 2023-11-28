@@ -40,7 +40,11 @@ g09 < input.gjf > input.log
 
 cp input.* "$PBS_O_WORKDIR/"
 
-cp check.* "$PBS_O_WORKDIR/"
+if [ ! -f check.* ]; then
+	:
+else
+	cp check.* "$PBS_O_WORKDIR/"
+fi
 
 rm -vrf $GAUSS_SCRDIR
 
