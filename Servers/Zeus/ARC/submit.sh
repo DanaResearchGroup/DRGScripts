@@ -13,4 +13,3 @@ cd $PBS_O_WORKDIR
 conda activate arc_env
 
 python $arc_code/ARC.py input.yml
-
