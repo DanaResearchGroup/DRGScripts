@@ -17,38 +17,38 @@ submit_scripts = {
 
 . ~/.bashrc
 
-PBS_O_WORKDIR={pwd}
-cd $PBS_O_WORKDIR
+PBS_O_WORKDIR="{pwd}"
+cd "$PBS_O_WORKDIR"
 
 source /usr/local/g09/setup.sh
 
-GAUSS_SCRDIR=/gtmp/{un}/scratch/g09/$PBS_JOBID
+GAUSS_SCRDIR="/gtmp/{un}/scratch/g09/$PBS_JOBID"
 
-mkdir -p $GAUSS_SCRDIR
+mkdir -p "$GAUSS_SCRDIR"
 
-export GAUSS_SCRDIR=$GAUSS_SCRDIR
+export GAUSS_SCRDIR="$GAUSS_SCRDIR"
 
 touch initial_time
 
-cd $GAUSS_SCRDIR
+cd "$GAUSS_SCRDIR"
 
-cp "$PBS_O_WORKDIR/input.gjf" $GAUSS_SCRDIR
+cp "$PBS_O_WORKDIR/input.gjf" "$GAUSS_SCRDIR"
 
-cp "$PBS_O_WORKDIR/check.chk" $GAUSS_SCRDIR
+if [ -f "$PBS_O_WORKDIR/check.chk" ]; then
+    cp "$PBS_O_WORKDIR/check.chk" "$GAUSS_SCRDIR/"
+fi
 
 g09 < input.gjf > input.log
 
 cp input.* "$PBS_O_WORKDIR/"
 
-if [ ! -f check.* ]; then
-	:
-else
-	cp check.* "$PBS_O_WORKDIR/"
+if [ -f check.chk ]; then
+    cp check.chk "$PBS_O_WORKDIR/"
 fi
 
-rm -vrf $GAUSS_SCRDIR
+rm -vrf "$GAUSS_SCRDIR"
 
-cd $PBS_O_WORKDIR
+cd "$PBS_O_WORKDIR"
 
 touch final_time
 
@@ -61,20 +61,20 @@ touch final_time
 #PBS -o out.txt
 #PBS -e err.txt
 
-PBS_O_WORKDIR={pwd}
-cd $PBS_O_WORKDIR
+PBS_O_WORKDIR="{pwd}"
+cd "$PBS_O_WORKDIR"
 
-MOLPRO_SCRDIR=/tmp/{un}/scratch/molpro/$PBS_JOBID
-export MOLPRO_SCRDIR=$MOLPRO_SCRDIR
-mkdir -p $MOLPRO_SCRDIR
+MOLPRO_SCRDIR="/tmp/{un}/scratch/molpro/$PBS_JOBID"
+export MOLPRO_SCRDIR="$MOLPRO_SCRDIR"
+mkdir -p "$MOLPRO_SCRDIR"
 
 which molpro
 
 touch initial_time
 
-cd $MOLPRO_SCRDIR
+cd "$MOLPRO_SCRDIR"
 
-cp "$PBS_O_WORKDIR/input.in" $MOLPRO_SCRDIR
+cp "$PBS_O_WORKDIR/input.in" "$MOLPRO_SCRDIR/"
 
 molpro -n {cpus} -d $MOLPRO_SCRDIR input.in
 
@@ -86,7 +86,7 @@ else
 	cp geometry.* ""$PBS_O_WORKDIR"/"
 fi
        
-rm -vrf $MOLPRO_SCRDIR
+rm -vrf "$MOLPRO_SCRDIR"
 
 touch final_time
     
@@ -109,15 +109,15 @@ export PATH=$PATH:$OMPI_Dir
 
 export LD_LIBRARY_PATH=/usr/local/openmpi-4.1.1/lib:$LD_LIBRARY_PATH
 
-PBS_O_WORKDIR={pwd}
-cd $PBS_O_WORKDIR
+PBS_O_WORKDIR="{pwd}"
+cd "$PBS_O_WORKDIR"
 
 touch initial_time
 
-ORCA_SCRDIR=/gtmp/$PBS_JOBID
-mkdir -p $ORCA_SCRDIR
-export ORCA_SCRDIR=$ORCA_SCRDIR
-cd $ORCA_SCRDIR 
+ORCA_SCRDIR="/gtmp/$PBS_JOBID"
+mkdir -p "$ORCA_SCRDIR"
+export ORCA_SCRDIR="$ORCA_SCRDIR"
+cd "$ORCA_SCRDIR"
 
 source /usr/local/orca-5.0.4/setup.sh
 source /usr/local/openmpi-4.1.1/setup.sh
@@ -128,13 +128,13 @@ cp "$PBS_O_WORKDIR/input.in" .
 
 ${{OrcaDir}}/orca input.in > input.log
 
-cd $PBS_O_WORKDIR
+cd "$PBS_O_WORKDIR"
 cp "$ORCA_SCRDIR/input.log" .
 cp "$ORCA_SCRDIR/input_property.txt" .
 
 touch final_time
 
-rm -vrf $ORCA_SCRDIR
+rm -vrf "$ORCA_SCRDIR"
         """,
         },
 }
