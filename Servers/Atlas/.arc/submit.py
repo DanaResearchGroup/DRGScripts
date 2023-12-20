@@ -190,6 +190,61 @@ rm -rf $WorkDir
 touch final_time
 
 """,
+    
+    
+    # QChem
+        'qchem': """Universe      = vanilla
+        
++JobName      = "{name}"
+
+log           = job.log
+output        = out.txt
+error         = err.txt
+
+getenv        = True
++PATH         = "/Local/ce_dana/Q-Chem/bin:$PATH"
+environment   = "QCSCRATCH=/storage/ce_dana/{un}/scratch/qchem/{name}/ SUBMIT_DIR=\"{pwd}\" QC=/Local/ce_dana/Q-Chem"
+
+
+should_transfer_files = no
+
+executable = job.sh
+
+request_cpus  = {cpus}
+request_memory = {memory}MB
+
+queue
+    
+""",
+        # will be renamed to ``job.sh`` when uploaded
+        'qchem_job': """#!/bin/csh
+
+# Create a file to store the initial time
+touch initial_time
+
+# Command to create scratch directory and change directory to it
+mkdir -p $QCSCRATCH
+cd $QCSCRATCH
+
+# Command to copy input files
+cp "$SUBMIT_DIR/input.in" .
+
+# Command to run QChem
+/Local/ce_dana/Q-Chem/bin/qchem -nt {cpus} input.in output.out    
+
+# Command to copy output files
+cp output.* "$SUBMIT_DIR/"
+
+# Remove the scratch directory
+rm -rf $QCSCRATCH
+
+#Change directory back to the original directory
+cd "$SUBMIT_DIR"
+
+# Create a file to store the final time
+touch final_time
+
+"""
     },
 }
 
