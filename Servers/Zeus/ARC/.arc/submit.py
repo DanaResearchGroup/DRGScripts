@@ -20,6 +20,17 @@ submit_scripts = {
 PBS_O_WORKDIR={pwd}
 cd $PBS_O_WORKDIR
 
+# Function to handle preemption (SIGTERM)
+cleanup() {
+    echo "Job exceeded walltime or was preempted. Saving files..."
+    cp $GAUSS_SCRDIR/check.* "$PBS_O_WORKDIR/" 2>/dev/null
+    cp $GAUSS_SCRDIR/input.log "$PBS_O_WORKDIR/" 2>/dev/null
+    rm -rvf $GAUSS_SCRDIR
+}
+
+# Trap SIGTERM
+trap 'cleanup' SIGTERM
+
 source /usr/local/g09/setup.sh
 
 GAUSS_SCRDIR=/gtmp/{un}/scratch/g09/$PBS_JOBID
@@ -64,6 +75,17 @@ touch final_time
 PBS_O_WORKDIR={pwd}
 cd $PBS_O_WORKDIR
 
+# Function to handle preemption (SIGTERM)
+cleanup() {
+    echo "Job exceeded walltime or was preempted. Saving files..."
+    cp $MOLPRO_SCRDIR/check.* "$PBS_O_WORKDIR/" 2>/dev/null
+    cp $MOLPRO_SCRDIR/input.log "$PBS_O_WORKDIR/" 2>/dev/null
+    rm -rvf $MOLPRO_SCRDIR
+}
+
+# Trap SIGTERM
+trap 'cleanup' SIGTERM
+
 MOLPRO_SCRDIR=/gtmp/{un}/scratch/molpro/$PBS_JOBID
 export MOLPRO_SCRDIR=$MOLPRO_SCRDIR
 mkdir -p $MOLPRO_SCRDIR
@@ -98,6 +120,19 @@ touch final_time
 #PBS -o out.txt
 #PBS -e err.txt
 
+
+# Function to handle preemption (SIGTERM)
+cleanup() {
+    echo "Job exceeded walltime or was preempted. Saving files..."
+    cp $SCRATCH/check.* "$PBS_O_WORKDIR/" 2>/dev/null
+    cp $SCRATCH/input.log "$PBS_O_WORKDIR/" 2>/dev/null
+    rm -rvf $SCRATCH
+}
+
+# Trap SIGTERM
+trap 'cleanup' SIGTERM
+
+
 # Source QChem environment
 source /usr/local/qchem/qcenv.sh
 
@@ -105,8 +140,8 @@ source /usr/local/qchem/qcenv.sh
 export QC=/usr/local/qchem
 
 # Get Current Directory
-export CWD="{pwd}"
-cd $CWD
+export PBS_O_WORKDIR="{pwd}"
+cd $PBS_O_WORKDIR
 
 # Set up scratch directory
 export SCRATCH=/gtmp/{un}/scratch/qchem/$PBS_JOBID
@@ -129,10 +164,10 @@ cd $SCRATCH
 qchem -pbs -nt {cpus} input.in output.out
 
 # Copy all the files back to the current directory
-cp -vfr $SCRATCH/* $CWD
+cp -vfr $SCRATCH/* $PBS_O_WORKDIR
 
 # Change directory back to the current directory
-cd $CWD
+cd $PBS_O_WORKDIR
 
 # Remove the scratch directory 
 rm -vrf $SCRATCH
@@ -161,6 +196,17 @@ export LD_LIBRARY_PATH=/usr/local/openmpi-4.1.1/lib:$LD_LIBRARY_PATH
 
 PBS_O_WORKDIR={pwd}
 cd $PBS_O_WORKDIR
+
+# Function to handle preemption (SIGTERM)
+cleanup() {
+    echo "Job exceeded walltime or was preempted. Saving files..."
+    cp $ORCA_SCRDIR/check.* "$PBS_O_WORKDIR/" 2>/dev/null
+    cp $ORCA_SCRDIR/input.log "$PBS_O_WORKDIR/" 2>/dev/null
+    rm -rvf $ORCA_SCRDIR
+}
+
+# Trap SIGTERM
+trap 'cleanup' SIGTERM
 
 touch initial_time
 
