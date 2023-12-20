@@ -91,6 +91,56 @@ rm -vrf "$MOLPRO_SCRDIR"
 touch final_time
     
         """,
+        'qchem': """#!/bin/bash -l
+#PBS -q mafat_new_q
+#PBS -N {name}
+#PBS -l select=1:ncpus={cpus}:mem={memory}:mpiprocs={cpus}
+#PBS -o out.txt
+#PBS -e err.txt
+
+# Source QChem environment
+source /usr/local/qchem/qcenv.sh
+
+# Set up Qchem
+export QC=/usr/local/qchem
+
+# Get Current Directory
+export CWD="{pwd}"
+cd $CWD
+
+# Set up scratch directory
+export SCRATCH=/gtmp/{un}/scratch/qchem/$PBS_JOBID
+if [ -d $SCRATCH ]; then
+        rm -vrf $SCRATCH
+fi
+
+mkdir -p $SCRATCH
+
+# Now, copy the input file to the VM storage
+cp input.in $SCRATCH
+
+# Create a file to measure the time of execution
+touch initial_time
+
+# Change directory to the VM storage
+cd $SCRATCH
+
+# Run QChem
+qchem -pbs -nt {cpus} input.in output.out
+
+# Copy all the files back to the current directory
+cp -vfr $SCRATCH/* $CWD
+
+# Change directory back to the current directory
+cd $CWD
+
+# Remove the scratch directory 
+rm -vrf $SCRATCH
+
+# Create a file to measure the time of execution
+touch final_time
+
+        """,
         'orca': """#!/bin/bash -l
 
 #PBS -q mafat_new_q
