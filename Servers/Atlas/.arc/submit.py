@@ -148,13 +148,13 @@ error         = err.txt
 
 getenv        = True
 +WorkDir      = "/storage/ce_dana/{un}/scratch/orca/{name}"
-environment   = "WorkDir=/storage/ce_dana/{un}/scratch/orca/{name}"
+environment   = "WorkDir=/storage/ce_dana/{un}/scratch/orca/{name}  SUBMIT_DIR={pwd}"
 
 should_transfer_files = no
 
 executable = job.sh
 
-request_cpus  = {cpus}
+request_cpus  = 1
 request_memory = {memory}MB
 
 queue
@@ -163,17 +163,17 @@ queue
         # will be renamed to ``job.sh`` when uploaded
         'orca_job': """#!/bin/bash -l
 
-touch initial_time
-
-export OrcaDir=/Local/ce_dana/orca_4_0_1_2_linux_x86-64_openmpi202
+export OrcaDir=/Local/ce_dana/orca_5_0_4_linux_x86-64_shared_openmpi411
 export PATH=$PATH:$OrcaDir
 
-export OMPI_Dir=/Local/ce_dana/openmpi-2.0.2/bin
+export OMPI_Dir=/Local/ce_dana/openmpi-4.1.1/bin
 export PATH=$PATH:$OMPI_Dir
 
-export LD_LIBRARY_PATH=/Local/ce_dana/openmpi-2.0.2/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/Local/ce_dana/orca_5_0_4_linux_x86-64_shared_openmpi411:/Local/ce_dana/openmpi-4.1.1/lib:$LD_LIBRARY_PATH
 
-SubmitDir={pwd}
+SubmitDir=$SUBMIT_DIR
+
+touch initial_time
 
 which orca
 
@@ -182,12 +182,15 @@ cd $WorkDir
 
 cp "$SubmitDir/input.in" .
 
-${OrcaDir}/orca input.in > output.out
-cp * "$SubmitDir/"
+${{OrcaDir}}/orca input.in > input.log
 
-rm -rf $WorkDir
+cd $SubmitDir
+cp "$WorkDir/input.log" .
+cp "$WorkDir/input_property.txt" .
 
 touch final_time
+
+rm -rf $WorkDir
 
 """,
     
