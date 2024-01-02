@@ -154,7 +154,7 @@ should_transfer_files = no
 
 executable = job.sh
 
-request_cpus  = 1
+request_cpus  = {cpus}
 request_memory = {memory}MB
 
 queue
