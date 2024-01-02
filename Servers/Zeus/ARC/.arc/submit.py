@@ -155,7 +155,7 @@ export OrcaDir=/usr/local/orca-5.0.4
 export PATH=$PATH:$OrcaDir
 
 export OMPI_Dir=/usr/local/openmpi-4.1.1
-export PATH=$PATH:$OMPI_Dir
+export PATH=$OMPI_Dir:$PATH
 
 export LD_LIBRARY_PATH=/usr/local/openmpi-4.1.1/lib:$LD_LIBRARY_PATH
 
