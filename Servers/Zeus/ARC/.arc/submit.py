@@ -91,61 +91,63 @@ rm -vrf "$MOLPRO_SCRDIR"
 touch final_time
     
         """,
-        'qchem': """#!/bin/bash -l
+      'qchem': """#!/bin/bash -l
+     
 #PBS -q mafat_new_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}:mpiprocs={cpus}
 #PBS -o out.txt
 #PBS -e err.txt
 
-# Source QChem environment
-source /usr/local/qchem/qcenv.sh
+. ~/.bashrc
 
-# Set up Qchem
-export QC=/usr/local/qchem
+# Load QChem Module
+. /usr/local/qchem/qcenv.sh
 
 # Get Current Directory
-export CWD="{pwd}"
-cd $CWD
+export PBS_O_WORKDIR="{pwd}"
+cd "$PBS_O_WORKDIR"
 
 # Set up scratch directory
-export SCRATCH=/gtmp/{un}/scratch/qchem/$PBS_JOBID
+export SCRATCH="/gtmp/{un}/qchem/$PBS_JOBID/scratch"
 if [ -d $SCRATCH ]; then
         rm -vrf $SCRATCH
 fi
-
 mkdir -p $SCRATCH
 
-# Now, copy the input file to the VM storage
-cp input.in $SCRATCH
+export QCSCRATCH=$SCRATCH
+export QC_RUN="/gtmp/{un}/qchem/$PBS_JOBID"\
+
+
+# Now, copy the input file to the tmp folder
+cp "./input.in" $QC_RUN
 
 # Create a file to measure the time of execution
 touch initial_time
 
 # Change directory to the VM storage
-cd $SCRATCH
+cd $QC_RUN
 
 # Run QChem
-qchem -pbs -nt {cpus} input.in output.out
-
-# Copy all the files back to the current directory
-cp -vfr $SCRATCH/* $CWD
-
-# Change directory back to the current directory
-cd $CWD
+qchem -nt {cpus} input.in output.out
 
 # Remove the scratch directory 
 rm -vrf $SCRATCH
 
+# Copy all the files back to the current directory
+cp -vfr $QC_RUN/* "$PBS_O_WORKDIR"
+
+# Change directory back to the current directory
+cd "$PBS_O_WORKDIR"
+
 # Create a file to measure the time of execution
 touch final_time
-
         """,
         'orca': """#!/bin/bash -l
 
 #PBS -q mafat_new_q
 #PBS -N {name}
-#PBS -l select=1:ncpus={cpus}:mem={memory}
+#PBS -l select=1:ncpus={cpus}:mem={memory}:mpiprocs={cpus}
 #PBS -o out.txt
 #PBS -e err.txt
 
