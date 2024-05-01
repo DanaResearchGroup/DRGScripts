@@ -1,0 +1,1872 @@
+2MF(12):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    3:
+      reaction: C5H5O(27) + hcccch2(128) <=> 2MF(12) + C4H2(8)
+      source: restart
+    4:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    5:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    7:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    8:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    9:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    10:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+  '1100':
+    1:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    4:
+      reaction: C5H5O(27) + hcccch2(128) <=> 2MF(12) + C4H2(8)
+      source: restart
+    5:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    7:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    8:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    9:
+      reaction: C5H5O(27) + OH(26) <=> C4H6O(125) + CO(18)
+      source: restart
+    10:
+      reaction: R1_44(109) + hcccch2(128) <=> C5H6(7)
+      source: CurranPentane
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: CJdCCdCCdO(29) <=> CdCCdCCJdO(49)
+      source: CurranPentane
+    3:
+      reaction: C5H4O-CPDone(10) + H(54) <=> C5H5O(1,3)(274)
+      source: JetSurF2.0
+    4:
+      reaction: C5H4O-CPDone(10) + H(54) <=> CO(18) + c-C4H5(47)
+      source: JetSurF2.0
+    5:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    6:
+      reaction: C5H5O(32) <=> C5H4O-CPDone(10) + H(54)
+      source: CurranPentane
+    7:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    8:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    9:
+      reaction: C5H5O(27) + hcccch2(128) <=> 2MF(12) + C4H2(8)
+      source: restart
+    10:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+  '1300':
+    1:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    4:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    5:
+      reaction: 1,3-butadiene(5) + H(54) <=> C2H3(89) + ethylene(3)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    7:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    8:
+      reaction: H(54) + c-C4H5(47) <=> 1,3-butadiene(5)
+      source: JetSurF2.0
+    9:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    10:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    3:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    4:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    5:
+      reaction: C5H6O(131) <=> 2MF(12)
+      source: restart
+    6:
+      reaction: C5H5O(27) + furfuryl(1) <=> 2MF(12) + P2(41)
+      source: H_Abstraction
+    7:
+      reaction: C5H5O(27) + H(54) <=> 2MF(12)
+      source: restart
+    8:
+      reaction: C5H5O(27) + P14(91) <=> C8H10O(223)
+      source: restart
+    9:
+      reaction: C5H5O(273) + P14(91) <=> C8H10O(231)
+      source: restart
+    10:
+      reaction: H(54) + furfuryl(1) <=> H2(20) + P2(41)
+      source: H_Abstraction
+CO(18):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    4:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    5:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    6:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    7:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    8:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    9:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    10:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(1,3)(274) + H2O(21)
+      source: H_Abstraction
+  '1100':
+    1:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    2:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    3:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    4:
+      reaction: 1,3-butadiene(5) + OH(26) <=> FORMALDEHYDE(16) + P14(91)
+      source: CurranPentane
+    5:
+      reaction: C5H5O(27) + OH(26) <=> C4H6O(125) + CO(18)
+      source: restart
+    6:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    7:
+      reaction: OH(26) + c-C4H5(47) <=> CHO(73) + P14(91)
+      source: restart
+    8:
+      reaction: CO(18) + OH(26) <=> CO2(22) + H(54)
+      source: CurranPentane
+    9:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: OH(26) + furan(6) <=> CO2(22) + P14(91)
+      source: CurranPentane
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    4:
+      reaction: C5H5O(27) + OH(26) <=> C4H6O(125) + CO(18)
+      source: restart
+    5:
+      reaction: 1,3-butadiene(5) + OH(26) <=> FORMALDEHYDE(16) + P14(91)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + c-C4H5(47) <=> CH2CHCHCHO(90) + H(54)
+      source: restart
+    7:
+      reaction: OH(26) + c-C4H5(47) <=> CHO(73) + P14(91)
+      source: restart
+    8:
+      reaction: OH(26) + furan(6) <=> CO2(22) + P14(91)
+      source: CurranPentane
+    9:
+      reaction: CO(18) + OH(26) <=> CO2(22) + H(54)
+      source: CurranPentane
+    10:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+  '1300':
+    1:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: CH2(314) + OH(26) <=> FORMALDEHYDE(16) + H(54)
+      source: FFCM1(-)
+    4:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    5:
+      reaction: C2H3(89) + OH(26) <=> H2O(21) + acetylene(2)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + c-C4H5(47) <=> CH2CHCHCHO(90) + H(54)
+      source: restart
+    7:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    8:
+      reaction: OH(26) + c-C4H5(47) <=> CHO(73) + P14(91)
+      source: restart
+    9:
+      reaction: C5H5O(27) + OH(26) <=> C4H6O(125) + CO(18)
+      source: restart
+    10:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    3:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    4:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    5:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: C5H6O2(53) <=> C4H6O(125) + CO(18)
+      source: restart
+    7:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: C3H6(106) <=> H(54) + P14(91)
+      source: CurranPentane
+    9:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    10:
+      reaction: C5H5O(273) + P14(91) <=> C8H10O(231)
+      source: restart
+H2O(21):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    4:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    5:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    6:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(1,3)(274) + H2O(21)
+      source: H_Abstraction
+    7:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    8:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    9:
+      reaction: FORMALDEHYDE(16) + OH(26) <=> CHO(73) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+  '1100':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    4:
+      reaction: C5H5O(27) + OH(26) <=> C4H6O(125) + CO(18)
+      source: restart
+    5:
+      reaction: 1,3-butadiene(5) + OH(26) <=> FORMALDEHYDE(16) + P14(91)
+      source: CurranPentane
+    6:
+      reaction: C4H2(8) + H(54) <=> hcccch2(128)
+      source: CurranPentane
+    7:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    8:
+      reaction: C3H6(106) + OH(26) <=> H2O(21) + P14(91)
+      source: CurranPentane
+    9:
+      reaction: CH3CHCHCHO(84) + OH(26) <=> CH2CHCHCHO(90) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: CO(18) + OH(26) <=> CO2(22) + H(54)
+      source: CurranPentane
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    4:
+      reaction: C5H5O(27) + OH(26) <=> C4H6O(125) + CO(18)
+      source: restart
+    5:
+      reaction: OH(26) + c-C4H5(47) <=> CH2CHCHCHO(90) + H(54)
+      source: restart
+    6:
+      reaction: OH(26) + c-C4H5(47) <=> CHO(73) + P14(91)
+      source: restart
+    7:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    8:
+      reaction: 1,3-butadiene(5) + OH(26) <=> FORMALDEHYDE(16) + P14(91)
+      source: CurranPentane
+    9:
+      reaction: OH(26) + R1_44(109) <=> CH2(S)(312) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: CJdCCdCCdO(29) <=> CdCCdCCJdO(49)
+      source: CurranPentane
+  '1300':
+    1:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: C2H3(89) + OH(26) <=> H2O(21) + acetylene(2)
+      source: CurranPentane
+    4:
+      reaction: CH2(314) + OH(26) <=> FORMALDEHYDE(16) + H(54)
+      source: FFCM1(-)
+    5:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: OH(26) + c-C4H5(47) <=> CH2CHCHCHO(90) + H(54)
+      source: restart
+    7:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    8:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    9:
+      reaction: OH(26) + c-C4H5(47) <=> CHO(73) + P14(91)
+      source: restart
+    10:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    3:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    4:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    5:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    6:
+      reaction: H(54) + furfuryl(1) <=> H2(20) + P2(41)
+      source: H_Abstraction
+    7:
+      reaction: C2HCHO(247) + R1_44(109) <=> C4H5O(55)
+      source: restart
+    8:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P19(256)
+      source: 2FFOH_H_Pdep
+    9:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: C3H6(106) <=> H(54) + P14(91)
+      source: CurranPentane
+acetylene(2):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    4:
+      reaction: C5H6(7) + H(54) <=> CdCCdCCJ(162)
+      source: CurranPentane
+    5:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    6:
+      reaction: C2H3(89) + hcccch2(128) <=> C4H2(8) + ethylene(3)
+      source: restart
+    7:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(1,3)(274) + H2O(21)
+      source: H_Abstraction
+    8:
+      reaction: H(54) + propyne(4) <=> R1_44(109) + acetylene(2)
+      source: CurranPentane
+    9:
+      reaction: CJdCCdCCdO(29) <=> CdCCdCCJdO(49)
+      source: CurranPentane
+    10:
+      reaction: C2H3(89) + acetylene(2) <=> C4H4(17) + H(54)
+      source: CurranPentane
+  '1100':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+    3:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    4:
+      reaction: H(54) + propyne(4) <=> R1_44(109) + acetylene(2)
+      source: CurranPentane
+    5:
+      reaction: C2H3(89) + acetylene(2) <=> C4H4(17) + H(54)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    7:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    8:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    9:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    10:
+      reaction: C2HCHO(247) + R1_44(109) <=> C4H5O(51)
+      source: restart
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    3:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    4:
+      reaction: C2H3(89) + acetylene(2) <=> C4H4(17) + H(54)
+      source: CurranPentane
+    5:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    7:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    8:
+      reaction: H(54) + propyne(4) <=> R1_44(109) + acetylene(2)
+      source: CurranPentane
+    9:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    10:
+      reaction: H(54) + c-C4H5(47) <=> acetylene(2) + ethylene(3)
+      source: JetSurF2.0
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    3:
+      reaction: C2H(238) + acetylene(2) <=> C4H2(8) + H(54)
+      source: CurranPentane
+    4:
+      reaction: C2H3(89) + acetylene(2) <=> C4H4(17) + H(54)
+      source: CurranPentane
+    5:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    6:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    7:
+      reaction: HCCO(309) + R1_44(109) <=> CO(18) + ethylene(3)
+      source: JetSurF2.0
+    8:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    9:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    10:
+      reaction: C2H(238) + C4H2(8) <=> C6H2(251) + H(54)
+      source: CurranPentane
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: C2H3(89) + acetylene(2) <=> C4H5-N(46)
+      source: CurranPentane
+    3:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    4:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    5:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    6:
+      reaction: C2HCHO(247) <=> CO(18) + acetylene(2)
+      source: CurranPentane
+    7:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    8:
+      reaction: C5H5O(32) <=> C5H4O-CPDone(10) + H(54)
+      source: CurranPentane
+    9:
+      reaction: C5H5O(273) + P14(91) <=> C8H10O(231)
+      source: restart
+    10:
+      reaction: CJdCCdCCdO(29) <=> CdCCdCCJdO(49)
+      source: CurranPentane
+benzene(11):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    3:
+      reaction: C6H5CH3(244) + H(54) <=> R1_44(109) + benzene(11)
+      source: JetSurF2.0
+    4:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    5:
+      reaction: 1,3-butadiene(5) + C2H3(89) => H(54) + H2(20) + benzene(11)
+      source: CurranPentane
+    6:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    7:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    8:
+      reaction: C4H5-N(46) + acetylene(2) <=> H(54) + benzene(11)
+      source: CurranPentane
+    9:
+      reaction: C7H10(283) + OH(26) <=> C7H9(241) + H2O(21)
+      source: H_Abstraction
+    10:
+      reaction: C7H10(284) + OH(26) <=> C7H9(241) + H2O(21)
+      source: H_Abstraction
+  '1100':
+    1:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    2:
+      reaction: C6H5CH3(244) + H(54) <=> R1_44(109) + benzene(11)
+      source: JetSurF2.0
+    3:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    4:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+    5:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    6:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    7:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    8:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    9:
+      reaction: C4H4(17) + H(54) <=> C4H5-N(46)
+      source: CurranPentane
+    10:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    3:
+      reaction: C6H5CH3(244) + H(54) <=> R1_44(109) + benzene(11)
+      source: JetSurF2.0
+    4:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    5:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    6:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    7:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    8:
+      reaction: C8H10O(190) <=> C8H10O(205)
+      source: restart
+    9:
+      reaction: C4H4(17) + H(54) <=> C4H5-N(46)
+      source: CurranPentane
+    10:
+      reaction: P14(91) + R1_44(109) <=> C3H4-A(14) + methane(15)
+      source: CurranPentane
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    3:
+      reaction: C6H5CH3(244) + H(54) <=> R1_44(109) + benzene(11)
+      source: JetSurF2.0
+    4:
+      reaction: C2H3(89) + CdCCdCCJ(162) <=> C7H10(276)
+      source: restart
+    5:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    7:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    8:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    9:
+      reaction: C8H10O(190) <=> C8H10O(205)
+      source: restart
+    10:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: C6H5CH3(244) + H(54) <=> R1_44(109) + benzene(11)
+      source: JetSurF2.0
+    3:
+      reaction: C5H5O(30) + P14(91) <=> C8H10O(178)
+      source: restart
+    4:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    5:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    6:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    7:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    8:
+      reaction: CJdCCdCCdO(29) <=> CdCCdCCJdO(49)
+      source: CurranPentane
+    9:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P19(256)
+      source: 2FFOH_H_Pdep
+    10:
+      reaction: C5H5O(32) <=> C5H4O-CPDone(10) + H(54)
+      source: CurranPentane
+ethylene(3):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    3:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    4:
+      reaction: C2H3(89) + hcccch2(128) <=> C4H2(8) + ethylene(3)
+      source: restart
+    5:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    6:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    7:
+      reaction: C2H3(89) + furfuryl(1) <=> P2(41) + ethylene(3)
+      source: H_Abstraction
+    8:
+      reaction: C5H7O3(59) <=> INT13(52)
+      source: restart
+    9:
+      reaction: 1,3-butadiene(5) + H(54) <=> C2H3(89) + ethylene(3)
+      source: CurranPentane
+    10:
+      reaction: CH2OH(66) + hcccch2(128) <=> C4H2(8) + methanol(13)
+      source: restart
+  '1100':
+    1:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    2:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    3:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    4:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    5:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    6:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    7:
+      reaction: 1,3-butadiene(5) + H(54) <=> C2H3(89) + ethylene(3)
+      source: CurranPentane
+    8:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: CH2(314) + ethylene(3) <=> H(54) + P14(91)
+      source: JetSurF2.0
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    3:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    4:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    5:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    6:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    7:
+      reaction: CH2(314) + ethylene(3) <=> H(54) + P14(91)
+      source: JetSurF2.0
+    8:
+      reaction: 1,3-butadiene(5) + H(54) <=> C2H3(89) + ethylene(3)
+      source: CurranPentane
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: H(54) + c-C4H5(47) <=> acetylene(2) + ethylene(3)
+      source: JetSurF2.0
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    3:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    4:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    5:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    6:
+      reaction: H(54) + c-C4H5(47) <=> acetylene(2) + ethylene(3)
+      source: JetSurF2.0
+    7:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    8:
+      reaction: 1,3-butadiene(5) + H(54) <=> C2H3(89) + ethylene(3)
+      source: CurranPentane
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: INT13(52) <=> C4H7O2(85) + CO(18)
+      source: restart
+    3:
+      reaction: INT13(52) <=> CO(18) + OCC1[CH]C1O(60)
+      source: restart
+    4:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    5:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    7:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    8:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    9:
+      reaction: INT13(52) <=> C4H7O2(61) + CO(18)
+      source: restart
+    10:
+      reaction: H(54) + furfuryl(1) <=> H2(20) + P2(41)
+      source: H_Abstraction
+furan(6):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: H(54) + furfuryl(1) <=> CH2OH(66) + furan(6)
+      source: 2FFOH_H_Pdep
+    4:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    5:
+      reaction: OH(26) + furan(6) <=> CO2(22) + P14(91)
+      source: CurranPentane
+    6:
+      reaction: H(54) + furan(6) <=> CO(18) + P14(91)
+      source: CurranPentane
+    7:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    8:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+  '1100':
+    1:
+      reaction: OH(26) + furan(6) <=> CO2(22) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: H(54) + furfuryl(1) <=> CH2OH(66) + furan(6)
+      source: 2FFOH_H_Pdep
+    4:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    5:
+      reaction: H(54) + furan(6) <=> CO(18) + P14(91)
+      source: CurranPentane
+    6:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    7:
+      reaction: C5H5O(27) + H(54) <=> C4H6(218) + CO(18)
+      source: restart
+    8:
+      reaction: C4H2(8) + H(54) <=> hcccch2(128)
+      source: CurranPentane
+    9:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    10:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    3:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+    4:
+      reaction: P14(91) + P2(41) <=> C3H6(106) + furfural(19)
+      source: restart
+    5:
+      reaction: P2(41) + hcccch2(128) <=> B123(116) + furfural(19)
+      source: restart
+    6:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    7:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P1(72)
+      source: 2FFOH_H_Abstraction
+    8:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    3:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    4:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    5:
+      reaction: P14(91) + P2(41) <=> C3H6(106) + furfural(19)
+      source: restart
+    6:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+    7:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    9:
+      reaction: P1(72) <=> P2(41)
+      source: restart
+    10:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P1(72)
+      source: 2FFOH_H_Abstraction
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: H(54) + furfuryl(1) <=> CH2OH(66) + furan(6)
+      source: 2FFOH_H_Pdep
+    3:
+      reaction: CH2CHCHCHO(90) <=> C4H5O(92)
+      source: restart
+    4:
+      reaction: C4H5O(92) <=> H(54) + furan(6)
+      source: restart
+    5:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    6:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    7:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    8:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    9:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P19(256)
+      source: 2FFOH_H_Pdep
+    10:
+      reaction: H(54) + furfuryl(1) <=> H2(20) + P2(41)
+      source: H_Abstraction
+furfural(19):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: C4H5O(55) + furfuryl(1) <=> CH3CHCHCHO(84) + P1(72)
+      source: H_Abstraction
+    4:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P1(72)
+      source: 2FFOH_H_Abstraction
+    5:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    6:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    7:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    8:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    9:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(1,3)(274) + H2O(21)
+      source: H_Abstraction
+    10:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+  '1100':
+    1:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    2:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    3:
+      reaction: P14(91) + P2(41) <=> C3H6(106) + furfural(19)
+      source: restart
+    4:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    5:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+    6:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P1(72)
+      source: 2FFOH_H_Abstraction
+    7:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: C4H2(8) + H(54) <=> hcccch2(128)
+      source: CurranPentane
+  '1200':
+    1:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+    4:
+      reaction: P14(91) + P2(41) <=> C3H6(106) + furfural(19)
+      source: restart
+    5:
+      reaction: P2(41) + hcccch2(128) <=> B123(116) + furfural(19)
+      source: restart
+    6:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P1(72)
+      source: 2FFOH_H_Abstraction
+    7:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    8:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    10:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    3:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    4:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    5:
+      reaction: P14(91) + P2(41) <=> C3H6(106) + furfural(19)
+      source: restart
+    6:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+    7:
+      reaction: furfural(19) <=> CO(18) + furan(6)
+      source: restart
+    8:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    10:
+      reaction: P1(72) <=> P2(41)
+      source: restart
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    3:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    4:
+      reaction: P2(41) <=> H(54) + furfural(19)
+      source: restart
+    5:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P1(72)
+      source: 2FFOH_H_Abstraction
+    6:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    7:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: C4H5O(55) + furfuryl(1) <=> CH3CHCHCHO(84) + P1(72)
+      source: H_Abstraction
+    9:
+      reaction: C4H4O(62) + H(54) <=> C4H5O(55)
+      source: restart
+    10:
+      reaction: P1(72) + methane(15) <=> R1_44(109) + furfuryl(1)
+      source: H_Abstraction
+furfuryl(1):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    3:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    4:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    5:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    7:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    8:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    9:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    10:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+  '1100':
+    1:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    4:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    5:
+      reaction: C4H4(17) + OH(26) <=> H2O(21) + hcccch2(128)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    7:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    8:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    9:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    10:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    3:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    4:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    5:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    7:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    9:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    10:
+      reaction: R1_44(109) + hcccch2(128) <=> C5H6(7)
+      source: CurranPentane
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: CH2OH(66) + INT13(52) <=> C5H8O3(96) + FORMALDEHYDE(16)
+      source: restart
+    3:
+      reaction: C2H3(89) + P2(41) <=> acetylene(2) + furfuryl(1)
+      source: restart
+    4:
+      reaction: CHO(73) + INT13(52) <=> C5H8O3(96) + CO(18)
+      source: restart
+    5:
+      reaction: C5H6O2(120) + P14(91) <=> C8H11O2(132)
+      source: restart
+    6:
+      reaction: HCCO(309) + R1_44(109) <=> CO(18) + ethylene(3)
+      source: JetSurF2.0
+    7:
+      reaction: C8H10O(213) + OH(26) <=> C8H11O2(105)
+      source: R_Addition_MultipleBond
+    8:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    9:
+      reaction: OH(26) + P14(91) <=> C3H4-A(14) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    3:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    4:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    5:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+    7:
+      reaction: H(54) + furfuryl(1) <=> OH(26) + P11(78)
+      source: 2FFOH_H_Pdep
+    8:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: C3H6(106) <=> H(54) + P14(91)
+      source: CurranPentane
+    10:
+      reaction: H(54) + furfuryl(1) <=> H2(20) + P2(41)
+      source: H_Abstraction
+ketene(9):
+  '1000':
+    1:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    2:
+      reaction: OH(26) + acetylene(2) <=> H(54) + ketene(9)
+      source: CurranPentane
+    3:
+      reaction: HCCO(309) + hcccch2(128) <=> C4H2(8) + ketene(9)
+      source: restart
+    4:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    5:
+      reaction: OH(26) + ketene(9) <=> H2O(21) + HCCO(309)
+      source: CurranPentane
+    6:
+      reaction: H(54) + ketene(9) <=> CO(18) + R1_44(109)
+      source: CurranPentane
+    7:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: C5H7O3(59) <=> INT13(52)
+      source: restart
+    9:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    10:
+      reaction: C5H6(7) + H(54) <=> CdCCdCCJ(162)
+      source: CurranPentane
+  '1100':
+    1:
+      reaction: HCCO(309) + R1_44(109) <=> CO(18) + ethylene(3)
+      source: JetSurF2.0
+    2:
+      reaction: OH(26) + acetylene(2) <=> H(54) + ketene(9)
+      source: CurranPentane
+    3:
+      reaction: H(54) + ketene(9) <=> CO(18) + R1_44(109)
+      source: CurranPentane
+    4:
+      reaction: OH(26) + ketene(9) <=> CH2OH(66) + CO(18)
+      source: CurranPentane
+    5:
+      reaction: OH(26) + ketene(9) <=> H2O(21) + HCCO(309)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    7:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    8:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: C4H2(8) + H(54) <=> hcccch2(128)
+      source: CurranPentane
+    10:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: HCCO(309) + R1_44(109) <=> CO(18) + ethylene(3)
+      source: JetSurF2.0
+    3:
+      reaction: H(54) + ketene(9) <=> CO(18) + R1_44(109)
+      source: CurranPentane
+    4:
+      reaction: OH(26) + acetylene(2) <=> H(54) + ketene(9)
+      source: CurranPentane
+    5:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    6:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    7:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    8:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    9:
+      reaction: R1_44(109) + hcccch2(128) <=> C5H6(7)
+      source: CurranPentane
+    10:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: HCCO(309) + R1_44(109) <=> CO(18) + ethylene(3)
+      source: JetSurF2.0
+    3:
+      reaction: C2H3(89) + H(54) <=> H2(20) + acetylene(2)
+      source: CurranPentane
+    4:
+      reaction: H(54) + ketene(9) <=> CO(18) + R1_44(109)
+      source: CurranPentane
+    5:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    6:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    7:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    8:
+      reaction: P14(91) + P2(41) <=> C3H6(106) + furfural(19)
+      source: restart
+    9:
+      reaction: C5H5O(27) + P2(41) <=> 2MF(12) + furfural(19)
+      source: restart
+    10:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: C4H6O(86) <=> ethylene(3) + ketene(9)
+      source: restart
+    3:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    4:
+      reaction: OH(26) + furfuryl(1) <=> INT13(52)
+      source: 2FFOH_OH_Pdep
+    5:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    6:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    7:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    8:
+      reaction: INT13(52) <=> C4H7O2(85) + CO(18)
+      source: restart
+    9:
+      reaction: INT13(52) <=> CO(18) + OCC1[CH]C1O(60)
+      source: restart
+    10:
+      reaction: H(54) + furfuryl(1) <=> H2(20) + P2(41)
+      source: H_Abstraction
+methane(15):
+  '1000':
+    1:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    2:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    3:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    4:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    5:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    6:
+      reaction: C2HCHO(247) + R1_44(109) <=> C4H5O(55)
+      source: restart
+    7:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    8:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    9:
+      reaction: C2HCHO(247) + R1_44(109) <=> C4H5O(51)
+      source: restart
+    10:
+      reaction: OH(26) + furfuryl(1) <=> OH(26) + P29(35)
+      source: 2FFOH_OH_Pdep
+  '1100':
+    1:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    2:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    3:
+      reaction: R1_44(109) + hcccch2(128) <=> C5H6(7)
+      source: CurranPentane
+    4:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    5:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    6:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    7:
+      reaction: H(54) + propyne(4) <=> R1_44(109) + acetylene(2)
+      source: CurranPentane
+    8:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: R1_44(109) + furfuryl(1) <=> P2(41) + methane(15)
+      source: H_Abstraction
+    10:
+      reaction: OH(26) + R1_44(109) <=> CH2(S)(312) + H2O(21)
+      source: CurranPentane
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    3:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    4:
+      reaction: R1_44(109) + hcccch2(128) <=> C5H6(7)
+      source: CurranPentane
+    5:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    6:
+      reaction: P14(91) + c-C4H5(47) <=> C7H10(275)
+      source: restart
+    7:
+      reaction: CH2OH(66) + R1_44(109) <=> FORMALDEHYDE(16) + methane(15)
+      source: FFCM1(-)
+    8:
+      reaction: OH(26) + R1_44(109) <=> CH2(S)(312) + H2O(21)
+      source: CurranPentane
+    9:
+      reaction: CHO(73) + R1_44(109) <=> CO(18) + methane(15)
+      source: CurranPentane
+    10:
+      reaction: H(54) + propyne(4) <=> R1_44(109) + acetylene(2)
+      source: CurranPentane
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    3:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    4:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    5:
+      reaction: R1_44(109) + hcccch2(128) <=> C5H6(7)
+      source: CurranPentane
+    6:
+      reaction: HCCO(309) + R1_44(109) <=> CO(18) + ethylene(3)
+      source: JetSurF2.0
+    7:
+      reaction: CH2(314) + OH(26) <=> FORMALDEHYDE(16) + H(54)
+      source: FFCM1(-)
+    8:
+      reaction: CH2OH(66) + R1_44(109) <=> FORMALDEHYDE(16) + methane(15)
+      source: FFCM1(-)
+    9:
+      reaction: CHO(73) + R1_44(109) <=> CO(18) + methane(15)
+      source: CurranPentane
+    10:
+      reaction: 1,3-butadiene(5) + H(54) <=> C2H3(89) + ethylene(3)
+      source: CurranPentane
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    3:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    4:
+      reaction: C2HCHO(247) + R1_44(109) <=> C4H5O(55)
+      source: restart
+    5:
+      reaction: C4H4O(62) + H(54) <=> C4H5O(55)
+      source: restart
+    6:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
+    7:
+      reaction: C4H5O(51) <=> IC3H4CHO-A(70)
+      source: restart
+    8:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: R1_44(109) + furfuryl(1) <=> P2(41) + methane(15)
+      source: H_Abstraction
+    10:
+      reaction: C4H5O(51) <=> C4H5O(55)
+      source: restart
+methanol(13):
+  '1000':
+    1:
+      reaction: CH2OH(66) + hcccch2(128) <=> C4H2(8) + methanol(13)
+      source: restart
+    2:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    3:
+      reaction: 2 hcccch2(128) <=> B123(116) + C4H2(8)
+      source: restart
+    4:
+      reaction: 2 hcccch2(128) <=> C4H2(8) + C4H4(17)
+      source: restart
+    5:
+      reaction: OH(26) + methanol(13) <=> CH2OH(66) + H2O(21)
+      source: CurranPentane
+    6:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    7:
+      reaction: P14(91) + hcccch2(128) <=> C3H6(106) + C4H2(8)
+      source: restart
+    8:
+      reaction: C5H6O(131) + OH(26) <=> C5H5O(273) + H2O(21)
+      source: H_Abstraction
+    9:
+      reaction: FORMALDEHYDE(16) + OH(26) <=> CHO(73) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: R1_44(109) + furfuryl(1) <=> P2(41) + methane(15)
+      source: H_Abstraction
+  '1100':
+    1:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    2:
+      reaction: OH(26) + methanol(13) <=> CH2OH(66) + H2O(21)
+      source: CurranPentane
+    3:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    4:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+    5:
+      reaction: CH2OH(66) + R1_44(109) <=> FORMALDEHYDE(16) + methane(15)
+      source: FFCM1(-)
+    6:
+      reaction: CH2(S)(312) + He <=> CH2(314) + He
+      source: FFCM1(-)
+    7:
+      reaction: P2(41) + R1_44(109) <=> furfural(19) + methane(15)
+      source: restart
+    8:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    9:
+      reaction: C4H2(8) + H(54) <=> hcccch2(128)
+      source: CurranPentane
+    10:
+      reaction: CH2OH(66) + hcccch2(128) <=> C4H2(8) + methanol(13)
+      source: restart
+  '1200':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    3:
+      reaction: OH(26) + methanol(13) <=> CH2OH(66) + H2O(21)
+      source: CurranPentane
+    4:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    5:
+      reaction: CH2OH(66) + R1_44(109) <=> FORMALDEHYDE(16) + methane(15)
+      source: FFCM1(-)
+    6:
+      reaction: OH(26) + R1_44(109) <=> CH2(S)(312) + H2O(21)
+      source: CurranPentane
+    7:
+      reaction: C2H3(89) + CH2OH(66) <=> acetylene(2) + methanol(13)
+      source: restart
+    8:
+      reaction: H(54) + methanol(13) <=> CH2OH(66) + H2(20)
+      source: CurranPentane
+    9:
+      reaction: CH2(S)(312) + He <=> CH2(314) + He
+      source: FFCM1(-)
+    10:
+      reaction: R1_44(109) + hcccch2(128) <=> C4H2(8) + methane(15)
+      source: restart
+  '1300':
+    1:
+      reaction: C2H3(89) + R1_44(109) <=> H(54) + P14(91)
+      source: CurranPentane
+    2:
+      reaction: 1,3-butadiene(5) + H(54) <=> C4H71-3(270)
+      source: CurranPentane
+    3:
+      reaction: C4H4(17) + OH(26) <=> C2HCHO(247) + R1_44(109)
+      source: restart
+    4:
+      reaction: CH2(314) + R1_44(109) <=> H(54) + ethylene(3)
+      source: FFCM1(-)
+    5:
+      reaction: C2H3(89) + CH2OH(66) <=> acetylene(2) + methanol(13)
+      source: restart
+    6:
+      reaction: CH2OH(66) + R1_44(109) <=> FORMALDEHYDE(16) + methane(15)
+      source: FFCM1(-)
+    7:
+      reaction: H(54) + methanol(13) <=> CH2OH(66) + H2(20)
+      source: CurranPentane
+    8:
+      reaction: OH(26) + methanol(13) <=> CH2OH(66) + H2O(21)
+      source: CurranPentane
+    9:
+      reaction: OH(26) + R1_44(109) <=> CH2(S)(312) + H2O(21)
+      source: CurranPentane
+    10:
+      reaction: CH2(S)(312) + He <=> CH2(314) + He
+      source: FFCM1(-)
+  '900':
+    1:
+      reaction: furfuryl(1) <=> C5H5O(28) + OH(26)
+      source: restart
+    2:
+      reaction: methanol(13) (+M) <=> OH(26) + R1_44(109) (+M)
+      source: CurranPentane
+    3:
+      reaction: P2(41) <=> C4H5O(51) + CO(18)
+      source: restart
+    4:
+      reaction: CH2OH(66) + furfuryl(1) <=> P2(41) + methanol(13)
+      source: H_Abstraction
+    5:
+      reaction: P2(41) <=> C4H5O(92) + CO(18)
+      source: restart
+    6:
+      reaction: FORMALDEHYDE(16) + H(54) (+M) <=> CH2OH(66) (+M)
+      source: CurranPentane
+    7:
+      reaction: H(54) + furfuryl(1) <=> CH2OH(66) + furan(6)
+      source: 2FFOH_H_Pdep
+    8:
+      reaction: OH(26) + furfuryl(1) <=> H2O(21) + P2(41)
+      source: 2FFOH_OH_Pdep
+    9:
+      reaction: INT13(52) <=> C4H7O2(85) + CO(18)
+      source: restart
+    10:
+      reaction: C5H5O(27) + OH(26) <=> furfuryl(1)
+      source: restart
