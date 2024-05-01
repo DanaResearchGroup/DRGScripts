@@ -42,6 +42,8 @@ g09 < input.gjf > input.log
 
 cp input.* "$PBS_O_WORKDIR/"
 
+cp output.* "$PBS_O_WORKDIR/"
+
 if [ -f check.chk ]; then
     cp check.chk "$PBS_O_WORKDIR/"
 fi
