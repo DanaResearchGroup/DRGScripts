@@ -1,0 +1,767 @@
+allow_nonisomorphic_2d: true
+job_memory: 50
+job_types:
+  bde: false
+  conformers: true
+  fine_grid: true
+  freq: true
+  irc: false
+  opt: true
+  rotors: true
+  sp: true
+level_of_theory: CBS-QB3
+project: xmr_2045_p_NPS_summary
+species:
+- adjlist: |
+    multiplicity 3
+    1  O u0 p2 c0 {3,S} {13,S}
+    2  O u1 p2 c0 {6,S}
+    3  C u0 p0 c0 {1,S} {7,S} {8,S} {9,S}
+    4  C u0 p0 c0 {5,S} {6,D} {10,S}
+    5  C u0 p0 c0 {4,S} {7,D} {11,S}
+    6  C u0 p0 c0 {2,S} {4,D} {12,S}
+    7  C u1 p0 c0 {3,S} {5,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {6,S}
+    13 H u0 p0 c0 {1,S}
+  label: C5H6O2(24)
+- adjlist: |
+    1  O u0 p2 c0 {4,S} {13,S}
+    2  O u0 p2 c0 {7,D}
+    3  C u0 p0 c0 {5,S} {6,S} {7,S} {8,S}
+    4  C u0 p0 c0 {1,S} {5,S} {9,S} {10,S}
+    5  C u0 p0 c0 {3,S} {4,S} {6,D}
+    6  C u0 p0 c0 {3,S} {5,D} {11,S}
+    7  C u0 p0 c0 {2,D} {3,S} {12,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {7,S}
+    13 H u0 p0 c0 {1,S}
+  label: C5H6O2(31)
+- adjlist: |
+    1  O u0 p2 c0 {4,S} {6,S}
+    2  O u0 p2 c0 {3,S} {13,S}
+    3  C u0 p0 c0 {2,S} {4,S} {5,S} {8,S}
+    4  C u0 p0 c0 {1,S} {3,S} {7,D}
+    5  C u0 p0 c0 {3,S} {6,D} {9,S}
+    6  C u0 p0 c0 {1,S} {5,D} {10,S}
+    7  C u0 p0 c0 {4,D} {11,S} {12,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {5,S}
+    10 H u0 p0 c0 {6,S}
+    11 H u0 p0 c0 {7,S}
+    12 H u0 p0 c0 {7,S}
+    13 H u0 p0 c0 {2,S}
+  label: P5-2(33)
+- adjlist: |
+    multiplicity 3
+    1  O u0 p2 c0 {6,S} {13,S}
+    2  O u1 p2 c0 {5,S}
+    3  C u1 p0 c0 {4,S} {5,S} {8,S}
+    4  C u0 p0 c0 {3,S} {6,D} {9,S}
+    5  C u0 p0 c0 {2,S} {3,S} {7,D}
+    6  C u0 p0 c0 {1,S} {4,D} {10,S}
+    7  C u0 p0 c0 {5,D} {11,S} {12,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {6,S}
+    11 H u0 p0 c0 {7,S}
+    12 H u0 p0 c0 {7,S}
+    13 H u0 p0 c0 {1,S}
+  label: C5H6O2(36)
+- adjlist: |
+    multiplicity 3
+    1  O u0 p2 c0 {4,S} {6,S}
+    2  O u0 p2 c0 {7,S} {13,S}
+    3  C u0 p0 c0 {5,S} {6,S} {8,S} {9,S}
+    4  C u0 p0 c0 {1,S} {5,D} {7,S}
+    5  C u0 p0 c0 {3,S} {4,D} {10,S}
+    6  C u1 p0 c0 {1,S} {3,S} {11,S}
+    7  C u1 p0 c0 {2,S} {4,S} {12,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {7,S}
+    13 H u0 p0 c0 {2,S}
+  label: C5H6O2(37)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {12,S}
+    2  O u1 p2 c0 {6,S}
+    3  C u0 p0 c0 {4,S} {6,D} {8,S}
+    4  C u0 p0 c0 {3,S} {7,D} {9,S}
+    5  C u0 p0 c0 {1,S} {7,D} {10,S}
+    6  C u0 p0 c0 {2,S} {3,D} {11,S}
+    7  C u0 p0 c0 {4,D} {5,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {1,S}
+  label: C5H5O2(43)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {7,S} {12,S}
+    2  O u0 p2 c0 {6,D}
+    3  C u0 p0 c0 {4,D} {5,S} {9,S}
+    4  C u0 p0 c0 {3,D} {6,S} {8,S}
+    5  C u0 p0 c0 {3,S} {7,D} {10,S}
+    6  C u0 p0 c0 {2,D} {4,S} {11,S}
+    7  C u1 p0 c0 {1,S} {5,D}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {1,S}
+  label: C5H5O2(44)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {4,S} {6,S}
+    2  C u0 p0 c0 {3,S} {4,S} {5,S} {7,S}
+    3  C u0 p0 c0 {2,S} {4,S} {8,S} {9,S}
+    4  C u1 p0 c0 {1,S} {2,S} {3,S}
+    5  C u0 p0 c0 {2,S} {6,D} {10,S}
+    6  C u0 p0 c0 {1,S} {5,D} {11,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+  label: C5H5O(50)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {4,D}
+    2  C u0 p0 c0 {3,S} {6,S} {7,S} {8,S}
+    3  C u0 p0 c0 {2,S} {5,D} {9,S}
+    4  C u0 p0 c0 {1,D} {5,S} {10,S}
+    5  C u1 p0 c0 {3,D} {4,S}
+    6  H u0 p0 c0 {2,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {2,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+  label: C4H5O(55)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {14,S}
+    2  O u0 p2 c0 {7,S} {15,S}
+    3  O u0 p2 c0 {6,D}
+    4  C u0 p0 c0 {6,S} {8,S} {11,S} {12,S}
+    5  C u0 p0 c0 {1,S} {6,S} {9,S} {10,S}
+    6  C u0 p0 c0 {3,D} {4,S} {5,S}
+    7  C u0 p0 c0 {2,S} {8,D} {13,S}
+    8  C u1 p0 c0 {4,S} {7,D}
+    9  H u0 p0 c0 {5,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {4,S}
+    12 H u0 p0 c0 {4,S}
+    13 H u0 p0 c0 {7,S}
+    14 H u0 p0 c0 {1,S}
+    15 H u0 p0 c0 {2,S}
+  label: C5H7O3(56)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {14,S}
+    2  O u0 p2 c0 {6,S} {15,S}
+    3  O u0 p2 c0 {8,D}
+    4  C u0 p0 c0 {5,S} {6,S} {7,S} {9,S}
+    5  C u0 p0 c0 {1,S} {4,S} {10,S} {11,S}
+    6  C u1 p0 c0 {2,S} {4,S} {13,S}
+    7  C u0 p0 c0 {4,S} {8,D} {12,S}
+    8  C u0 p0 c0 {3,D} {7,D}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {7,S}
+    13 H u0 p0 c0 {6,S}
+    14 H u0 p0 c0 {1,S}
+    15 H u0 p0 c0 {2,S}
+  label: C5H7O3(57)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {15,S}
+    2  O u0 p2 c0 {7,S} {14,S}
+    3  O u0 p2 c0 {8,D}
+    4  C u0 p0 c0 {5,S} {6,S} {7,S} {9,S}
+    5  C u0 p0 c0 {1,S} {4,S} {6,S} {11,S}
+    6  C u0 p0 c0 {4,S} {5,S} {8,S} {10,S}
+    7  C u0 p0 c0 {2,S} {4,S} {12,S} {13,S}
+    8  C u1 p0 c0 {3,D} {6,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {6,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {7,S}
+    13 H u0 p0 c0 {7,S}
+    14 H u0 p0 c0 {2,S}
+    15 H u0 p0 c0 {1,S}
+  label: C5H7O3(58)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {4,S} {15,S}
+    2  O u0 p2 c0 {5,S} {14,S}
+    3  O u0 p2 c0 {8,D}
+    4  C u0 p0 c0 {1,S} {6,S} {7,S} {9,S}
+    5  C u0 p0 c0 {2,S} {6,S} {10,S} {11,S}
+    6  C u1 p0 c0 {4,S} {5,S} {12,S}
+    7  C u0 p0 c0 {4,S} {8,D} {13,S}
+    8  C u0 p0 c0 {3,D} {7,D}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {6,S}
+    13 H u0 p0 c0 {7,S}
+    14 H u0 p0 c0 {2,S}
+    15 H u0 p0 c0 {1,S}
+  label: C5H7O3(59)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {4,S} {12,S}
+    2  O u0 p2 c0 {5,S} {13,S}
+    3  C u0 p0 c0 {4,S} {5,S} {6,S} {7,S}
+    4  C u0 p0 c0 {1,S} {3,S} {6,S} {8,S}
+    5  C u0 p0 c0 {2,S} {3,S} {9,S} {10,S}
+    6  C u1 p0 c0 {3,S} {4,S} {11,S}
+    7  H u0 p0 c0 {3,S}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {5,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {1,S}
+    13 H u0 p0 c0 {2,S}
+  label: OCC1[CH]C1O(60)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {12,S}
+    2  O u0 p2 c0 {6,S} {13,S}
+    3  C u0 p0 c0 {1,S} {4,S} {7,S} {8,S}
+    4  C u1 p0 c0 {3,S} {5,S} {9,S}
+    5  C u0 p0 c0 {4,S} {6,D} {10,S}
+    6  C u0 p0 c0 {2,S} {5,D} {11,S}
+    7  H u0 p0 c0 {3,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {1,S}
+    13 H u0 p0 c0 {2,S}
+  label: C4H7O2(61)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {2,S} {5,S}
+    2  C u0 p0 c0 {1,S} {3,S} {7,S} {8,S}
+    3  C u0 p0 c0 {2,S} {4,D} {9,S}
+    4  C u0 p0 c0 {3,D} {6,S} {10,S}
+    5  C u0 p0 c0 {1,S} {6,D} {11,S}
+    6  C u1 p0 c0 {4,S} {5,D}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {2,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {5,S}
+  label: C5H5O(63)
+- adjlist: |
+    1 C u0 p0 c0 {2,D} {3,S} {5,S}
+    2 C u0 p0 c0 {1,D} {6,S} {7,S}
+    3 C u0 p0 c0 {1,S} {4,D} {8,S}
+    4 C u0 p1 c0 {3,D}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {2,S}
+    7 H u0 p0 c0 {2,S}
+    8 H u0 p0 c0 {3,S}
+  label: C4H4(64)
+- adjlist: |
+    multiplicity 3
+    1  O u0 p2 c0 {5,S} {13,S}
+    2  O u1 p2 c0 {6,S}
+    3  C u0 p0 c0 {4,S} {7,S} {8,S} {9,S}
+    4  C u0 p0 c0 {3,S} {6,D} {10,S}
+    5  C u0 p0 c0 {1,S} {7,D} {11,S}
+    6  C u0 p0 c0 {2,S} {4,D} {12,S}
+    7  C u1 p0 c0 {3,S} {5,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {6,S}
+    13 H u0 p0 c0 {1,S}
+  label: C5H6O2(67)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {10,S}
+    2  C u0 p0 c0 {3,S} {4,S} {6,S} {7,S}
+    3  C u0 p0 c0 {2,S} {4,S} {5,D}
+    4  C u1 p0 c0 {2,S} {3,S} {8,S}
+    5  C u0 p0 c0 {1,S} {3,D} {9,S}
+    6  H u0 p0 c0 {2,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {5,S}
+    10 H u0 p0 c0 {1,S}
+  label: C4H5O(68)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,D}
+    2  C u0 p0 c0 {3,S} {4,S} {6,S} {7,S}
+    3  C u0 p0 c0 {2,S} {4,S} {8,S} {9,S}
+    4  C u1 p0 c0 {2,S} {3,S} {5,S}
+    5  C u0 p0 c0 {1,D} {4,S} {10,S}
+    6  H u0 p0 c0 {2,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {5,S}
+  label: C4H5O(69)
+- adjlist: |
+    multiplicity 3
+    1  O u0 p2 c0 {3,S} {13,S}
+    2  O u1 p2 c0 {5,S}
+    3  C u0 p0 c0 {1,S} {4,S} {7,S} {8,S}
+    4  C u0 p0 c0 {3,S} {5,D} {9,S}
+    5  C u0 p0 c0 {2,S} {4,D} {10,S}
+    6  C u0 p0 c0 {7,D} {11,S} {12,S}
+    7  C u1 p0 c0 {3,S} {6,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {6,S}
+    13 H u0 p0 c0 {1,S}
+  label: C5H6O2(71)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {4,S}
+    2  O u0 p2 c0 {3,S} {7,S}
+    3  C u0 p0 c0 {1,S} {2,S} {4,S} {5,S}
+    4  C u0 p0 c0 {1,S} {3,S} {8,S} {9,S}
+    5  C u1 p0 c0 {3,S} {6,S} {10,S}
+    6  C u0 p0 c0 {5,S} {7,D} {11,S}
+    7  C u0 p0 c0 {2,S} {6,D} {12,S}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {7,S}
+  label: C5H5O2(74)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {6,S}
+    2  O u0 p2 c0 {3,S} {7,S}
+    3  C u0 p0 c0 {1,S} {2,S} {4,D}
+    4  C u0 p0 c0 {3,D} {5,S} {8,S}
+    5  C u0 p0 c0 {4,S} {6,D} {9,S}
+    6  C u0 p0 c0 {1,S} {5,D} {10,S}
+    7  C u1 p0 c0 {2,S} {11,S} {12,S}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {5,S}
+    10 H u0 p0 c0 {6,S}
+    11 H u0 p0 c0 {7,S}
+    12 H u0 p0 c0 {7,S}
+  label: C5H5O2(75)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {4,S} {12,S}
+    2  O u0 p2 c0 {5,S} {13,S}
+    3  C u0 p0 c0 {4,S} {6,S} {9,S} {10,S}
+    4  C u0 p0 c0 {1,S} {3,S} {7,S} {8,S}
+    5  C u0 p0 c0 {2,S} {6,D} {11,S}
+    6  C u1 p0 c0 {3,S} {5,D}
+    7  H u0 p0 c0 {4,S}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {3,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {1,S}
+    13 H u0 p0 c0 {2,S}
+  label: C4H7O2(76)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {2,S} {4,S}
+    2  C u0 p0 c0 {1,S} {3,S} {7,S} {8,S}
+    3  C u0 p0 c0 {2,S} {6,D} {9,S}
+    4  C u0 p0 c0 {1,S} {5,D} {11,S}
+    5  C u0 p0 c0 {4,D} {6,S} {10,S}
+    6  C u1 p0 c0 {3,D} {5,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {2,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {4,S}
+  label: C5H5O(77)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {2,S} {4,S}
+    2  C u0 p0 c0 {1,S} {3,D} {7,S}
+    3  C u0 p0 c0 {2,D} {5,S} {8,S}
+    4  C u1 p0 c0 {1,S} {9,S} {10,S}
+    5  C u0 p0 c0 {3,S} {6,T}
+    6  C u0 p0 c0 {5,T} {11,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {6,S}
+  label: C5H5O(79)
+- adjlist: |
+    multiplicity 3
+    1  O u1 p2 c0 {4,S}
+    2  C u0 p0 c0 {3,S} {6,S} {7,S} {8,S}
+    3  C u0 p0 c0 {2,S} {4,D} {9,S}
+    4  C u0 p0 c0 {1,S} {3,D} {10,S}
+    5  C u0 p0 c0 {6,D} {11,S} {12,S}
+    6  C u1 p0 c0 {2,S} {5,D}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {2,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {5,S}
+  label: C5H6O(80)
+- adjlist: |
+    multiplicity 2
+    1  O u1 p2 c0 {2,S}
+    2  C u0 p0 c0 {1,S} {3,S} {7,S} {8,S}
+    3  C u0 p0 c0 {2,S} {4,D} {9,S}
+    4  C u0 p0 c0 {3,D} {5,S} {10,S}
+    5  C u0 p0 c0 {4,S} {6,T}
+    6  C u0 p0 c0 {5,T} {11,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {2,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {6,S}
+  label: C5H5O(81)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {7,S}
+    2  O u0 p2 c0 {3,S} {12,S}
+    3  C u0 p0 c0 {1,S} {2,S} {5,D}
+    4  C u0 p0 c0 {5,S} {6,D} {10,S}
+    5  C u0 p0 c0 {3,D} {4,S} {8,S}
+    6  C u0 p0 c0 {4,D} {7,S} {9,S}
+    7  C u1 p0 c0 {1,S} {6,S} {11,S}
+    8  H u0 p0 c0 {5,S}
+    9  H u0 p0 c0 {6,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {7,S}
+    12 H u0 p0 c0 {2,S}
+  label: C5H5O2(82)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {12,S}
+    2  O u0 p2 c0 {7,D}
+    3  C u1 p0 c0 {4,S} {6,S} {8,S}
+    4  C u0 p0 c0 {3,S} {5,D} {9,S}
+    5  C u0 p0 c0 {1,S} {4,D} {10,S}
+    6  C u0 p0 c0 {3,S} {7,D} {11,S}
+    7  C u0 p0 c0 {2,D} {6,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {1,S}
+  label: C5H5O2(83)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {13,S}
+    2  O u0 p2 c0 {5,S} {12,S}
+    3  C u0 p0 c0 {1,S} {4,S} {5,S} {6,S}
+    4  C u0 p0 c0 {3,S} {6,S} {7,S} {8,S}
+    5  C u0 p0 c0 {2,S} {3,S} {9,S} {10,S}
+    6  C u1 p0 c0 {3,S} {4,S} {11,S}
+    7  H u0 p0 c0 {4,S}
+    8  H u0 p0 c0 {4,S}
+    9  H u0 p0 c0 {5,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {2,S}
+    13 H u0 p0 c0 {1,S}
+  label: C4H7O2(87)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {2,S} {5,S}
+    2  C u0 p0 c0 {1,S} {3,S} {6,S} {7,S}
+    3  C u0 p0 c0 {2,S} {4,D} {8,S}
+    4  C u0 p0 c0 {3,D} {5,S} {9,S}
+    5  C u1 p0 c0 {1,S} {4,S} {10,S}
+    6  H u0 p0 c0 {2,S}
+    7  H u0 p0 c0 {2,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+  label: C4H5O(92)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {12,S}
+    2  O u0 p2 c0 {7,D}
+    3  C u0 p0 c0 {4,S} {6,S} {8,S} {9,S}
+    4  C u0 p0 c0 {3,S} {5,D} {10,S}
+    5  C u0 p0 c0 {1,S} {4,D} {11,S}
+    6  C u1 p0 c0 {3,S} {7,D}
+    7  C u0 p0 c0 {2,D} {6,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {1,S}
+  label: C5H5O2(94)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {5,S} {12,S}
+    2  O u1 p2 c0 {6,S}
+    3  C u0 p0 c0 {4,S} {5,D} {8,S}
+    4  C u0 p0 c0 {3,S} {7,D} {9,S}
+    5  C u0 p0 c0 {1,S} {3,D} {10,S}
+    6  C u0 p0 c0 {2,S} {7,D} {11,S}
+    7  C u0 p0 c0 {4,D} {6,D}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {1,S}
+  label: C5H5O2(95)
+- adjlist: |
+    multiplicity 2
+    1 C u0 p0 c0 {2,S} {3,S} {5,S} {6,S}
+    2 C u0 p0 c0 {1,S} {4,S} {7,S} {8,S}
+    3 C u1 p0 c0 {1,S} {4,S} {9,S}
+    4 C u0 p1 c0 {2,S} {3,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {1,S}
+    7 H u0 p0 c0 {2,S}
+    8 H u0 p0 c0 {2,S}
+    9 H u0 p0 c0 {3,S}
+  label: '[CH]1CCC1-2(98)'
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {6,S} {9,S}
+    2  O u0 p2 c0 {5,S} {21,S}
+    3  C u0 p0 c0 {4,S} {7,S} {9,S} {11,S}
+    4  C u0 p0 c0 {3,S} {8,S} {12,S} {13,S}
+    5  C u0 p0 c0 {2,S} {6,S} {14,S} {15,S}
+    6  C u0 p0 c0 {1,S} {5,S} {7,D}
+    7  C u0 p0 c0 {3,S} {6,D} {17,S}
+    8  C u0 p0 c0 {4,S} {10,D} {16,S}
+    9  C u1 p0 c0 {1,S} {3,S} {18,S}
+    10 C u0 p0 c0 {8,D} {19,S} {20,S}
+    11 H u0 p0 c0 {3,S}
+    12 H u0 p0 c0 {4,S}
+    13 H u0 p0 c0 {4,S}
+    14 H u0 p0 c0 {5,S}
+    15 H u0 p0 c0 {5,S}
+    16 H u0 p0 c0 {8,S}
+    17 H u0 p0 c0 {7,S}
+    18 H u0 p0 c0 {9,S}
+    19 H u0 p0 c0 {10,S}
+    20 H u0 p0 c0 {10,S}
+    21 H u0 p0 c0 {2,S}
+  label: C8H11O2(99)
+- adjlist: |
+    multiplicity 2
+    1 C u0 p0 c0 {3,S} {4,S} {5,S} {6,S}
+    2 C u0 p0 c0 {3,S} {4,S} {7,S} {8,S}
+    3 C u1 p0 c0 {1,S} {2,S} {9,S}
+    4 C u0 p1 c0 {1,S} {2,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {1,S}
+    7 H u0 p0 c0 {2,S}
+    8 H u0 p0 c0 {2,S}
+    9 H u0 p0 c0 {3,S}
+  label: '[CH]1CCC1(100)'
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {6,S} {9,S}
+    2  O u0 p2 c0 {5,S} {21,S}
+    3  C u0 p0 c0 {4,S} {6,S} {7,S} {11,S}
+    4  C u0 p0 c0 {3,S} {8,S} {12,S} {13,S}
+    5  C u0 p0 c0 {2,S} {6,S} {14,S} {15,S}
+    6  C u1 p0 c0 {1,S} {3,S} {5,S}
+    7  C u0 p0 c0 {3,S} {9,D} {17,S}
+    8  C u0 p0 c0 {4,S} {10,D} {16,S}
+    9  C u0 p0 c0 {1,S} {7,D} {18,S}
+    10 C u0 p0 c0 {8,D} {19,S} {20,S}
+    11 H u0 p0 c0 {3,S}
+    12 H u0 p0 c0 {4,S}
+    13 H u0 p0 c0 {4,S}
+    14 H u0 p0 c0 {5,S}
+    15 H u0 p0 c0 {5,S}
+    16 H u0 p0 c0 {8,S}
+    17 H u0 p0 c0 {7,S}
+    18 H u0 p0 c0 {9,S}
+    19 H u0 p0 c0 {10,S}
+    20 H u0 p0 c0 {10,S}
+    21 H u0 p0 c0 {2,S}
+  label: C8H11O2(101)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {4,S}
+    2  O u0 p2 c0 {7,D}
+    3  C u0 p0 c0 {1,S} {5,S} {8,S} {9,S}
+    4  C u0 p0 c0 {1,S} {6,D} {7,S}
+    5  C u1 p0 c0 {3,S} {6,S} {10,S}
+    6  C u0 p0 c0 {4,D} {5,S} {11,S}
+    7  C u0 p0 c0 {2,D} {4,S} {12,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {3,S}
+    10 H u0 p0 c0 {5,S}
+    11 H u0 p0 c0 {6,S}
+    12 H u0 p0 c0 {7,S}
+  label: C5H5O2(102)
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {9,S}
+    2  O u0 p2 c0 {5,S} {21,S}
+    3  C u0 p0 c0 {1,S} {4,S} {5,S} {6,S}
+    4  C u0 p0 c0 {3,S} {7,S} {11,S} {12,S}
+    5  C u0 p0 c0 {2,S} {3,S} {13,S} {14,S}
+    6  C u1 p0 c0 {3,S} {8,S} {16,S}
+    7  C u0 p0 c0 {4,S} {10,D} {15,S}
+    8  C u0 p0 c0 {6,S} {9,D} {17,S}
+    9  C u0 p0 c0 {1,S} {8,D} {18,S}
+    10 C u0 p0 c0 {7,D} {19,S} {20,S}
+    11 H u0 p0 c0 {4,S}
+    12 H u0 p0 c0 {4,S}
+    13 H u0 p0 c0 {5,S}
+    14 H u0 p0 c0 {5,S}
+    15 H u0 p0 c0 {7,S}
+    16 H u0 p0 c0 {6,S}
+    17 H u0 p0 c0 {8,S}
+    18 H u0 p0 c0 {9,S}
+    19 H u0 p0 c0 {10,S}
+    20 H u0 p0 c0 {10,S}
+    21 H u0 p0 c0 {2,S}
+  label: C8H11O2(103)
+- adjlist: |
+    multiplicity 2
+    1 C u0 p0 c0 {2,S} {3,S} {4,S} {5,S}
+    2 C u0 p0 c0 {1,S} {4,S} {6,S} {7,S}
+    3 C u1 p0 c0 {1,S} {8,S} {9,S}
+    4 C u0 p1 c0 {1,S} {2,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {2,S}
+    7 H u0 p0 c0 {2,S}
+    8 H u0 p0 c0 {3,S}
+    9 H u0 p0 c0 {3,S}
+  label: '[CH2]C1CC1(104)'
+- adjlist: |
+    multiplicity 2
+    1  O u0 p2 c0 {3,S} {6,S}
+    2  O u0 p2 c0 {5,S} {21,S}
+    3  C u0 p0 c0 {1,S} {4,S} {7,S} {11,S}
+    4  C u0 p0 c0 {3,S} {8,S} {12,S} {13,S}
+    5  C u0 p0 c0 {2,S} {6,S} {14,S} {15,S}
+    6  C u0 p0 c0 {1,S} {5,S} {9,D}
+    7  C u1 p0 c0 {3,S} {9,S} {17,S}
+    8  C u0 p0 c0 {4,S} {10,D} {16,S}
+    9  C u0 p0 c0 {6,D} {7,S} {18,S}
+    10 C u0 p0 c0 {8,D} {19,S} {20,S}
+    11 H u0 p0 c0 {3,S}
+    12 H u0 p0 c0 {4,S}
+    13 H u0 p0 c0 {4,S}
+    14 H u0 p0 c0 {5,S}
+    15 H u0 p0 c0 {5,S}
+    16 H u0 p0 c0 {8,S}
+    17 H u0 p0 c0 {7,S}
+    18 H u0 p0 c0 {9,S}
+    19 H u0 p0 c0 {10,S}
+    20 H u0 p0 c0 {10,S}
+    21 H u0 p0 c0 {2,S}
+  label: C8H11O2(105)
+- adjlist: |
+    multiplicity 2
+    1 C u0 p0 c0 {2,S} {3,S} {5,S} {6,S}
+    2 C u0 p0 c+1 {1,S} {3,S} {4,S}
+    3 C u0 p1 c-1 {1,S} {2,S} {7,S}
+    4 C u1 p0 c0 {2,S} {8,S} {9,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {1,S}
+    7 H u0 p0 c0 {3,S}
+    8 H u0 p0 c0 {4,S}
+    9 H u0 p0 c0 {4,S}
+  label: C4H5(107)
+- adjlist: |
+    1  O u0 p2 c0 {3,S} {13,S}
+    2  O u0 p2 c0 {6,D}
+    3  C u0 p0 c0 {1,S} {4,S} {5,S} {8,S}
+    4  C u0 p0 c0 {3,S} {6,S} {9,S} {10,S}
+    5  C u0 p0 c0 {3,S} {7,S} {11,S} {12,S}
+    6  C u0 p0 c0 {2,D} {4,S} {7,S}
+    7  C u0 p1 c0 {5,S} {6,S}
+    8  H u0 p0 c0 {3,S}
+    9  H u0 p0 c0 {4,S}
+    10 H u0 p0 c0 {4,S}
+    11 H u0 p0 c0 {5,S}
+    12 H u0 p0 c0 {5,S}
+    13 H u0 p0 c0 {1,S}
+  label: C5H6O2(108)
+- adjlist: |
+    multiplicity 3
+    1 C u0 p0 c0 {2,S} {4,S} {5,S} {6,S}
+    2 C u1 p0 c0 {1,S} {3,S} {7,S}
+    3 C u0 p0 c0 {2,S} {4,D} {8,S}
+    4 C u1 p0 c0 {1,S} {3,D}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {1,S}
+    7 H u0 p0 c0 {2,S}
+    8 H u0 p0 c0 {3,S}
+  label: C4H4(110)
+- adjlist: |
+    1 C u0 p0 c0 {2,S} {3,S} {4,S} {5,S}
+    2 C u0 p0 c0 {1,S} {3,S} {6,S} {7,S}
+    3 C u0 p0 c0 {1,S} {2,S} {4,D}
+    4 C u0 p0 c0 {1,S} {3,D} {8,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {2,S}
+    7 H u0 p0 c0 {2,S}
+    8 H u0 p0 c0 {4,S}
+  label: C4H4(111)
+- adjlist: |
+    multiplicity 3
+    1 C u0 p0 c0 {2,S} {3,S} {4,D}
+    2 C u1 p0 c0 {1,S} {3,S} {5,S}
+    3 C u1 p0 c0 {1,S} {2,S} {6,S}
+    4 C u0 p0 c0 {1,D} {7,S} {8,S}
+    5 H u0 p0 c0 {2,S}
+    6 H u0 p0 c0 {3,S}
+    7 H u0 p0 c0 {4,S}
+    8 H u0 p0 c0 {4,S}
+  label: C4H4(112)
+- adjlist: |
+    1 C u0 p0 c0 {2,S} {5,S} {6,S} {7,S}
+    2 C u0 p0 c0 {1,S} {3,S} {4,D}
+    3 C u0 p0 c0 {2,S} {4,D} {8,S}
+    4 C u0 p0 c0 {2,D} {3,D}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {1,S}
+    7 H u0 p0 c0 {1,S}
+    8 H u0 p0 c0 {3,S}
+  label: C4H4(113)
+- adjlist: |
+    multiplicity 3
+    1 C u0 p0 c0 {2,S} {5,S} {6,S} {7,S}
+    2 C u1 p0 c0 {1,S} {3,D}
+    3 C u0 p0 c0 {2,D} {4,D}
+    4 C u1 p0 c0 {3,D} {8,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {1,S}
+    7 H u0 p0 c0 {1,S}
+    8 H u0 p0 c0 {4,S}
+  label: C4H4(114)
+- adjlist: |
+    1 C u0 p0 c0 {2,S} {3,S} {4,S} {5,S}
+    2 C u0 p0 c0 {1,S} {3,S} {4,S} {6,S}
+    3 C u0 p0 c0 {1,S} {2,S} {7,S} {8,S}
+    4 C u0 p1 c0 {1,S} {2,S}
+    5 H u0 p0 c0 {1,S}
+    6 H u0 p0 c0 {2,S}
+    7 H u0 p0 c0 {3,S}
+    8 H u0 p0 c0 {3,S}
+  label: C4H4(115)
+ts_adapters:
+- AutoTST
+- heuristics
