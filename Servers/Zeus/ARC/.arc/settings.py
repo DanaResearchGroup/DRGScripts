@@ -8,9 +8,9 @@ import string
 
 
 servers = {
-    'local': {  # Each Zeus node containes 80 cores and 378 GB RAM
+    'local': {  # Each Zeus node contains 80 cores and 378 GB RAM
         'cluster_soft': 'PBS',
-        'un': 'alon',
+        'un': '<your username>',
         'cpus': 16,  # 20
         'memory': 160,  # 360 / 4.0
     },
