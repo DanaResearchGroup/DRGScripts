@@ -1,0 +1,60 @@
+OH(18):
+  '1800':
+    1:
+      kinetics: |-
+        Arrhenius(A=(4e+10,'cm^3/(mol*s)'), n=-0, Ea=(0,'kcal/mol'), T0=(1,'K'), comment="""Estimated from node Root_Ext-1R!H-R_4R->O_Ext-4O-R_Sp-5R!H-1R!H_Ext-5R!H-R
+        Multiplied by reaction path degeneracy 4.0""")
+      reaction: O2(16) + PB9(21) <=> 2BF(1) + hydroperoxyl(17)
+      source: restart
+    2:
+      kinetics: Chebyshev(coeffs=[[-11.52,-0.2488,-0.1238,-0.03282],[14.24,0.2891,0.1391,0.03276],[-0.3184,0.02992,0.01957,0.009237],[-0.03702,-0.09458,-0.0413,-0.006106],[-0.03249,0.01213,-0.001873,-0.006631],[-0.007047,0.01453,0.00766,0.0018]],
+        kunits='cm^3/(mol*s)', Tmin=(300,'K'), Tmax=(2010,'K'), Pmin=(0.01,'atm'),
+        Pmax=(98.692,'atm'))
+      reaction: C5H5O(25) + NC3H7(24) <=> C8H11O(12) + H(19)
+      source: restart
+    3:
+      kinetics: Chebyshev(coeffs=[[9.925,0.5638,-0.1197,0.01207],[1.293,0.799,-0.08665,-0.02699],[-0.3404,0.4131,0.02239,-0.03139],[-0.2099,0.1506,0.0507,-0.01104],[-0.08583,0.009542,0.04208,0.004012],[-0.01929,-0.03668,0.021,0.009565]],
+        kunits='cm^3/(mol*s)', Tmin=(300,'K'), Tmax=(2010,'K'), Pmin=(0.01,'atm'),
+        Pmax=(98.692,'atm'))
+      reaction: 2BF(1) + H(19) <=> PB10(22)
+      source: restart
+    4:
+      kinetics: |-
+        Arrhenius(A=(1350,'cm^3/(mol*s)'), n=2.7, Ea=(0,'kcal/mol'), T0=(1,'K'), comment="""Estimated from node Root_Ext-1R!H-R_N-4R->O_N-Sp-5R!H=1R!H_Ext-4CHNS-R_N-6R!H->S_4CHNS->C_N- Sp-6BrBrBrCCCClClClFFFIIINNNOOOPPPSiSiSi#4C_6BrCClFINOPSi->C_1R!H-inRing
+        Multiplied by reaction path degeneracy 2.0""")
+      reaction: 2BF_radical_1(4) + PB9(21) <=> 2 2BF(1)
+      source: restart
+    5:
+      kinetics: Chebyshev(coeffs=[[-35.22,1.065,-0.237,-0.00829],[37.21,-0.02674,0.03155,0.007313],[-0.5057,0.5134,-0.007833,-0.04273],[-0.1579,0.1354,-0.01044,-0.004544],[-0.04025,-0.02177,0.03728,-0.0007171],[-0.001789,-0.03193,0.02017,-0.0005826]],
+        kunits='s^-1', Tmin=(300,'K'), Tmax=(2010,'K'), Pmin=(0.01,'atm'), Pmax=(98.692,'atm'))
+      reaction: 2BF(1) <=> C8H11O(12) + H(19)
+      source: restart
+    6:
+      kinetics: Arrhenius(A=(2.10782,'cm^3/(mol*s)'), n=3.627, Ea=(33.408,'kcal/mol'),
+        T0=(1,'K'))
+      reaction: 2BF(1) + O2(16) <=> 2BF_radical_3(8) + hydroperoxyl(17)
+      source: 2BF_H_Abstraction
+    7:
+      kinetics: |-
+        Arrhenius(A=(1350,'cm^3/(mol*s)'), n=2.7, Ea=(0,'kcal/mol'), T0=(1,'K'), comment="""Estimated from node Root_Ext-1R!H-R_N-4R->O_N-Sp-5R!H=1R!H_Ext-4CHNS-R_N-6R!H->S_4CHNS->C_N- Sp-6BrBrBrCCCClClClFFFIIINNNOOOPPPSiSiSi#4C_6BrCClFINOPSi->C_1R!H-inRing
+        Multiplied by reaction path degeneracy 2.0""")
+      reaction: C8H11O(10) + PB10(22) <=> 2 2BF(1)
+      source: restart
+    8:
+      kinetics: Chebyshev(coeffs=[[-20.57,0.2082,-0.05365,0.002115],[25.63,0.3821,-0.09495,0.002154],[-0.1903,0.2931,-0.06403,-0.002535],[-0.1572,0.1834,-0.02861,-0.006562],[-0.09178,0.08755,-0.001959,-0.00753],[-0.03991,0.02546,0.01018,-0.005416]],
+        kunits='s^-1', Tmin=(300,'K'), Tmax=(2010,'K'), Pmin=(0.01,'atm'), Pmax=(98.692,'atm'))
+      reaction: 2BF(1) <=> 2BF_radical_3(8) + H(19)
+      source: restart
+    9:
+      kinetics: |-
+        Arrhenius(A=(0.0106757,'cm^3/(mol*s)'), n=4.302, Ea=(4.423,'kcal/mol'), T0=(1,'K'), comment="""Estimated using template [C/H2/NonDeC;Cd_sec_rad] for rate rule [C/H2/NonDeC;Cd_rad/NonDeO]
+        Euclidian distance = 1.0
+        Multiplied by reaction path degeneracy 2.0
+        family: H_Abstraction""")
+      reaction: 2BF(1) + C8H11O(14) <=> 2BF(1) + 2BF_radical_2(6)
+      source: H_Abstraction
+    10:
+      kinetics: Chebyshev(coeffs=[[-6.185,2.259,-0.08725,-0.03808],[10.97,0.6522,0.001311,0.02897],[-0.5226,0.2605,-0.0389,0.03798],[-0.4026,0.1833,-0.02108,0.01036],[-0.246,0.1269,-0.002067,-0.01255],[-0.09878,0.04635,0.003889,-0.01353]],
+        kunits='s^-1', Tmin=(300,'K'), Tmax=(2010,'K'), Pmin=(0.01,'atm'), Pmax=(98.692,'atm'))
+      reaction: 2BF_radical_2(6) <=> 2BF_radical_1(4)
+      source: restart

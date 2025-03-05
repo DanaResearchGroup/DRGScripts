@@ -1,0 +1,165 @@
+project: 2BF
+
+t3:
+  options:
+    library_name: 2BF_xmr_2043
+    max_T3_iterations: 15
+    max_RMG_exceptions_allowed: 10
+    modify_concentration_ranges_in_reverse: False
+    modify_concentration_ranges_together: True  
+    num_sa_per_temperature_range: 3
+    num_sa_per_pressure_range: 3
+    num_sa_per_concentration_range: 3
+
+  sensitivity:
+    adapter: RMGConstantTP
+    SA_threshold: 0.01
+    pdep_SA_threshold: 0.001
+    ME_methods: ['CSE', 'MSC']
+    top_SA_species: 10 
+    top_SA_reactions: 10
+
+rmg:
+  database:
+    thermo_libraries:
+      - primaryThermoLibrary
+      - BurkeH2O2
+      - 2BF_thermo
+      - 2BF_thermo_wo_rotors
+      - 2FFOH_thermo
+      - 2FFOH_thermo_wo_rotors
+      - '/home/nellymitnik/runs/T3/2BF/xmr_2033/2BF_xmr_2027_b_lib.py' #I copied only the file from previous run
+      - '/home/nellymitnik/runs/T3/2BF/xmr_2033/2BF_xmr_2029_lib.py' #I copied only the file from previous run
+      - thermo_DFT_CCSDTF12_BAC
+      - DFT_QCI_thermo
+      - Spiekermann_refining_elementary_reactions
+      - CurranPentane
+      - C3
+      - CBS_QB3_1dHR
+      - FFCM1(-)
+      - JetSurF2.0
+      - s3_5_7_ane
+      - naphthalene_H
+      - USC-Mech-ii
+      - heavy_oil_ccsdtf12_1dHR
+      - bio_oil
+      - vinylCPD_H
+      - Klippenstein_Glarborg2016
+      - Fulvene_H
+      - Chernov
+      - C10H11
+      - CH
+    kinetics_libraries:
+      - primaryH2O2
+      - 2BF_H_Abstraction
+      - 2BF_kinetics_w_rotors
+      - 2BF_kinetics_wo_rotors
+      - 2FFOH_kinetics_w_rotors
+      - 2FFOH_H_Abstraction
+      - 2FFOH_H_Pdep
+      - 2FFOH_OH_Pdep
+      - C2H2_init
+      - C2H4+O_Klipp2017
+      - CurranPentane
+      - FFCM1(-)
+      - NOx2018
+      - JetSurF2.0
+      - Klippenstein_Glarborg2016
+      - C10H11
+      - C12H11_pdep
+      - Lai_Hexylbenzene
+      - 1989_Stewart_2CH3_to_C2H5_H
+      - 2001_Tokmakov_H_Toluene_to_CH3_Benzene
+      - 2003_Miller_Propargyl_Recomb_High_P
+      - 2005_Senosiain_OH_C2H2
+      - kislovB
+      - c-C5H5_CH3_Sharma
+      - fascella
+      - 2006_Joshi_OH_CO
+      - 2009_Sharma_C5H5_CH3_highP
+      - 2015_Buras_C2H3_C4H6_highP
+      - C3
+      - Methylformate
+      - C6H5_C4H4_Mebel
+      - vinylCPD_H
+      - Mebel_Naphthyl
+      - Mebel_C6H5_C2H2
+      - Fulvene_H
+
+  species:
+    - label: 2BF
+      smiles: CCCCC1=CC=CO1
+      concentration: 1
+      observable: true
+      seed_all_rads: ['radical', 'peroxyl']
+    - label: O2
+      smiles: '[O][O]'
+      concentration: [5.75,17.25]
+      observable: true
+    - label: N2
+      smiles: 'N#N'
+      concentration: [21.62,64.86]
+      balance: false
+      reactive: false
+    - label: hydroperoxyl
+      smiles: '[O]O'
+      observable: true
+    - label: OH_rad
+      smiles: '[OH]'
+      observable: true
+    - label: H_rad
+      smiles: '[H]'
+      observable: true
+    - label: PB8
+      smiles: 'CCCCC1[CH]C=CO1'
+      observable: true  
+    - label: PB9
+      smiles: 'CCCC[C]1CC=CO1'
+      observable: true  
+    - label: PB10
+      smiles: 'CCCCC1=CC[CH]O1'
+      observable: true 
+
+  reactors:
+    - type: gas batch constant T P
+      T: [700, 1990]  # K
+      P: [1.0, 50.0]  # bar
+      termination_rate_ratio: 0.01
+
+  model:
+    core_tolerance: [0.20, 0.10, 0.05, 0.02, 0.01] #, 0.005, 0.001]
+
+  pdep:
+    method: MSC
+    max_grain_size: 2
+    max_number_of_grains: 250
+    T: [300, 2010, 10]  # K
+    P: [0.01, 100, 10]  # bar
+    interpolation: Chebyshev
+    max_atoms: 28 #2BF has 21 atoms and should have a Pdep behavior, until now was 16 so rmg didnt consider it at all for 2BF
+
+  options:
+    save_edge: true
+    save_html: true
+    generate_plots: true
+
+  # species constraints (optional block)
+  species_constraints:
+    allowed: ['input species', 'seed mechanisms', 'reaction libraries']
+    max_C_atoms: 16
+    max_O_atoms: 5
+    max_N_atoms: 0
+    max_Si_atoms: 0
+    max_S_atoms: 0
+    max_heavy_atoms: 10
+    max_radical_electrons: 2
+    max_singlet_carbenes: 1
+    max_carbene_radicals: 1
+
+qm:
+  adapter: ARC
+  level_of_theory: CBS-QB3
+  job_memory: 20
+  job_types:
+    rotors: false
+
