@@ -6,7 +6,7 @@
 
 # RMG-Py
 export rmgpy_path='~/Code/RMG-Py/'
-export rmgdb_path='~/Code/RMG-Py/'
+export rmgdb_path='~/Code/RMG-database/'
 export PYTHONPATH=$PYTHONPATH:~/Code/RMG-Py/
 
 # ARC
@@ -20,22 +20,27 @@ export PYTHONPATH=$PYTHONPATH:~/Code/T3/
 # g09
 source /usr/local/g09/setup.sh
 
-
-# aliases
+# personalized aliases
+alias rc='source ~/.bashrc'
+alias rce='nano ~/.bashrc'
+alias erc='nano ~/.bashrc'
 
 alias rmge='conda activate rmg_env'
 alias arce='conda activate arc_env'
 alias t3e='conda activate t3_env'
+alias cte='conda activate ct_env'
 alias deact='conda deactivate'
-alias rc='source ~/.bashrc'
-alias erc='nano ~/.bashrc'
-alias rce='nano ~/.bashrc'
+
 alias rmgcode='cd $rmgpy_path'
 alias dbcode='cd $rmgdb_path'
 alias arcode='cd $arc_path'
 alias t3code='cd $t3_path'
-alias runs='cd ~/runs'
+
 alias rmg='python-jl $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arkane='python-jl $rmgpy_path/Arkane.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arc='python $arc_path/ARC.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arcrestart='python $arc_path/ARC.py restart.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias t3='python $t3_path/T3.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+
 alias sb='qsub submit.sh'
 alias st='qstat -u <user>'
-

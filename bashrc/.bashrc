@@ -18,17 +18,29 @@ export t3_path=~/Code/T3/
 export PYTHONPATH=$PYTHONPATH:~/Code/T3/
 
 
-# aliases
+# personalized aliases
+alias rc='source ~/.bashrc'
+alias rce='nano ~/.bashrc'
+alias erc='nano ~/.bashrc'
 
 alias rmge='conda activate rmg_env'
 alias arce='conda activate arc_env'
 alias t3e='conda activate t3_env'
+alias cte='conda activate ct_env'
 alias deact='conda deactivate'
-alias rc='source ~/.bashrc'
-alias erc='nano ~/.bashrc'
+
 alias rmgcode='cd $rmgpy_path'
 alias dbcode='cd $rmgdb_path'
 alias arcode='cd $arc_path'
 alias t3code='cd $t3_path'
+
+alias j='cd ~/scripts && jupyter notebook'
+
+alias rmg='python-jl $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arkane='python-jl $rmgpy_path/Arkane.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arc='python $arc_path/ARC.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arcrestart='python $arc_path/ARC.py restart.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias t3='python $t3_path/T3.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+
 alias runs='cd ~/runs'
 alias rmg='python-jl $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
