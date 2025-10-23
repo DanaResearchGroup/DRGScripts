@@ -67,4 +67,16 @@ alias tst='pytest -ra -vv'
 alias sb='condor_submit submit.sub'
 alias st='condor_q -cons "Member(Jobstatus,{1,2})" -af:j "{\"0\",\"P\",\"R\",\"X\",\"C\",\"H\",\">\",\"S\"}[JobStatus]" RequestCpus RequestMemory JobName "(Time() - EnteredCurrentStatus)"'
 alias runs='cd /storage/ce_dana/[username]/runs'
+alias sl="screen -ls"
+
+screen_quit() {
+    if [ -z "$1" ]; then
+        echo "Please provide a screen session name."
+        return 1
+    fi
+    screen -X -S "$1" quit
+}
+
+
+
 
