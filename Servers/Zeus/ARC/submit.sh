@@ -1,9 +1,9 @@
 #!/bin/bash -l
 
 #PBS -N <name>  # Note: Manually change this job name, and delete this comment
-#PBS -q zeus_new_q
+#PBS -q alon_q
 #PBS -l walltime=72:00:00
-#PBS -l select=1:ncpus=1
+#PBS -l select=1:ncpus=1:host=n170
 #PBS -o out.txt
 #PBS -e err.txt
 
@@ -12,5 +12,4 @@ cd $PBS_O_WORKDIR
 
 conda activate arc_env
 
-python $arc_code/ARC.py input.yml
-
+python $arc_path/ARC.py input.yml
