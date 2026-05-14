@@ -9,9 +9,9 @@ submit_scripts = {
     'local': {
         'gaussian': """#!/bin/bash -l
 
-#PBS -q mafat_new_q
+#PBS -q alon_q
 #PBS -N {name}
-#PBS -l select=1:ncpus={cpus}:mem={memory}:mpiprocs={cpus}
+#PBS -l select=1:ncpus={cpus}:mem={memory}mb:mpiprocs={cpus}
 #PBS -o out.txt
 #PBS -e err.txt
 
@@ -20,9 +20,13 @@ submit_scripts = {
 PBS_O_WORKDIR="{pwd}"
 cd "$PBS_O_WORKDIR"
 
-source /usr/local/g09/setup.sh
+# source /usr/local/g09/setup.sh 
+# source /usr/local/g16/setup.sh
 
-GAUSS_SCRDIR="/gtmp/{un}/scratch/g09/$PBS_JOBID"
+source /usr/local/g16-gpu/g16/setup.sh # uses the faster installation of gaussian 16 (and rev C.02)
+
+
+GAUSS_SCRDIR="/gtmp/{un}/scratch/g16/$PBS_JOBID"
 
 mkdir -p "$GAUSS_SCRDIR"
 
@@ -38,7 +42,7 @@ if [ -f "$PBS_O_WORKDIR/check.chk" ]; then
     cp "$PBS_O_WORKDIR/check.chk" "$GAUSS_SCRDIR/"
 fi
 
-g09 < input.gjf > input.log
+g16 < input.gjf > input.log
 
 cp input.* "$PBS_O_WORKDIR/"
 
@@ -93,7 +97,7 @@ touch final_time
         """,
       'qchem': """#!/bin/bash -l
      
-#PBS -q mafat_new_q
+#PBS -q alon_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}:mpiprocs={cpus}
 #PBS -o out.txt
@@ -145,7 +149,7 @@ touch final_time
         """,
         'orca': """#!/bin/bash -l
 
-#PBS -q mafat_new_q
+#PBS -q alon_q
 #PBS -N {name}
 #PBS -l select=1:ncpus={cpus}:mem={memory}:mpiprocs={cpus}
 #PBS -o out.txt
@@ -153,7 +157,8 @@ touch final_time
 
 . ~/.bashrc
 
-export OrcaDir=/usr/local/orca-5.0.4
+# export OrcaDir=/usr/local/orca-5.0.4
+export OrcaDir=/usr/local/orca6
 export PATH=$PATH:$OrcaDir
 
 export OMPI_Dir=/usr/local/openmpi-4.1.1
@@ -166,12 +171,13 @@ cd "$PBS_O_WORKDIR"
 
 touch initial_time
 
-ORCA_SCRDIR="/gtmp/$PBS_JOBID"
+ORCA_SCRDIR="/gtmp/{un}/scratch/orca/$PBS_JOBID"
 mkdir -p "$ORCA_SCRDIR"
 export ORCA_SCRDIR="$ORCA_SCRDIR"
 cd "$ORCA_SCRDIR"
 
-source /usr/local/orca-5.0.4/setup.sh
+# source /usr/local/orca-5.0.4/setup.sh
+source /usr/local/orca6/setup.sh
 source /usr/local/openmpi-4.1.1/setup.sh
 
 which orca
@@ -181,8 +187,10 @@ cp "$PBS_O_WORKDIR/input.in" .
 ${{OrcaDir}}/orca input.in > input.log
 
 cd "$PBS_O_WORKDIR"
-cp "$ORCA_SCRDIR/input.log" .
-cp "$ORCA_SCRDIR/input_property.txt" .
+cp "$ORCA_SCRDIR/input.log" output.out
+cp "$ORCA_SCRDIR/input.hess" .
+cp "$ORCA_SCRDIR/input.property.txt" .
+
 
 touch final_time
 
