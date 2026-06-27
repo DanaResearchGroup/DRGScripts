@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Python lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install ruff
+        run: pip install ruff
+      - name: Byte-compile all scripts
+        run: python -m compileall -q $(git ls-files '*.py')
+      - name: Lint for real errors
+        # Fail only on genuine bugs (syntax errors, undefined names),
+        # not on style — this is a loose research-scripts repo.
+        run: ruff check --select E9,F63,F7,F82 .
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Explicit so the repo allowlist applies regardless of auto-detection.
+          GITLEAKS_CONFIG: ${{ github.workspace }}/.gitleaks.toml
