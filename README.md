@@ -45,9 +45,9 @@ Most scripts assume you already have RMG-Py / ARC / T3 installed and on your `PY
 
 - Branch off `main` and open a pull request; don't push directly to `main`.
 - **CI runs on every PR** (see badges above):
-  - a **Python lint** that byte-compiles all scripts and fails on genuine errors
-    (syntax errors, undefined names) via [ruff](https://github.com/astral-sh/ruff) —
-    style is intentionally not enforced;
+  - a **Python lint**: `python -m compileall` byte-compiles all scripts, then
+    [ruff](https://github.com/astral-sh/ruff) fails only on genuine errors (syntax
+    errors, undefined names) — style is intentionally not enforced;
   - a **[gitleaks](https://github.com/gitleaks/gitleaks) secret scan**.
 - **Never commit real secrets.** Server settings here are placeholders; keep real
   credentials in your local `~/.arc` / `~/.t3`.
