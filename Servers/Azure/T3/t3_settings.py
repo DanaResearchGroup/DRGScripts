@@ -19,7 +19,7 @@ servers = {
         'cluster_soft': 'Slurm',
         'address': '{IPADDRESS}',
         'un': '{USERNAME}',
-        'key': '/home/{LOCAL_USERNAME}}/.ssh/ubuntu-image_key.pem',
+        'key': '/home/{LOCAL_USERNAME}/.ssh/ubuntu-image_key.pem',
         'cpus': 16,
         'memory': 32,
         'path': '/mount/nfsshareslurm/nfs/',
@@ -44,16 +44,6 @@ submit_filenames = {'OGE': 'submit.sh',
                     'PBS': 'submit.sh',
                     'HTCondor': 'submit.sub',
                     }
-
-check_status_command = {'OGE': 'export SGE_ROOT=/opt/sge; /opt/sge/bin/lx24-amd64/qstat',
-                        'Slurm': '/usr/bin/squeue',
-                        'PBS': '/opt/pbs/bin/qstat',
-                        }
-
-submit_command = {'OGE': 'export SGE_ROOT=/opt/sge; /opt/sge/bin/lx24-amd64/qsub',
-                  'Slurm': '/usr/bin/sbatch',
-                  'PBS': '/opt/pbs/bin/qsub',
-                  }
 
 delete_command = {'OGE': 'export SGE_ROOT=/opt/sge; /opt/sge/bin/lx24-amd64/qdel',
                   'Slurm': '/usr/bin/scancel',
