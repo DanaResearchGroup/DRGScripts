@@ -73,7 +73,7 @@ def create_kinetic_library(rxns_list,path,kinetic_lib_name,short_desc_kinetic_li
     lib.save(path=path)
 
 #Edit paths and files:
-base_dir='/home/nelly/Code/scripts/Kinetics/files'
+base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files')
 smiles_csv = 'smiles_csv.csv'
 kinetics_csv = 'kinetics_csv.csv'
 kinetics_path= os.path.join(base_dir,'reactions.py')

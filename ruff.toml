@@ -1,0 +1,10 @@
+# ruff config for the CI lint job (.github/workflows/ci.yml).
+#
+# These paths are RMG domain-specific scripts that RMG exec()s with an injected
+# namespace (species, reaction, entry, Arrhenius, database, simpleReactor, ...).
+# They are generated/DSL files, not standalone Python, so they must not be linted.
+extend-exclude = [
+    "data",                    # RMG-generated reaction networks
+    "**/files/reactions.py",   # generated RMG kinetics libraries
+    "**/RMG/input.py",         # RMG job input scripts
+]

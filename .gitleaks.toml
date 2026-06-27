@@ -1,0 +1,16 @@
+# gitleaks config for the secret-scan CI job.
+# Extends the default ruleset; only adds allowlist entries for known-safe placeholders.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Templated placeholders in the Servers/ config files — not real secrets"
+# The server settings/submit templates ship with placeholders to be filled in
+# locally (under ~/.arc and ~/.t3), never real values. Allow the placeholder
+# shapes and the example key *path* (no key material is committed).
+regexes = [
+  '''\{IPADDRESS\}''',
+  '''\{USERNAME\}''',
+  '''\{LOCAL_USERNAME\}''',
+  '''ubuntu-image_key\.pem''',
+]

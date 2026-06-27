@@ -58,7 +58,7 @@ def create_Pdep_kinetics_list(Pdep_kinetics_csv):
     for col in range(1,len(df_kinetics.columns),num_pressures):
         rxn_label = df_kinetics.columns[col]
         print(rxn_label)
-        K_matrix = df_kinetics.to_numpy()[1: , col:col+4]
+        K_matrix = df_kinetics.to_numpy()[1: , col:col+num_pressures]
         K_filtered = reshape_matrix(K_matrix)
         #create a temp numpy array of T range according to the rows in k_filtered matrix
         #convert pressures in atm to Pa
@@ -100,7 +100,7 @@ def create_kinetic_library(rxns_list,path,kinetic_lib_name,short_desc_kinetic_li
     lib.save(path=path)
 
 #Edit paths and files:
-base_dir='/home/nelly/Code/scripts/Pdep/files'
+base_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'files')
 smiles_csv = 'smiles.csv'
 Pdep_kinetics_csv = 'kinetics.csv'
 #Assumption: K is given for some constant pressures for each rxn
