@@ -36,6 +36,9 @@ scratch/
 
 # csv database
 *.csv
+# but keep example inputs for the kinetics-extraction scripts
+!Kinetics_lib/files/*.csv
+!Pdep/files/*.csv
 
 # iPython files
 *.ipynb_*
