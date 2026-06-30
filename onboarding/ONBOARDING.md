@@ -88,10 +88,12 @@ folder in Obsidian ("Open folder as vault").
 1. **Tailscale** — install the GUI app, sign in to the same tailnet, confirm *Connected*.
 2. **Terminal into the Linux PC** (run agents on the remote, never the laptop):
    ```bash
-   ssh <office-pc>            # your tailnet host name
+   ssh <you>@<office-pc>      # your user + tailnet host name
    tmux attach -t cc || tmux new -s cc
    claude
    ```
+   Add the SSH alias from the seeded `tools/Remote Dev — Pattern` note to `~/.ssh/config`
+   (sets `User` and `Compression yes`) so plain `ssh <office-pc>` works too.
    On flaky wifi use `mosh <you>@<office-pc>` instead of `ssh`. See the seeded
    `tools/Remote Dev — Pattern` and `tools/Tmux Cheatsheet` notes.
 3. **Obsidian** — install the Dropbox client + Obsidian on the laptop and open the **same**
