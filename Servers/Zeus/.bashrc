@@ -1,7 +1,6 @@
 
 
 # User specific aliases and functions
-# Note: Change the <user> keyword of the last "st" command to your own username (without the "<" and ">)
 
 
 # RMG-Py
@@ -36,11 +35,11 @@ alias dbcode='cd $rmgdb_path'
 alias arcode='cd $arc_path'
 alias t3code='cd $t3_path'
 
-alias rmg='python-jl $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
-alias arkane='python-jl $rmgpy_path/Arkane.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias rmg='python $rmgpy_path/rmg.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
+alias arkane='python $rmgpy_path/Arkane.py input.py  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
 alias arc='python $arc_path/ARC.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
 alias arcrestart='python $arc_path/ARC.py restart.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
 alias t3='python $t3_path/T3.py input.yml  > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2)'
 
 alias sb='qsub submit.sh'
-alias st='qstat -u <user>'
+alias st='qstat -u $USER'
