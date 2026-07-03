@@ -97,7 +97,7 @@ trap cleanup_on_kill TERM INT
 
 mkdir -p "$MOLPRO_SCRDIR"
 
-which molpro
+which molpro26
 
 touch initial_time
 
@@ -105,7 +105,7 @@ cd "$MOLPRO_SCRDIR"
 
 cp "$PBS_O_WORKDIR/input.in" "$MOLPRO_SCRDIR/"
 
-molpro -n {cpus} -d "$MOLPRO_SCRDIR" input.in
+molpro26 -n {cpus} -d "$MOLPRO_SCRDIR" input.in
 
 cp input.* "$PBS_O_WORKDIR/"
 
