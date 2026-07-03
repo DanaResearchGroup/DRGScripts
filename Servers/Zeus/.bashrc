@@ -5,16 +5,16 @@
 
 
 # RMG-Py
-export rmgpy_path='~/Code/RMG-Py/'
-export rmgdb_path='~/Code/RMG-database/'
+export rmgpy_path="$HOME/Code/RMG-Py/"
+export rmgdb_path="$HOME/Code/RMG-database/"
 export PYTHONPATH=$PYTHONPATH:~/Code/RMG-Py/
 
 # ARC
-export arc_path='~/Code/ARC/'
+export arc_path="$HOME/Code/ARC/"
 export PYTHONPATH=$PYTHONPATH:~/Code/ARC/
 
 # T3
-export t3_path='~/Code/T3/'
+export t3_path="$HOME/Code/T3/"
 export PYTHONPATH=$PYTHONPATH:~/Code/T3/
 
 # g09
