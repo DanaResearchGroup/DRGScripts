@@ -85,16 +85,28 @@ folder in Obsidian ("Open folder as vault").
 
 ## B. Laptop (Windows / macOS) — thin client + Obsidian
 
-1. **Tailscale** — install the GUI app, sign in to the same tailnet, confirm *Connected*.
-2. **Terminal into the Linux PC** (run agents on the remote, never the laptop):
+1. **Windows only: WSL with Ubuntu** — your terminal cockpit is a WSL Ubuntu tab in
+   Windows Terminal (that's where `ssh`/`mosh` run). In an **administrator** PowerShell:
+   ```powershell
+   wsl --install -d Ubuntu
+   ```
+   Reboot when prompted, create your Ubuntu user, then inside Ubuntu:
    ```bash
-   ssh <office-pc>            # your tailnet host name
+   sudo apt update && sudo apt install -y mosh
+   ```
+   (macOS: skip — use the native Terminal; `brew install mosh` if you want mosh.)
+2. **Tailscale** — install the GUI app, sign in to the same tailnet, confirm *Connected*.
+3. **Terminal into the Linux PC** (run agents on the remote, never the laptop):
+   ```bash
+   ssh <you>@<office-pc>      # your user + tailnet host name
    tmux attach -t cc || tmux new -s cc
    claude
    ```
+   Add the SSH alias from the seeded `tools/Remote Dev — Pattern` note to `~/.ssh/config`
+   (sets `User` and `Compression yes`) so plain `ssh <office-pc>` works too.
    On flaky wifi use `mosh <you>@<office-pc>` instead of `ssh`. See the seeded
    `tools/Remote Dev — Pattern` and `tools/Tmux Cheatsheet` notes.
-3. **Obsidian** — install the Dropbox client + Obsidian on the laptop and open the **same**
+4. **Obsidian** — install the Dropbox client + Obsidian on the laptop and open the **same**
    synced vault folder. No agent stack on the laptop.
 
 ---

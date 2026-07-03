@@ -23,6 +23,7 @@ with your own values once your tailnet is up.
   Host <linux-host>
       HostName <linux-host>          # the tailnet MagicDNS name
       User <your-user>
+      Compression yes                # helps on slow/remote links
   ```
 - **Cockpit on Windows:** the WSL Ubuntu tab in Windows Terminal. On macOS: the native
   terminal.
