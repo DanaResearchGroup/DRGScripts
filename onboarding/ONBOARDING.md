@@ -91,7 +91,7 @@ this PC.
 
 **a. Install** — the `headroom` CLI ships via pip; `pipx` keeps it isolated and on `PATH`:
 ```bash
-sudo apt install -y pipx            # older Ubuntu: python3 -m pip install --user pipx
+sudo apt install -y pipx            # older Ubuntu: sudo apt install -y python3-pip && python3 -m pip install --user pipx
 pipx install "headroom-ai[all]"     # [all] bundles the ML compressor — large download
 pipx ensurepath                     # puts ~/.local/bin on PATH for future shells
 export PATH="$HOME/.local/bin:$PATH" && headroom --version   # this shell
@@ -144,7 +144,9 @@ headroom perf                              # savings, once traffic has flowed
 
 > **To reverse it entirely:** `headroom install remove --profile claude && headroom install
 > remove --profile codex`, then `rm -f ~/.config/systemd/user/headroom-{claude,codex}.service.d/tuning.conf
-> && systemctl --user daemon-reload`.
+> && systemctl --user daemon-reload`. Optionally `sudo loginctl disable-linger "$USER"` to undo the
+> linger from step **c** — but only if no *other* systemd user service relies on it (linger keeps
+> all your user services alive across logout, not just Headroom's).
 
 ---
 
@@ -185,8 +187,9 @@ headroom perf                              # savings, once traffic has flowed
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
 - [ ] `headroom install status --profile claude` and `--profile codex` both show *running /
-      healthy*; in a **freshly started** Claude Code session, `!env | grep ANTHROPIC_BASE_URL`
-      prints `http://127.0.0.1:8787`.
+      healthy*; in a **freshly started** Claude Code session, typing `!env | grep ANTHROPIC_BASE_URL`
+      at the Claude Code prompt (the leading `!` tells Claude Code to run the rest as a shell
+      command) prints `http://127.0.0.1:8787`.
 
 ---
 
