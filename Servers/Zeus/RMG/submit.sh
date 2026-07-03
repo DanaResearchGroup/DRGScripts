@@ -12,5 +12,5 @@ cd $PBS_O_WORKDIR
 
 conda activate rmg_env
 
-python-jl $rmg_code/rmg.py -n 10 input.py
+python $rmgpy_path/rmg.py -n 10 input.py
 
