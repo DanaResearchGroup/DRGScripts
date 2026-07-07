@@ -44,9 +44,9 @@ Install the official superpowers plugin in Claude Code (its skills back this run
 
 ### 5. agent-skills
 Follow the **"New member — Claude Code only"** path in
-<https://github.com/alongd/agent-skills/blob/main/SETUP.md>:
+<https://github.com/DanaResearchGroup/agent-skills/blob/main/SETUP.md>:
 ```bash
-git clone https://github.com/alongd/agent-skills ~/Code/agent-skills
+git clone https://github.com/DanaResearchGroup/agent-skills ~/Code/agent-skills
 ln -s ~/Code/agent-skills ~/.claude/skills
 chmod +x ~/Code/agent-skills/bin/cc-statusline.sh
 ```
@@ -55,7 +55,7 @@ Then wire the status line in `~/.claude/settings.json`:
 "statusLine": { "type": "command", "command": "/home/<you>/Code/agent-skills/bin/cc-statusline.sh" }
 ```
 Updates later: tell Claude Code *"update my agent-skills"* (see
-[UPDATING.md](https://github.com/alongd/agent-skills/blob/main/UPDATING.md)).
+[UPDATING.md](https://github.com/DanaResearchGroup/agent-skills/blob/main/UPDATING.md)).
 
 ### 6. tmux config
 ```bash
