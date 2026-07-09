@@ -4,6 +4,8 @@
 > *"read onboarding/ONBOARDING.md and walk me through it, one step at a time."* Claude Code
 > will run the commands with you and stop for anything that needs your input (logins, tokens).
 > Maintainers: see [MAINTAINING.md](./MAINTAINING.md).
+>
+> Written by Alon Grinberg Dana ([@alongd](https://github.com/alongd)).
 
 ## What you're building
 
@@ -14,7 +16,7 @@
 - This is **your own independent setup**: your own Tailscale tailnet, your own Obsidian
   vault, your own Claude account. Nothing here grants access to anyone else's machines.
 
-First pass is **Claude Code only**, plus the **Headroom** token-compression layer (step 11),
+First pass is **Claude Code only**, plus the **Headroom** token-compression layer (step 12),
 which also pre-wires the Codex proxy. Codex CLI itself, Slack, MCP connectors, and cluster
 compute are deferred — see [MAINTAINING.md](./MAINTAINING.md) for how to add them later.
 
@@ -57,32 +59,50 @@ Then wire the status line in `~/.claude/settings.json`:
 Updates later: tell Claude Code *"update my agent-skills"* (see
 [UPDATING.md](https://github.com/DanaResearchGroup/agent-skills/blob/main/UPDATING.md)).
 
-### 6. tmux config
+### 6. gstack skills
+[gstack](https://github.com/garrytan/gstack) is a **separate** suite of ~23 Claude-Code skills
+(`/review`, `/qa`, `/ship`, `/browse`, `/design-review`, …) that the global CLAUDE.md (step 8)
+and the smoke test below both expect. It is *not* part of the agent-skills clone from step 5 —
+it's a different repo that installs **into** that clone, so you have to add it explicitly here.
+Easiest path — paste this to a Claude Code session and let it run:
+
+> Install gstack: run `git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup`.
+
+`./setup` builds gstack's headless browser and registers the skills; it needs **`bun`**
+(install from <https://bun.sh>) — if `bun` is missing the script stops and prints the exact
+install command, so run that first and re-run `./setup`. Because `~/.claude/skills` *is* your
+agent-skills repo, gstack lands in `agent-skills/gstack/` and its skills sync into top-level
+folders there; those are **git-ignored** — don't commit them. Update gstack later with
+`/gstack-upgrade`. The `gstack` section in your `~/.claude/CLAUDE.md` (the skill list and the
+"use `/browse` for all web browsing" rule) comes from the CLAUDE.global.md merge in step 8, so
+you don't add it by hand here.
+
+### 7. tmux config
 ```bash
 cp <path-to-this-DRGScripts-clone>/onboarding/dotfiles/tmux.conf ~/.tmux.conf
 ```
 Prefix is `C-a`. (Optional persistence plugins need `tpm` — see the comments in the file.)
 
-### 7. Global CLAUDE.md
+### 8. Global CLAUDE.md
 Merge [CLAUDE.global.md](./CLAUDE.global.md) into your `~/.claude/CLAUDE.md` (have Claude
 Code merge it, preserving any lines you've already added). Fix the **Obsidian Vault path**
-to match your Dropbox layout (step 9).
+to match your Dropbox layout (step 10).
 
-### 8. ARC project guide
+### 9. ARC project guide
 When you set up an ARC working copy, copy this repo's [ARC/CLAUDE.md](../ARC/CLAUDE.md)
 into it so Claude Code has the ARC conventions in context.
 
-### 9. Dropbox + Obsidian
+### 10. Dropbox + Obsidian
 Install the **Dropbox desktop client** (it syncs your vault at the filesystem level — no
 remotely-save plugin). Install **Obsidian**. Decide your vault path, e.g.
 `$HOME/Dropbox/Vault`.
 
-### 10. Scaffold the vault
+### 11. Scaffold the vault
 Follow [vault-structure.md](./vault-structure.md): create the folder tree and copy the
 seed files (operating manual, wiki index, tools cheatsheets) into place. Then open the
 folder in Obsidian ("Open folder as vault").
 
-### 11. Headroom token compression (Claude Code + Codex)
+### 12. Headroom token compression (Claude Code + Codex)
 [Headroom](https://github.com/headroomlabs-ai/headroom) compresses what your agent *reads*
 (tool outputs, logs, files, history) before it reaches the model — typically **12–90% fewer
 tokens, same answers**, and reversible (the model can pull originals back on demand). It runs
@@ -182,7 +202,8 @@ headroom perf                              # savings, once traffic has flowed
 
 - [ ] `tailscale status` shows your tailnet and this host.
 - [ ] From the laptop: `ssh`/`mosh` into the Linux PC, `tmux attach` works.
-- [ ] A Claude Code session lists the gstack skills (type `/`); superpowers loads.
+- [ ] A Claude Code session lists the gstack skills from step 6 (type `/` and look for
+      `/browse`, `/review`, `/ship`, …); superpowers loads.
 - [ ] The status line shows the model name + context-window %.
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
@@ -195,7 +216,7 @@ headroom perf                              # savings, once traffic has flowed
 
 ## D. Later (deferred)
 
-Codex CLI (its Headroom proxy is already set up in step 11 — just install Codex and it routes),
+Codex CLI (its Headroom proxy is already set up in step 12 — just install Codex and it routes),
 Slack notifications, MCP connectors, gbrain, and cluster/PBS compute are intentionally out of
 this first pass. When you're ready, [MAINTAINING.md](./MAINTAINING.md) lists each and
 how to un-defer it.
