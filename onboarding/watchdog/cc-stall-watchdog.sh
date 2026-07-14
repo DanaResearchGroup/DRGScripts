@@ -77,7 +77,7 @@ pane_idle() {
     local s; s=$(herdr_status "$1")
     # 'blocked' (agent waiting for input) is deliberately NOT idle: a blocked
     # agent must not self-clear its deadline — tier 1 should reach the user.
-    [[ "$s" == idle || "$s" == done ]]
+    [[ "$s" == "idle" || "$s" == "done" ]]
   else
     pane_alive "$1" && ! pane_busy "$1"
   fi
@@ -143,6 +143,7 @@ pane_transcript_mtime() { # $1 = pane_pid → epoch mtime of newest transcript, 
   [[ -n "$cpid" ]] || return 1
   cwd=$(readlink "/proc/$cpid/cwd" 2>/dev/null) || return 1
   munged=$(printf '%s' "$cwd" | sed 's#[/.]#-#g')
+  # shellcheck disable=SC2012  # ls -t is the point (mtime sort); CC-generated paths contain no newlines
   newest=$(ls -t "$HOME/.claude/projects/$munged"/*.jsonl 2>/dev/null | head -1)
   [[ -n "$newest" ]] || return 1
   stat -c %Y "$newest"
@@ -170,9 +171,9 @@ backstop_scan() {
 }
 
 process_deadline() { # $1 = deadline file
-  local f=$1 pane deadline setts reason transcript notified recovered now
+  local f=$1 pane deadline reason transcript notified recovered now
   pane=$(get_field "$f" pane);       deadline=$(get_field "$f" deadline)
-  setts=$(get_field "$f" set);       reason=$(get_field "$f" reason)
+  reason=$(get_field "$f" reason)
   transcript=$(get_field "$f" transcript)
   notified=$(get_field "$f" notified); recovered=$(get_field "$f" recovered)
   now=$(date +%s)

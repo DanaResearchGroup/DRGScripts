@@ -42,10 +42,13 @@ resolve_transcript() {
   # Claude Code stores transcripts under a cwd-munged directory name.
   local munged
   munged=$(pwd | sed 's#[/.]#-#g')
+  # shellcheck disable=SC2012  # ls -t is the point (mtime sort); CC-generated paths contain no newlines
   ls -t "$HOME/.claude/projects/$munged"/*.jsonl 2>/dev/null | head -1 || true
 }
 
-cmd=${1:-}; [[ -n "$cmd" ]] && shift || usage
+cmd=${1:-}
+[[ -n "$cmd" ]] || usage
+shift
 case "$cmd" in
   set)
     (( $# == 2 )) || usage

@@ -6,8 +6,14 @@ PASS=0; FAIL=0
 
 t() { # t <name> <fn>
   local out
-  if out=$("$2" 2>&1); then echo "PASS $1"; PASS=$((PASS + 1))
-  else echo "FAIL $1"; echo "$out" | sed 's/^/    /'; FAIL=$((FAIL + 1)); fi
+  if out=$("$2" 2>&1); then
+    echo "PASS $1"; PASS=$((PASS + 1))
+  else
+    echo "FAIL $1"
+    # shellcheck disable=SC2001  # per-line prefix of multiline output; parameter expansion cannot anchor ^
+    echo "$out" | sed 's/^/    /'
+    FAIL=$((FAIL + 1))
+  fi
 }
 
 setup() {
@@ -24,7 +30,7 @@ setup() {
 }
 
 test_deadman_set_writes_fields() {
-  setup; cd "$TMP"
+  setup; cd "$TMP" || return 1
   TMUX_PANE=%7 "$HERE/../cc-deadman" set 30 "suite run" >/dev/null || return 1
   local f="$CC_WATCHDOG_HOME/state/%7.deadline"
   [[ -f "$f" ]] || { echo "no deadline file"; return 1; }
@@ -36,14 +42,14 @@ test_deadman_set_writes_fields() {
 }
 
 test_deadman_clear_removes() {
-  setup; cd "$TMP"
+  setup; cd "$TMP" || return 1
   TMUX_PANE=%7 "$HERE/../cc-deadman" set 30 "x" >/dev/null || return 1
   TMUX_PANE=%7 "$HERE/../cc-deadman" clear >/dev/null || return 1
   [[ ! -f "$CC_WATCHDOG_HOME/state/%7.deadline" ]]
 }
 
 test_deadman_extend_pushes_and_resets_tiers() {
-  setup; cd "$TMP"
+  setup; cd "$TMP" || return 1
   TMUX_PANE=%7 "$HERE/../cc-deadman" set 30 "x" >/dev/null
   local f="$CC_WATCHDOG_HOME/state/%7.deadline"
   echo "notified=123" >> "$f"
@@ -58,7 +64,7 @@ test_deadman_extend_pushes_and_resets_tiers() {
 }
 
 test_deadman_pane_from_process_tree() {
-  setup; cd "$TMP"
+  setup; cd "$TMP" || return 1
   echo "%9 $$" > "$TMUX_SHIM_DIR/panes"   # this test shell is cc-deadman's ancestor
   "$HERE/../cc-deadman" set 5 "tree" >/dev/null || return 1
   [[ -f "$CC_WATCHDOG_HOME/state/%9.deadline" ]]
@@ -69,7 +75,10 @@ t deadman_clear_removes test_deadman_clear_removes
 t deadman_extend_pushes_and_resets_tiers test_deadman_extend_pushes_and_resets_tiers
 t deadman_pane_from_process_tree test_deadman_pane_from_process_tree
 
-src_watchdog() { . "$HERE/../cc-stall-watchdog.sh"; }
+src_watchdog() {
+  # shellcheck disable=SC1091  # sourced from the repo tree at runtime; path is dynamic
+  . "$HERE/../cc-stall-watchdog.sh"
+}
 
 test_wd_notify_posts_to_slack() {
   setup; src_watchdog
@@ -220,7 +229,7 @@ t wd_vanished_pane_notifies_and_archives test_wd_vanished_pane_notifies_and_arch
 t wd_phoenix_defers test_wd_phoenix_defers
 
 test_deadman_herdr_pane_key() {
-  setup; cd "$TMP"
+  setup; cd "$TMP" || return 1
   HERDR_ENV=1 HERDR_PANE_ID=w1:p3 "$HERE/../cc-deadman" set 30 "melt sim" >/dev/null || return 1
   local f="$CC_WATCHDOG_HOME/state/herdr:w1:p3.deadline"
   [[ -f "$f" ]] || { echo "no herdr deadline file"; return 1; }
