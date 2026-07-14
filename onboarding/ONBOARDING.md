@@ -168,6 +168,41 @@ headroom perf                              # savings, once traffic has flowed
 > linger from step **c** — but only if no *other* systemd user service relies on it (linger keeps
 > all your user services alive across logout, not just Headroom's).
 
+### 13. cc-watchdog — silent-stall guard for long agent sessions
+
+Long autonomous Claude Code runs can die out silently: the session waits on
+background work (a test suite, a build) whose owner died, and nothing ever
+wakes it — it looks exactly like "done, waiting for you". cc-watchdog is a
+dead-man's switch that catches this.
+
+Before a session goes quiet while waiting on something, it declares a deadline
+(`cc-deadman set 40 "full test suite, ~25 min"`). A systemd user timer checks
+every 5 minutes; if the deadline passes you get a Slack ping, and if nothing
+recovers within an hour the watchdog nudges the session itself ("your awaited
+work likely died — check honest status and continue").
+
+Install:
+```bash
+cd ~/Code/DRGScripts/onboarding/watchdog
+./install.sh
+```
+Then put your Slack incoming-webhook URL in `~/.cc-watchdog/config`:
+```bash
+SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
+```
+(Create one: api.slack.com/apps → your app → Incoming Webhooks → add to your
+own DM or a private channel.)
+
+Works for agent sessions under tmux and under Herdr alike (inside a Herdr pane
+the deadline keys itself to the Herdr pane id and recovery uses `herdr pane
+run`; see the README's "tmux and Herdr" section and run its smoke test once
+from inside Herdr).
+
+The session-side habit lives in the global CLAUDE.md you merged in step 8
+(silent-stall prevention rules): agents declare deadlines before long waits and
+run final gates in the mother session. The watchdog is the enforcement; the
+rules are the prevention. Details: `onboarding/watchdog/README.md`.
+
 ---
 
 ## B. Laptop (Windows / macOS) — thin client + Obsidian
@@ -211,6 +246,9 @@ headroom perf                              # savings, once traffic has flowed
       healthy*; in a **freshly started** Claude Code session, typing `!env | grep ANTHROPIC_BASE_URL`
       at the Claude Code prompt (the leading `!` tells Claude Code to run the rest as a shell
       command) prints `http://127.0.0.1:8787`.
+- [ ] `systemctl --user status cc-stall-watchdog.timer` shows *active (waiting)*.
+- [ ] In a tmux Claude Code session: `cc-deadman set 1 "smoke test"` → Slack ping within
+      ~6 min (then `cc-deadman clear`).
 
 ---
 

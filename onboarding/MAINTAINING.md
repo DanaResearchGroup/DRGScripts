@@ -47,6 +47,7 @@ not by copying secrets or by being granted access to the PI's machines.
 | Statusline | the **simple context-% script**, not the PI's `~/agents` auto-handoff variant | Self-contained; no extra infra to stand up. |
 | Seeds | **sanitized**, real files under `vault-seeds/` | Easy `cp` into place; the PI's real remote-dev note (tailnet IPs, VPN endpoint, cluster/exit-node config) is excluded — a generic `Remote Dev — Pattern` replaces it. |
 | First pass | **Claude Code only** | Smaller surface; the deferred list below grows it later. |
+| Silent-stall detection | **cc-watchdog** (`onboarding/watchdog/`): timer-driven dead-man's switch, not hook-driven heuristics | CC-hook watchers only wake at turn ends, so they share the session's blind spot (a 36 h TA die-out in 2026-07 motivated this). Deadlines declared by the session itself make false positives ~zero (a 2.75 h quiet suite run is legitimate work); a 6 h notify-only backstop covers sessions that never declared. Unlike the PI-local auto-handoff/Phoenix stack, this ships to members: standalone (tmux + coreutils + systemd user timer + one Slack webhook). |
 
 ## Deferred — "later" (and how to un-defer)
 
