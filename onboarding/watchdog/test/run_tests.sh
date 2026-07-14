@@ -65,6 +65,50 @@ t deadman_clear_removes test_deadman_clear_removes
 t deadman_extend_pushes_and_resets_tiers test_deadman_extend_pushes_and_resets_tiers
 t deadman_pane_from_process_tree test_deadman_pane_from_process_tree
 
+src_watchdog() { . "$HERE/../cc-stall-watchdog.sh"; }
+
+test_wd_notify_posts_to_slack() {
+  setup; src_watchdog
+  notify "hello world"
+  grep -q "hello world" "$SHIM_LOG_DIR/curl.log" || { echo "no slack post"; return 1; }
+}
+
+test_wd_notify_dry_is_log_only() {
+  setup; export WATCHDOG_DRY=1; src_watchdog
+  notify "quiet"
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "curl called in dry mode"; return 1; }
+  grep -q "NOTIFY: quiet" "$CC_WATCHDOG_HOME/log" || { echo "not logged"; return 1; }
+}
+
+test_wd_notify_falls_back_without_webhook() {
+  setup; unset SLACK_WEBHOOK_URL; src_watchdog
+  notify "fallback"
+  grep -q "fallback" "$SHIM_LOG_DIR/notify-send.log" || { echo "no notify-send"; return 1; }
+}
+
+test_wd_pane_busy_matches_footer() {
+  setup; src_watchdog
+  echo "%1 100" > "$TMUX_SHIM_DIR/panes"
+  printf 'stuff\n... esc to interrupt\n' > "$TMUX_SHIM_DIR/content-%1"
+  pane_busy %1 || { echo "should be busy"; return 1; }
+  printf '> \n' > "$TMUX_SHIM_DIR/content-%1"
+  pane_idle %1 || { echo "should be idle"; return 1; }
+}
+
+test_wd_config_overrides_defaults() {
+  setup
+  mkdir -p "$CC_WATCHDOG_HOME"
+  echo "GRACE_MIN=7" > "$CC_WATCHDOG_HOME/config"
+  src_watchdog
+  (( GRACE_MIN == 7 )) || { echo "GRACE_MIN=$GRACE_MIN"; return 1; }
+}
+
+t wd_notify_posts_to_slack test_wd_notify_posts_to_slack
+t wd_notify_dry_is_log_only test_wd_notify_dry_is_log_only
+t wd_notify_falls_back_without_webhook test_wd_notify_falls_back_without_webhook
+t wd_pane_busy_matches_footer test_wd_pane_busy_matches_footer
+t wd_config_overrides_defaults test_wd_config_overrides_defaults
+
 # --- tests appended by later tasks above this line ---
 
 echo "---"
