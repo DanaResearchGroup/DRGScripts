@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# cc-deadman — declare when this Claude Code session expects to be alive again.
+# Enforced by cc-stall-watchdog.sh (see README.md in this directory).
+set -euo pipefail
+
+WD_HOME="${CC_WATCHDOG_HOME:-$HOME/.cc-watchdog}"
+STATE_DIR="$WD_HOME/state"
+mkdir -p "$STATE_DIR"
+
+usage() {
+  cat >&2 <<'EOF'
+usage: cc-deadman set <minutes> "<reason>"   declare a deadline
+       cc-deadman extend <minutes>           push this session's deadline out
+       cc-deadman clear                      remove this session's deadline
+       cc-deadman list                       show all live deadlines
+EOF
+  exit 2
+}
+
+resolve_pane() {
+  if [[ -n "${TMUX_PANE:-}" ]]; then printf '%s' "$TMUX_PANE"; return 0; fi
+  # Tool shells often lack $TMUX_PANE: find the pane whose top-level shell
+  # (pane_pid) is an ancestor of this process.
+  local pid=$$ chain=" "
+  while (( pid > 1 )); do
+    chain+="$pid "
+    pid=$(awk '{print $4}' "/proc/$pid/stat" 2>/dev/null) || break
+  done
+  local pane ppid
+  while read -r pane ppid; do
+    [[ "$chain" == *" $ppid "* ]] && { printf '%s' "$pane"; return 0; }
+  done < <(tmux list-panes -a -F '#{pane_id} #{pane_pid}' 2>/dev/null)
+  echo "cc-deadman: cannot resolve tmux pane (not inside tmux?)" >&2
+  return 1
+}
+
+resolve_transcript() {
+  # Claude Code stores transcripts under a cwd-munged directory name.
+  local munged
+  munged=$(pwd | sed 's#[/.]#-#g')
+  ls -t "$HOME/.claude/projects/$munged"/*.jsonl 2>/dev/null | head -1 || true
+}
+
+cmd=${1:-}; [[ -n "$cmd" ]] && shift || usage
+case "$cmd" in
+  set)
+    (( $# == 2 )) || usage
+    mins=$1 reason=$2
+    pane=$(resolve_pane)
+    f="$STATE_DIR/$pane.deadline"
+    now=$(date +%s)
+    {
+      echo "pane=$pane"
+      echo "set=$now"
+      echo "deadline=$(( now + mins * 60 ))"
+      echo "reason=$reason"
+      echo "transcript=$(resolve_transcript)"
+    } > "$f"
+    echo "cc-deadman: armed — $mins min for: $reason"
+    ;;
+  extend)
+    (( $# == 1 )) || usage
+    pane=$(resolve_pane)
+    f="$STATE_DIR/$pane.deadline"
+    [[ -f "$f" ]] || { echo "cc-deadman: no deadline set for $pane" >&2; exit 1; }
+    old=$(sed -n 's/^deadline=//p' "$f")
+    grep -Ev '^(deadline|notified|recovered|failed)=' "$f" > "$f.tmp" || true
+    echo "deadline=$(( old + $1 * 60 ))" >> "$f.tmp"
+    mv "$f.tmp" "$f"
+    echo "cc-deadman: extended by $1 min"
+    ;;
+  clear)
+    pane=$(resolve_pane)
+    rm -f "$STATE_DIR/$pane.deadline"
+    echo "cc-deadman: cleared"
+    ;;
+  list)
+    shopt -s nullglob
+    now=$(date +%s)
+    for f in "$STATE_DIR"/*.deadline; do
+      d=$(sed -n 's/^deadline=//p' "$f")
+      printf '%s  due in %d min  %s\n' \
+        "$(sed -n 's/^pane=//p' "$f")" "$(( (d - now) / 60 ))" \
+        "$(sed -n 's/^reason=//p' "$f")"
+    done
+    ;;
+  *) usage ;;
+esac
