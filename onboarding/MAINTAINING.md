@@ -25,7 +25,8 @@ not by copying secrets or by being granted access to the PI's machines.
 
 | File | Repo | What it does | Touch when… |
 |---|---|---|---|
-| `bin/cc-statusline.sh` | agent-skills | Context-% status line (model + bar + %). | The statusline JSON schema changes. |
+| `bin/cc-statusline.sh` + `bin/lib/cc-statusline-lib.sh` | agent-skills | Status line: model + colour-coded context-% + git location (repo/branch/worktree/dirty). Shares the lib with the PI's autodev variant. | The statusline JSON schema changes, or the colours/format need tuning. |
+| `onboarding/statusline/{install.sh,README.md}` | DRGScripts | Installer that wires `bin/cc-statusline.sh` into `~/.claude/settings.json` (surgical `.statusLine` patch, backup, idempotent) + the member-facing doc. | The install/settings wiring changes. |
 | `UPDATING.md` | agent-skills | CC-executable "update my skills" runbook (plain `git pull`). | The update flow changes. |
 | `SETUP.md` (new-member section) | agent-skills | Minimal clone→symlink→statusline path. | Install steps change. |
 | `onboarding/ONBOARDING.md` | DRGScripts | Master CC-executable runbook the member points CC at. | Any step in the end-to-end flow changes. |
@@ -42,10 +43,10 @@ not by copying secrets or by being granted access to the PI's machines.
 |---|---|---|
 | agent-skills | **clone**, not fork | Members track upstream with a plain `git pull`; no fork divergence to manage. |
 | User-specific paths | `/home/alon` → **`$HOME`** in agent-skills prose **and** the PI's `~/.claude/CLAUDE.md` | An agent reading prose expands `$HOME`; works identically for the PI; removes any "personalize" step. |
-| `~/.claude/settings.json` | **left literal** | Its paths are personal infra (`~/agents` auto-handoff, the gstack **session-update hook**, gitkraken marketplace) the member never gets; Claude Code does **not** reliably shell-expand `$HOME` in non-command fields (e.g. `extraKnownMarketplaces.path`). Risk > benefit. **NB:** this is the settings.json *hook* only — the gstack **skills** themselves *are* member-facing and are installed in ONBOARDING step 6. |
+| `~/.claude/settings.json` | **left literal**, except `.statusLine` | Its paths are personal infra (`~/agents` auto-handoff, the gstack **session-update hook**, gitkraken marketplace) the member never gets; Claude Code does **not** reliably shell-expand `$HOME` in non-command fields (e.g. `extraKnownMarketplaces.path`). Risk > benefit. The **one** key the member does get is `.statusLine` — a *command* field (absolute path is safe), written surgically by `onboarding/statusline/install.sh` (backup + idempotent), not by copying the PI's file. **NB:** the settings.json *hook* stays PI-only — but the gstack **skills** themselves *are* member-facing (ONBOARDING step 6). |
 | gstack **skills** | **member installs** in ONBOARDING step 6 | `CLAUDE.global.md` and the smoke test reference `/browse`, `/review`, `/ship`, … — so gstack must be part of the member setup, not PI-only. It's a separate repo ([garrytan/gstack](https://github.com/garrytan/gstack)) cloned into `~/.claude/skills/gstack`; git-ignored inside agent-skills. |
 | Obsidian sync | **Dropbox desktop client only; no remotely-save** | No mobile/phone requirement → filesystem sync is enough. One fewer plugin. |
-| Statusline | the **simple context-% script**, not the PI's `~/agents` auto-handoff variant | Self-contained; no extra infra to stand up. |
+| Statusline | the **group `bin/cc-statusline.sh`** (model + colour-coded context-% + git location), not the PI's `~/agents` auto-handoff variant | Both variants share `bin/lib/cc-statusline-lib.sh` so model/context/location never drift between them; the member gets the clean one — no `~/agents` infra to stand up. Wired by `onboarding/statusline/install.sh`. |
 | Seeds | **sanitized**, real files under `vault-seeds/` | Easy `cp` into place; the PI's real remote-dev note (tailnet IPs, VPN endpoint, cluster/exit-node config) is excluded — a generic `Remote Dev — Pattern` replaces it. |
 | First pass | **Claude Code only** | Smaller surface; the deferred list below grows it later. |
 | Multiplexer | **Herdr recommended; tmux also supported** (ONBOARDING step 7) | Herdr is agent-state-aware (mouse-first sidebar showing each agent's live state), which the cc-watchdog guard and the agent-skills auto-handoff/Phoenix watchers gate on natively — so it's the recommended default. tmux stays fully supported for members who deliberately prefer a keyboard-first multiplexer. |

@@ -55,3 +55,11 @@ jobs:
                      onboarding/watchdog/test/shims/*
       - name: unit tests
         run: onboarding/watchdog/test/run_tests.sh
+
+  statusline:
+    name: statusline (shellcheck)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: shellcheck onboarding/statusline/install.sh

@@ -50,13 +50,17 @@ Follow the **"New member — Claude Code only"** path in
 ```bash
 git clone https://github.com/DanaResearchGroup/agent-skills ~/Code/agent-skills
 ln -s ~/Code/agent-skills ~/.claude/skills
-chmod +x ~/Code/agent-skills/bin/cc-statusline.sh
 ```
-Then wire the status line in `~/.claude/settings.json`:
-```json
-"statusLine": { "type": "command", "command": "/home/<you>/Code/agent-skills/bin/cc-statusline.sh" }
+Then wire up the status line — it shows the model, a **colour-coded
+context-window %** (green → yellow → red as it fills), and your **git location**
+(repo, branch, worktree name, and a dirty flag). The installer patches
+`~/.claude/settings.json` surgically (backs it up first, idempotent):
+```bash
+<path-to-this-DRGScripts-clone>/onboarding/statusline/install.sh
 ```
-Updates later: tell Claude Code *"update my agent-skills"* (see
+See [statusline/README.md](./statusline/README.md) for what each segment means
+and how to customise the colours. Updates later: tell Claude Code *"update my
+agent-skills"* (see
 [UPDATING.md](https://github.com/DanaResearchGroup/agent-skills/blob/main/UPDATING.md)).
 
 ### 6. gstack skills
@@ -276,7 +280,8 @@ rules are the prevention. Details: `onboarding/watchdog/README.md`.
       (`herdr --remote`, or `tmux attach`) works.
 - [ ] A Claude Code session lists the gstack skills from step 6 (type `/` and look for
       `/browse`, `/review`, `/ship`, …); superpowers loads.
-- [ ] The status line shows the model name + context-window %.
+- [ ] The status line shows the model name, a colour-coded context-window %, and
+      your git location (repo, branch, worktree/`[primary]` marker).
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
 - [ ] `headroom install status --profile claude` and `--profile codex` both show *running /
