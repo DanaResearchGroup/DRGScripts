@@ -1,0 +1,26 @@
+# Herdr config — sensible defaults for autonomous multi-agent work.
+# Place at ~/.config/herdr/config.toml. Herdr runs fine without it; these are
+# only deltas from the built-in defaults. See every knob: `herdr --default-config`.
+# Reload into a running server after edits: `herdr server reload-config`.
+
+[ui]
+# Float blocked / needs-attention agents to the top of the sidebar instead of
+# grouping by space. Handy when several agents run at once.
+agent_panel_sort = "priority"
+
+[ui.toast]
+# Notify when a background agent changes state (done / blocked). "terminal"
+# routes the notification to the terminal you're currently attached to, so it
+# reaches you even when you attach remotely over SSH (unlike "system", which
+# fires on the host's own desktop).
+delivery = "terminal"
+
+[experimental]
+# Preserve pane screen contents across a full server restart, so a long run's
+# output isn't lost if the server bounces.
+pane_history = true
+
+[advanced]
+# Long autonomous sessions emit a lot of output — keep more scrollback for
+# review (50MB, up from the 10MB default).
+scrollback_limit_bytes = 50000000
