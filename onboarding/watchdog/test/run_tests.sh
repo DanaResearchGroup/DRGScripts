@@ -356,6 +356,21 @@ t wd_backstop_trips_on_stale_busy_undeclared test_wd_backstop_trips_on_stale_bus
 t wd_backstop_skips_declared_and_fresh test_wd_backstop_skips_declared_and_fresh
 t wd_backstop_clears_busy_since_on_idle test_wd_backstop_clears_busy_since_on_idle
 
+test_install_creates_links_and_units() {
+  setup
+  export HOME="$TMP/home"; mkdir -p "$HOME"
+  CC_WATCHDOG_NO_SYSTEMD=1 "$HERE/../install.sh" >/dev/null || return 1
+  [[ -L "$HOME/.local/bin/cc-deadman" ]] || { echo "no cc-deadman link"; return 1; }
+  [[ -L "$HOME/.local/bin/cc-stall-watchdog.sh" ]] || { echo "no watchdog link"; return 1; }
+  [[ -f "$HOME/.config/systemd/user/cc-stall-watchdog.timer" ]] || { echo "no timer unit"; return 1; }
+  [[ -f "$HOME/.config/systemd/user/cc-stall-watchdog.service" ]] || { echo "no service unit"; return 1; }
+  [[ -f "$HOME/.cc-watchdog/config" ]] || { echo "no config stub"; return 1; }
+  # idempotent
+  CC_WATCHDOG_NO_SYSTEMD=1 "$HERE/../install.sh" >/dev/null || { echo "second run failed"; return 1; }
+}
+
+t install_creates_links_and_units test_install_creates_links_and_units
+
 # --- tests appended by later tasks above this line ---
 
 echo "---"
