@@ -123,6 +123,45 @@ inject_recovery() { # $1 pane, $2 reason
   tmux send-keys -t "$1" Enter
 }
 
+cc_panes() { # emit "<pane_id> <pane_pid>" for panes running a claude process
+  local pane ppid
+  while read -r pane ppid; do
+    pstree -p "$ppid" 2>/dev/null | grep -q 'claude(' && printf '%s %s\n' "$pane" "$ppid"
+  done < <(tmux list-panes -a -F '#{pane_id} #{pane_pid}' 2>/dev/null)
+}
+
+pane_transcript_mtime() { # $1 = pane_pid → epoch mtime of newest transcript, or fail
+  local cpid cwd munged newest
+  cpid=$(pstree -p "$1" 2>/dev/null | grep -o 'claude([0-9]\+)' | head -1 | tr -dc 0-9)
+  [[ -n "$cpid" ]] || return 1
+  cwd=$(readlink "/proc/$cpid/cwd" 2>/dev/null) || return 1
+  munged=$(printf '%s' "$cwd" | sed 's#[/.]#-#g')
+  newest=$(ls -t "$HOME/.claude/projects/$munged"/*.jsonl 2>/dev/null | head -1)
+  [[ -n "$newest" ]] || return 1
+  stat -c %Y "$newest"
+}
+
+backstop_scan() {
+  local now pane ppid bs since tmtime stamp
+  now=$(date +%s)
+  while read -r pane ppid; do
+    bs="$STATE_DIR/pane-$pane.busy-since"
+    if ! pane_busy "$pane"; then rm -f "$bs"; continue; fi
+    [[ -f "$bs" ]] || echo "$now" > "$bs"
+    [[ -f "$STATE_DIR/$pane.deadline" ]] && continue      # declared: ladder owns it
+    since=$(cat "$bs")
+    (( now - since >= BACKSTOP_HOURS * 3600 )) || continue
+    tmtime=$(pane_transcript_mtime "$ppid") || continue    # can't resolve → skip, no guess
+    (( now - tmtime >= BACKSTOP_HOURS * 3600 )) || continue
+    stamp="$STATE_DIR/pane-$pane.backstop-notified"
+    if [[ -f "$stamp" ]] && (( now - $(cat "$stamp") < BACKSTOP_RENOTIFY_HOURS * 3600 )); then
+      continue
+    fi
+    notify "cc-watchdog BACKSTOP: [$(session_name "$pane")] busy >${BACKSTOP_HOURS}h, transcript stale, no declared deadline — possible silent stall (notify-only)"
+    echo "$now" > "$stamp"
+  done < <(cc_panes)
+}
+
 process_deadline() { # $1 = deadline file
   local f=$1 pane deadline setts reason transcript notified recovered now
   pane=$(get_field "$f" pane);       deadline=$(get_field "$f" deadline)

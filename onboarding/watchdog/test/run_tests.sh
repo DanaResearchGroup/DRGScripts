@@ -302,6 +302,60 @@ t wd_herdr_tier2_uses_pane_run test_wd_herdr_tier2_uses_pane_run
 t wd_herdr_unreachable_degrades_to_notify test_wd_herdr_unreachable_degrades_to_notify
 t wd_herdr_self_clear_on_idle test_wd_herdr_self_clear_on_idle
 
+mk_cc_pane() { # <pane> <fake-claude-pid> — busy CC pane whose transcript lives under fake $HOME
+  echo "$1 100" > "$TMUX_SHIM_DIR/panes"
+  printf 'working... esc to interrupt\n' > "$TMUX_SHIM_DIR/content-$1"
+  echo "shell(100)---claude($2)" > "$TMUX_SHIM_DIR/pstree-100"
+}
+
+test_wd_backstop_trips_on_stale_busy_undeclared() {
+  setup
+  export HOME="$TMP/home"                        # fake HOME for transcript resolution
+  src_watchdog
+  mk_cc_pane %1 $$                               # real pid → /proc/$$/cwd works
+  local munged proj
+  munged=$(readlink "/proc/$$/cwd" | sed 's#[/.]#-#g')
+  proj="$HOME/.claude/projects/$munged"
+  mkdir -p "$proj"
+  touch -d '7 hours ago' "$proj/session.jsonl"
+  echo "$(( $(date +%s) - 7 * 3600 ))" > "$CC_WATCHDOG_HOME/state/pane-%1.busy-since"
+  backstop_scan || { echo "backstop_scan failed"; return 1; }
+  grep -q 'BACKSTOP' "$SHIM_LOG_DIR/curl.log" || { echo "no backstop notify"; return 1; }
+  backstop_scan || { echo "backstop_scan failed on renotify pass"; return 1; }   # renotify suppression
+  (( $(grep -c 'BACKSTOP' "$SHIM_LOG_DIR/curl.log") == 1 )) || { echo "renotified"; return 1; }
+}
+
+test_wd_backstop_skips_declared_and_fresh() {
+  setup
+  export HOME="$TMP/home"
+  src_watchdog
+  mk_cc_pane %1 $$
+  # fresh pane: the scan must enumerate it (creating busy-since — the positive
+  # control proving the scan actually ran) yet not trip
+  backstop_scan || { echo "backstop_scan failed"; return 1; }
+  [[ -f "$CC_WATCHDOG_HOME/state/pane-%1.busy-since" ]] || { echo "pane not enumerated"; return 1; }
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "tripped while fresh"; return 1; }
+  # stale busy-since but declared deadline → A-layer owns it, no trip
+  echo "$(( $(date +%s) - 7 * 3600 ))" > "$CC_WATCHDOG_HOME/state/pane-%1.busy-since"
+  mk_deadline %1 600 -60 "declared" >/dev/null
+  backstop_scan || { echo "backstop_scan failed on 2nd pass"; return 1; }
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "tripped despite declaration"; return 1; }
+}
+
+test_wd_backstop_clears_busy_since_on_idle() {
+  setup; src_watchdog
+  echo "%1 100" > "$TMUX_SHIM_DIR/panes"
+  echo "shell(100)---claude(1)" > "$TMUX_SHIM_DIR/pstree-100"
+  printf '> \n' > "$TMUX_SHIM_DIR/content-%1"    # idle
+  echo "123" > "$CC_WATCHDOG_HOME/state/pane-%1.busy-since"
+  backstop_scan || { echo "backstop_scan failed"; return 1; }
+  [[ ! -f "$CC_WATCHDOG_HOME/state/pane-%1.busy-since" ]]
+}
+
+t wd_backstop_trips_on_stale_busy_undeclared test_wd_backstop_trips_on_stale_busy_undeclared
+t wd_backstop_skips_declared_and_fresh test_wd_backstop_skips_declared_and_fresh
+t wd_backstop_clears_busy_since_on_idle test_wd_backstop_clears_busy_since_on_idle
+
 # --- tests appended by later tasks above this line ---
 
 echo "---"
