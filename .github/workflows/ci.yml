@@ -40,3 +40,18 @@ jobs:
         # Scan the working tree (not full history): a "don't add secrets" gate,
         # free of false positives from large base64 blobs in old commits.
         run: gitleaks dir --config .gitleaks.toml --redact --verbose .
+
+  watchdog:
+    name: cc-watchdog (shellcheck + unit tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          shellcheck onboarding/watchdog/cc-deadman \
+                     onboarding/watchdog/cc-stall-watchdog.sh \
+                     onboarding/watchdog/install.sh \
+                     onboarding/watchdog/test/run_tests.sh \
+                     onboarding/watchdog/test/shims/*
+      - name: unit tests
+        run: onboarding/watchdog/test/run_tests.sh
