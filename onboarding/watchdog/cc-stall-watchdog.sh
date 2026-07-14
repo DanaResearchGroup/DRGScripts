@@ -62,6 +62,76 @@ phoenix_owns() { # $1 = pane — true iff Phoenix is limit-waiting on this pane'
   return 1
 }
 
+RECOVERY_PROMPT_TMPL='Dead-man deadline expired for: %s. Your awaited work likely died silently. Check honest status (process alive? output complete?) and continue or re-run.'
+
+inject_recovery() { # $1 pane, $2 reason
+  log "RECOVER: injecting into $1 (reason: $2)"
+  [[ -n "${WATCHDOG_DRY:-}" ]] && return 0
+  if pane_busy "$1"; then
+    tmux send-keys -t "$1" Escape
+    sleep 5
+  fi
+  # shellcheck disable=SC2059
+  tmux send-keys -t "$1" -l "$(printf "$RECOVERY_PROMPT_TMPL" "$2")"
+  sleep 1
+  tmux send-keys -t "$1" Enter
+}
+
+process_deadline() { # $1 = deadline file
+  local f=$1 pane deadline setts reason transcript notified recovered now
+  pane=$(get_field "$f" pane);       deadline=$(get_field "$f" deadline)
+  setts=$(get_field "$f" set);       reason=$(get_field "$f" reason)
+  transcript=$(get_field "$f" transcript)
+  notified=$(get_field "$f" notified); recovered=$(get_field "$f" recovered)
+  now=$(date +%s)
+
+  if ! pane_alive "$pane"; then
+    notify "cc-watchdog: pane $pane VANISHED with unmet deadline: $reason"
+    mv "$f" "$ARCHIVE_DIR/"; return
+  fi
+
+  if phoenix_owns "$pane"; then log "DEFER: Phoenix owns $pane"; return; fi
+
+  # Self-clear: the session did something after declaring, and is idle again.
+  if [[ -n "$transcript" && -f "$transcript" ]] \
+      && (( $(stat -c %Y "$transcript") > setts )) && pane_idle "$pane"; then
+    log "SELF-CLEAR: $pane progressed and is idle ($reason)"
+    mv "$f" "$ARCHIVE_DIR/"; return
+  fi
+
+  (( now < deadline )) && return
+
+  if [[ -z "$notified" ]]; then
+    notify "cc-watchdog: [$(session_name "$pane")] deadline MISSED ($(( (now - deadline) / 60 )) min overdue): $reason"
+    set_field "$f" notified "$now"
+    return
+  fi
+
+  if [[ -z "$recovered" ]]; then
+    (( now >= deadline + GRACE_MIN * 60 )) || return
+    local lr="$STATE_DIR/pane-$pane.last-recovery"
+    if [[ -f "$lr" ]] && (( now - $(cat "$lr") < RECOVERY_BACKOFF_HOURS * 3600 )); then
+      notify "cc-watchdog: [$(session_name "$pane")] stalled AGAIN within ${RECOVERY_BACKOFF_HOURS}h of a recovery — notify-only backoff: $reason"
+      set_field "$f" recovered "$now"
+      set_field "$f" recovery_kind backoff
+      return
+    fi
+    inject_recovery "$pane" "$reason"
+    set_field "$f" recovered "$now"
+    set_field "$f" recovery_kind inject
+    echo "$now" > "$lr"
+    return
+  fi
+
+  # "RECOVERY FAILED ... after injection" is only truthful when an injection
+  # actually happened; backoff-mode deadlines already got their final notice.
+  if [[ "$(get_field "$f" recovery_kind)" == inject ]] \
+      && [[ -z "$(get_field "$f" failed)" ]] && (( now >= recovered + GRACE_MIN * 60 )); then
+    notify "cc-watchdog: [$(session_name "$pane")] RECOVERY FAILED (no progress ${GRACE_MIN} min after injection): $reason"
+    set_field "$f" failed "$now"
+  fi
+}
+
 main() {
   shopt -s nullglob
   local f

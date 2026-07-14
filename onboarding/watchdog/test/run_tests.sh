@@ -109,6 +109,111 @@ t wd_notify_falls_back_without_webhook test_wd_notify_falls_back_without_webhook
 t wd_pane_busy_matches_footer test_wd_pane_busy_matches_footer
 t wd_config_overrides_defaults test_wd_config_overrides_defaults
 
+mk_deadline() { # <pane> <deadline-offset-s> <set-offset-s> <reason> — echoes file path
+  local now f
+  now=$(date +%s)
+  f="$CC_WATCHDOG_HOME/state/$1.deadline"
+  mkdir -p "$CC_WATCHDOG_HOME/state"
+  {
+    echo "pane=$1"
+    echo "set=$(( now + $3 ))"
+    echo "deadline=$(( now + $2 ))"
+    echo "reason=$4"
+    echo "transcript=$TMP/transcript.jsonl"
+  } > "$f"
+  echo "$f"
+}
+
+live_busy_pane() { # <pane>
+  echo "$1 100" > "$TMUX_SHIM_DIR/panes"
+  printf 'working... esc to interrupt\n' > "$TMUX_SHIM_DIR/content-$1"
+}
+
+test_wd_not_due_is_noop() {
+  setup; src_watchdog; live_busy_pane %1
+  local f; f=$(mk_deadline %1 600 -60 "later")
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  [[ -f "$f" ]] && ! grep -q '^notified=' "$f"
+}
+
+test_wd_tier1_notifies_once() {
+  setup; src_watchdog; live_busy_pane %1
+  local f; f=$(mk_deadline %1 -120 -1800 "suite")
+  process_deadline "$f"
+  grep -q 'deadline MISSED' "$SHIM_LOG_DIR/curl.log" || { echo "no tier1"; return 1; }
+  process_deadline "$f"
+  (( $(grep -c 'deadline MISSED' "$SHIM_LOG_DIR/curl.log") == 1 )) \
+    || { echo "notified twice"; return 1; }
+}
+
+test_wd_tier2_injects_after_grace() {
+  setup; src_watchdog; live_busy_pane %1
+  local f; f=$(mk_deadline %1 $(( -GRACE_MIN * 60 - 60 )) -7200 "suite")
+  set_field "$f" notified "$(( $(date +%s) - GRACE_MIN * 60 ))"
+  process_deadline "$f"
+  grep -q 'Escape' "$TMUX_SHIM_DIR/send-keys.log" || { echo "no Escape"; return 1; }
+  grep -q 'Dead-man deadline expired' "$TMUX_SHIM_DIR/send-keys.log" \
+    || { echo "no recovery prompt"; return 1; }
+  grep -q '^recovered=' "$f" || { echo "no recovered stamp"; return 1; }
+  [[ -f "$CC_WATCHDOG_HOME/state/pane-%1.last-recovery" ]] || { echo "no last-recovery"; return 1; }
+}
+
+test_wd_backoff_after_recent_recovery() {
+  setup; src_watchdog; live_busy_pane %1
+  date +%s > "$CC_WATCHDOG_HOME/state/pane-%1.last-recovery"
+  local f; f=$(mk_deadline %1 $(( -GRACE_MIN * 60 - 60 )) -7200 "again")
+  set_field "$f" notified "$(( $(date +%s) - GRACE_MIN * 60 ))"
+  process_deadline "$f"
+  [[ ! -f "$TMUX_SHIM_DIR/send-keys.log" ]] || { echo "injected during backoff"; return 1; }
+  grep -q 'notify-only backoff' "$SHIM_LOG_DIR/curl.log" || { echo "no backoff notice"; return 1; }
+  set_field "$f" recovered "$(( $(date +%s) - GRACE_MIN * 60 - 60 ))"
+  process_deadline "$f" || { echo "process_deadline failed on 2nd pass"; return 1; }
+  ! grep -q 'RECOVERY FAILED' "$SHIM_LOG_DIR/curl.log" || { echo "false RECOVERY FAILED in backoff mode"; return 1; }
+}
+
+test_wd_self_clear_on_progress_and_idle() {
+  setup; src_watchdog
+  echo "%1 100" > "$TMUX_SHIM_DIR/panes"
+  printf '> \n' > "$TMUX_SHIM_DIR/content-%1"   # idle
+  local f; f=$(mk_deadline %1 -120 -1800 "done actually")
+  touch "$TMP/transcript.jsonl"                  # mtime now > set time
+  process_deadline "$f"
+  [[ ! -f "$f" ]] || { echo "not cleared"; return 1; }
+  [[ -f "$CC_WATCHDOG_HOME/state/archive/%1.deadline" ]] || { echo "not archived"; return 1; }
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "notified on self-clear"; return 1; }
+}
+
+test_wd_vanished_pane_notifies_and_archives() {
+  setup; src_watchdog
+  : > "$TMUX_SHIM_DIR/panes"                     # no panes at all
+  local f; f=$(mk_deadline %1 -120 -1800 "gone")
+  process_deadline "$f"
+  grep -q 'VANISHED' "$SHIM_LOG_DIR/curl.log" || { echo "no vanish notice"; return 1; }
+  [[ ! -f "$f" ]] || { echo "not archived"; return 1; }
+}
+
+test_wd_phoenix_defers() {
+  setup; src_watchdog; live_busy_pane %1
+  export CC_WATCHDOG_AGENTS_STATE="$TMP/agents"
+  mkdir -p "$TMP/agents"
+  touch "$TMP/agents/abc.limit-wait"
+  echo "%1" > "$TMP/agents/abc.tmux-pane"
+  src_watchdog                                   # re-source to pick up override
+  local f; f=$(mk_deadline %1 -120 -1800 "limit")
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "notified despite Phoenix"; return 1; }
+  [[ -f "$f" ]] || { echo "file touched"; return 1; }
+  grep -q 'DEFER: Phoenix owns' "$CC_WATCHDOG_HOME/log" || { echo "no DEFER log"; return 1; }
+}
+
+t wd_not_due_is_noop test_wd_not_due_is_noop
+t wd_tier1_notifies_once test_wd_tier1_notifies_once
+t wd_tier2_injects_after_grace test_wd_tier2_injects_after_grace
+t wd_backoff_after_recent_recovery test_wd_backoff_after_recent_recovery
+t wd_self_clear_on_progress_and_idle test_wd_self_clear_on_progress_and_idle
+t wd_vanished_pane_notifies_and_archives test_wd_vanished_pane_notifies_and_archives
+t wd_phoenix_defers test_wd_phoenix_defers
+
 # --- tests appended by later tasks above this line ---
 
 echo "---"
