@@ -1,0 +1,6 @@
+[Unit]
+Description=Claude Code stall watchdog (dead-man's switch tick)
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/cc-stall-watchdog.sh

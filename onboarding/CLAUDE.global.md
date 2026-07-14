@@ -76,3 +76,18 @@ Before building on a premise — what a field actually contains at the read site
 Treat unverified premises as likely-wrong, not likely-right. Across long arcs of load-bearing checks the probes invert the premise more often than they confirm it (the moments weren't end-of-run; the "healthy" channel was dead; the MW didn't survive the data boundary; the core had zero reactions where the counts implied dozens; the "reference-state-paired" reaction wasn't, in the guard's eyes). A plan built on an unverified premise produces correct implementations of wrong designs — the most expensive failure class, because every downstream review validates against the same false premise.
 
 Corollary — don't build to pass the check. When a guard / test / tripwire refuses your construct, do not reshape the construct to slip under it; a thing built only to make a check go green validates nothing that transfers. Ask first whether the guard caught a real defect (then fix the defect) or exposed a false-positive in itself (then record it as a finding) — not how to get past it.
+
+# Silent-stall prevention (cc-watchdog contract)
+
+Long autonomous sessions must never wait indefinitely on work that could die
+silently:
+
+- Run final gates (full test suites, builds) in the mother session as tracked
+  background tasks — never owned by a subagent that will stop before the work
+  completes.
+- Before ending any turn while background/external work is still pending,
+  declare a dead-man deadline: `cc-deadman set <expected minutes + 50% margin>
+  "<reason>"`.
+- First action after resuming from a wait: `cc-deadman clear` (or re-arm for
+  the next wait).
+- Wrap any command without a natural bound in `timeout`.

@@ -56,3 +56,5 @@ timer.dat
 # .vscode
 .vscode
 
+# Superpowers working files (brainstorming specs, plans) — local-only, never tracked
+docs/superpowers/

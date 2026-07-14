@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# pstree -p <pid>  → canned output from $TMUX_SHIM_DIR/pstree-<pid>
+cat "$TMUX_SHIM_DIR/pstree-$2" 2>/dev/null

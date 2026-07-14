@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+echo "$*" >> "$SHIM_LOG_DIR/notify-send.log"

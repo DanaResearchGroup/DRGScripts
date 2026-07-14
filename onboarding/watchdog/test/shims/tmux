@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Test shim for tmux, driven by files under $TMUX_SHIM_DIR.
+cmd=$1; shift
+case "$cmd" in
+  list-panes)
+    fmt=""
+    while (( $# > 0 )); do [[ $1 == -F ]] && fmt=$2; shift; done
+    if [[ "$fmt" == *pane_pid* ]]; then cat "$TMUX_SHIM_DIR/panes" 2>/dev/null
+    else awk '{print $1}' "$TMUX_SHIM_DIR/panes" 2>/dev/null; fi
+    ;;
+  capture-pane)
+    pane=""
+    while (( $# > 0 )); do [[ $1 == -t ]] && pane=$2; shift; done
+    cat "$TMUX_SHIM_DIR/content-${pane}" 2>/dev/null
+    ;;
+  display-message) echo "fake-session" ;;
+  send-keys) echo "$*" >> "$TMUX_SHIM_DIR/send-keys.log" ;;
+  *) exit 0 ;;
+esac
