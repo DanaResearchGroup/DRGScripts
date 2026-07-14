@@ -18,6 +18,10 @@ EOF
 }
 
 resolve_pane() {
+  # Herdr injects its pane id into every managed pane; prefer it when present.
+  if [[ "${HERDR_ENV:-}" == 1 && -n "${HERDR_PANE_ID:-}" ]]; then
+    printf 'herdr:%s' "$HERDR_PANE_ID"; return 0
+  fi
   if [[ -n "${TMUX_PANE:-}" ]]; then printf '%s' "$TMUX_PANE"; return 0; fi
   # Tool shells often lack $TMUX_PANE: find the pane whose top-level shell
   # (pane_pid) is an ancestor of this process.

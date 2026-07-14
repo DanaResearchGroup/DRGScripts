@@ -40,10 +40,46 @@ notify() { # $1 = message
   fi
 }
 
-pane_alive() { tmux list-panes -a -F '#{pane_id}' 2>/dev/null | grep -qx "$1"; }
-pane_busy()  { tmux capture-pane -p -t "$1" 2>/dev/null | grep -q "$BUSY_RE"; }
-pane_idle()  { pane_alive "$1" && ! pane_busy "$1"; }
-session_name() { tmux display-message -p -t "$1" '#{session_name}' 2>/dev/null || echo '?'; }
+# --- multiplexer seam: pane keys "herdr:<id>" route to the herdr CLI -------
+is_herdr() { [[ "$1" == herdr:* ]]; }
+hid() { printf '%s' "${1#herdr:}"; }
+
+herdr_status() { # $1 = full pane key → agent_status, empty if unreachable
+  herdr pane get "$(hid "$1")" 2>/dev/null \
+    | sed -n 's/.*"agent_status"[[:space:]]*:[[:space:]]*"\([a-z]*\)".*/\1/p' | head -1
+}
+
+pane_alive() {
+  if is_herdr "$1"; then
+    local out
+    # unreachable herdr => assume alive: never false-VANISH a session we can't see
+    out=$(herdr pane list 2>/dev/null) || return 0
+    grep -qF "\"$(hid "$1")\"" <<<"$out"
+  else
+    tmux list-panes -a -F '#{pane_id}' 2>/dev/null | grep -qx "$1"
+  fi
+}
+
+pane_busy() {
+  if is_herdr "$1"; then [[ "$(herdr_status "$1")" == working ]]
+  else tmux capture-pane -p -t "$1" 2>/dev/null | grep -q "$BUSY_RE"; fi
+}
+
+pane_idle() {
+  if is_herdr "$1"; then
+    local s; s=$(herdr_status "$1")
+    # 'blocked' (agent waiting for input) is deliberately NOT idle: a blocked
+    # agent must not self-clear its deadline — tier 1 should reach the user.
+    [[ "$s" == idle || "$s" == done ]]
+  else
+    pane_alive "$1" && ! pane_busy "$1"
+  fi
+}
+
+session_name() {
+  if is_herdr "$1"; then printf '%s' "$1"
+  else tmux display-message -p -t "$1" '#{session_name}' 2>/dev/null || echo '?'; fi
+}
 
 get_field() { sed -n "s/^$2=//p" "$1" | head -1; }
 set_field() {
@@ -52,12 +88,16 @@ set_field() {
   mv "$1.tmp" "$1"
 }
 
-phoenix_owns() { # $1 = pane — true iff Phoenix is limit-waiting on this pane's session
+phoenix_owns() { # $1 = pane key — Phoenix records herdr panes in <sid>.herdr-pane
   local f sid
   for f in "$AGENTS_STATE"/*.limit-wait; do
     [[ -e "$f" ]] || return 1
     sid=$(basename "$f" .limit-wait)
-    [[ "$(cat "$AGENTS_STATE/$sid.tmux-pane" 2>/dev/null)" == "$1" ]] && return 0
+    if is_herdr "$1"; then
+      [[ "$(cat "$AGENTS_STATE/$sid.herdr-pane" 2>/dev/null)" == "$(hid "$1")" ]] && return 0
+    else
+      [[ "$(cat "$AGENTS_STATE/$sid.tmux-pane" 2>/dev/null)" == "$1" ]] && return 0
+    fi
   done
   return 1
 }
@@ -67,6 +107,12 @@ RECOVERY_PROMPT_TMPL='Dead-man deadline expired for: %s. Your awaited work likel
 inject_recovery() { # $1 pane, $2 reason
   log "RECOVER: injecting into $1 (reason: $2)"
   [[ -n "${WATCHDOG_DRY:-}" ]] && return 0
+  if is_herdr "$1"; then
+    # shellcheck disable=SC2059
+    herdr pane run "$(hid "$1")" "$(printf "$RECOVERY_PROMPT_TMPL" "$2")" >/dev/null 2>&1 \
+      || log "ERROR: herdr pane run failed for $1 (external control unavailable?)"
+    return 0
+  fi
   if pane_busy "$1"; then
     tmux send-keys -t "$1" Escape
     sleep 5

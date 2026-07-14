@@ -15,10 +15,12 @@ setup() {
   export CC_WATCHDOG_HOME="$TMP/wd"
   export TMUX_SHIM_DIR="$TMP/tmux"
   export SHIM_LOG_DIR="$TMP/shimlog"
-  mkdir -p "$TMUX_SHIM_DIR" "$SHIM_LOG_DIR"
+  export HERDR_SHIM_DIR="$TMP/herdr"
+  mkdir -p "$TMUX_SHIM_DIR" "$SHIM_LOG_DIR" "$HERDR_SHIM_DIR"
   export PATH="$HERE/shims:$PATH"
   export SLACK_WEBHOOK_URL="http://example.invalid/hook"
-  unset WATCHDOG_DRY TMUX_PANE
+  export CC_WATCHDOG_AGENTS_STATE="$TMP/agents"
+  unset WATCHDOG_DRY TMUX_PANE HERDR_ENV HERDR_PANE_ID
 }
 
 test_deadman_set_writes_fields() {
@@ -213,6 +215,92 @@ t wd_backoff_after_recent_recovery test_wd_backoff_after_recent_recovery
 t wd_self_clear_on_progress_and_idle test_wd_self_clear_on_progress_and_idle
 t wd_vanished_pane_notifies_and_archives test_wd_vanished_pane_notifies_and_archives
 t wd_phoenix_defers test_wd_phoenix_defers
+
+test_deadman_herdr_pane_key() {
+  setup; cd "$TMP"
+  HERDR_ENV=1 HERDR_PANE_ID=w1:p3 "$HERE/../cc-deadman" set 30 "melt sim" >/dev/null || return 1
+  local f="$CC_WATCHDOG_HOME/state/herdr:w1:p3.deadline"
+  [[ -f "$f" ]] || { echo "no herdr deadline file"; return 1; }
+  grep -qx 'pane=herdr:w1:p3' "$f" || { echo "bad pane key"; return 1; }
+}
+
+test_wd_herdr_vanished_detected() {
+  setup; src_watchdog
+  herdr_pane w9:p9 idle   # herdr reachable, but lists a DIFFERENT pane
+  local f; f=$(mk_deadline herdr:w1:p3 -120 -1800 "gone")
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  grep -q 'VANISHED' "$SHIM_LOG_DIR/curl.log" || { echo "no vanish notice"; return 1; }
+  [[ ! -f "$f" ]] || { echo "not archived"; return 1; }
+}
+
+herdr_pane() { # <id> <agent_status> — register a live herdr pane in the shim
+  printf '{"panes": [{"pane_id": "%s"}]}\n' "$1" > "$HERDR_SHIM_DIR/panes.json"
+  printf '{"pane_id": "%s", "agent_status": "%s"}\n' "$1" "$2" > "$HERDR_SHIM_DIR/status-$1.json"
+}
+
+test_wd_herdr_status_mapping() {
+  setup; src_watchdog
+  herdr_pane w1:p3 working
+  pane_busy herdr:w1:p3 || { echo "working should be busy"; return 1; }
+  ! pane_idle herdr:w1:p3 || { echo "working must not be idle"; return 1; }
+  herdr_pane w1:p3 blocked
+  ! pane_busy herdr:w1:p3 || { echo "blocked is not busy"; return 1; }
+  ! pane_idle herdr:w1:p3 || { echo "blocked must NOT be idle (no self-clear)"; return 1; }
+  herdr_pane w1:p3 idle
+  pane_idle herdr:w1:p3 || { echo "idle should be idle"; return 1; }
+}
+
+test_wd_herdr_tier2_uses_pane_run() {
+  setup; src_watchdog
+  herdr_pane w1:p3 working
+  local f; f=$(mk_deadline herdr:w1:p3 $(( -GRACE_MIN * 60 - 60 )) -7200 "herdr suite")
+  set_field "$f" notified "$(( $(date +%s) - GRACE_MIN * 60 ))"
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  grep -q 'Dead-man deadline expired' "$HERDR_SHIM_DIR/pane-run.log" || { echo "no pane run"; return 1; }
+  [[ ! -f "$TMUX_SHIM_DIR/send-keys.log" ]] || { echo "tmux injection used for herdr pane"; return 1; }
+  grep -qx 'recovery_kind=inject' "$f" || { echo "no inject stamp"; return 1; }
+}
+
+test_wd_herdr_unreachable_degrades_to_notify() {
+  setup; src_watchdog
+  # no panes.json / status files: every herdr call fails (external control unavailable)
+  local f; f=$(mk_deadline herdr:w1:p3 -120 -1800 "unreachable")
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  ! grep -q 'VANISHED' "$SHIM_LOG_DIR/curl.log" || { echo "false VANISH"; return 1; }
+  grep -q 'deadline MISSED' "$SHIM_LOG_DIR/curl.log" || { echo "tier1 did not fire"; return 1; }
+  [[ -f "$f" ]] || { echo "deadline archived while unreachable"; return 1; }
+}
+
+test_wd_herdr_self_clear_on_idle() {
+  setup; src_watchdog
+  herdr_pane w1:p3 idle
+  local f; f=$(mk_deadline herdr:w1:p3 -120 -1800 "finished")
+  touch "$TMP/transcript.jsonl"
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  [[ ! -f "$f" ]] || { echo "not self-cleared"; return 1; }
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "notified on self-clear"; return 1; }
+}
+
+test_wd_herdr_phoenix_defers() {
+  setup; src_watchdog
+  herdr_pane w1:p3 working
+  mkdir -p "$CC_WATCHDOG_AGENTS_STATE"
+  touch "$CC_WATCHDOG_AGENTS_STATE/abc.limit-wait"
+  echo "w1:p3" > "$CC_WATCHDOG_AGENTS_STATE/abc.herdr-pane"
+  src_watchdog   # re-source after the state dir exists
+  local f; f=$(mk_deadline herdr:w1:p3 -120 -1800 "limit")
+  process_deadline "$f" || { echo "process_deadline failed"; return 1; }
+  grep -q 'DEFER: Phoenix owns' "$CC_WATCHDOG_HOME/log" || { echo "no DEFER log"; return 1; }
+  [[ ! -f "$SHIM_LOG_DIR/curl.log" ]] || { echo "notified despite Phoenix"; return 1; }
+}
+
+t deadman_herdr_pane_key test_deadman_herdr_pane_key
+t wd_herdr_vanished_detected test_wd_herdr_vanished_detected
+t wd_herdr_phoenix_defers test_wd_herdr_phoenix_defers
+t wd_herdr_status_mapping test_wd_herdr_status_mapping
+t wd_herdr_tier2_uses_pane_run test_wd_herdr_tier2_uses_pane_run
+t wd_herdr_unreachable_degrades_to_notify test_wd_herdr_unreachable_degrades_to_notify
+t wd_herdr_self_clear_on_idle test_wd_herdr_self_clear_on_idle
 
 # --- tests appended by later tasks above this line ---
 

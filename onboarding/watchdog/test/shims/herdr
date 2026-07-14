@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Test shim: driven by files under $HERDR_SHIM_DIR; missing file => exit 1
+# (models herdr being unreachable / refusing external control).
+case "$1 $2" in
+  "pane list") cat "$HERDR_SHIM_DIR/panes.json" ;;
+  "pane get")  cat "$HERDR_SHIM_DIR/status-$3.json" ;;
+  "pane run")  id=$3; shift 3; echo "$id $*" >> "$HERDR_SHIM_DIR/pane-run.log" ;;
+  *) exit 0 ;;
+esac
