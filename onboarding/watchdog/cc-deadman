@@ -68,7 +68,7 @@ case "$cmd" in
     f="$STATE_DIR/$pane.deadline"
     [[ -f "$f" ]] || { echo "cc-deadman: no deadline set for $pane" >&2; exit 1; }
     old=$(sed -n 's/^deadline=//p' "$f")
-    grep -Ev '^(deadline|notified|recovered|failed|recovery_kind)=' "$f" > "$f.tmp" || true
+    grep -Ev '^(deadline|notified|recovered|failed|recovery_kind|baseline)=' "$f" > "$f.tmp" || true
     echo "deadline=$(( old + $1 * 60 ))" >> "$f.tmp"
     mv "$f.tmp" "$f"
     echo "cc-deadman: extended by $1 min"

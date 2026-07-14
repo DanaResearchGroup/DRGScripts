@@ -26,8 +26,15 @@ mkdir -p "$STATE_DIR" "$ARCHIVE_DIR"
 
 log() { printf '%s %s\n' "$(date '+%F %T')" "$*" >> "$LOG_FILE"; }
 
-notify() { # $1 = message
-  local msg=${1//\"/\'}
+notify() { # $1 = message — escape for the JSON payload; a dropped alert is
+  # the one unacceptable failure mode, so backslashes/quotes/control chars
+  # must never invalidate the body.
+  local msg=$1
+  msg=${msg//\\/\\\\}
+  msg=${msg//\"/\\\"}
+  msg=${msg//$'\n'/ }
+  msg=${msg//$'\t'/ }
+  msg=${msg//$'\r'/ }
   log "NOTIFY: $msg"
   [[ -n "${WATCHDOG_DRY:-}" ]] && return 0
   if [[ -n "${SLACK_WEBHOOK_URL:-}" ]]; then
@@ -177,11 +184,25 @@ process_deadline() { # $1 = deadline file
 
   if phoenix_owns "$pane"; then log "DEFER: Phoenix owns $pane"; return; fi
 
-  # Self-clear: the session did something after declaring, and is idle again.
-  if [[ -n "$transcript" && -f "$transcript" ]] \
-      && (( $(stat -c %Y "$transcript") > setts )) && pane_idle "$pane"; then
-    log "SELF-CLEAR: $pane progressed and is idle ($reason)"
-    mv "$f" "$ARCHIVE_DIR/"; return
+  # Self-clear needs a BASELINE distinguishing the declaring turn's own tail
+  # writes from later resumed activity: cc-deadman runs as a tool call, so
+  # the transcript is appended AFTER set=, and any freshness-vs-now window
+  # fails because the first tick after turn-end always lands inside it
+  # (5-min cadence). First idle tick stamps baseline=<transcript mtime>;
+  # self-clear requires strictly newer activity than that baseline, while
+  # idle.
+  if [[ -n "$transcript" && -f "$transcript" ]]; then
+    local tm baseline
+    tm=$(stat -c %Y "$transcript" 2>/dev/null) || tm=""
+    baseline=$(get_field "$f" baseline)
+    if [[ -n "$tm" ]] && pane_idle "$pane"; then
+      if [[ -z "$baseline" ]]; then
+        set_field "$f" baseline "$tm"   # the declaring turn's final write
+      elif (( tm > baseline )); then
+        log "SELF-CLEAR: $pane progressed past baseline and is idle ($reason)"
+        mv "$f" "$ARCHIVE_DIR/"; return
+      fi
+    fi
   fi
 
   (( now < deadline )) && return

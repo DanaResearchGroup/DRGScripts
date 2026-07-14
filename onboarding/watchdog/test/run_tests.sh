@@ -47,12 +47,14 @@ test_deadman_extend_pushes_and_resets_tiers() {
   TMUX_PANE=%7 "$HERE/../cc-deadman" set 30 "x" >/dev/null
   local f="$CC_WATCHDOG_HOME/state/%7.deadline"
   echo "notified=123" >> "$f"
+  echo "baseline=123" >> "$f"
   local before after
   before=$(sed -n 's/^deadline=//p' "$f")
   TMUX_PANE=%7 "$HERE/../cc-deadman" extend 10 >/dev/null
   after=$(sed -n 's/^deadline=//p' "$f")
   (( after - before == 600 )) || { echo "bad extend"; return 1; }
   ! grep -q '^notified=' "$f" || { echo "notified not reset"; return 1; }
+  ! grep -q '^baseline=' "$f" || { echo "baseline not stripped"; return 1; }
 }
 
 test_deadman_pane_from_process_tree() {
@@ -178,6 +180,7 @@ test_wd_self_clear_on_progress_and_idle() {
   echo "%1 100" > "$TMUX_SHIM_DIR/panes"
   printf '> \n' > "$TMUX_SHIM_DIR/content-%1"   # idle
   local f; f=$(mk_deadline %1 -120 -1800 "done actually")
+  set_field "$f" baseline "$(( $(date +%s) - 900 ))"
   touch "$TMP/transcript.jsonl"                  # mtime now > set time
   process_deadline "$f"
   [[ ! -f "$f" ]] || { echo "not cleared"; return 1; }
@@ -275,6 +278,7 @@ test_wd_herdr_self_clear_on_idle() {
   setup; src_watchdog
   herdr_pane w1:p3 idle
   local f; f=$(mk_deadline herdr:w1:p3 -120 -1800 "finished")
+  set_field "$f" baseline "$(( $(date +%s) - 900 ))"
   touch "$TMP/transcript.jsonl"
   process_deadline "$f" || { echo "process_deadline failed"; return 1; }
   [[ ! -f "$f" ]] || { echo "not self-cleared"; return 1; }
@@ -370,6 +374,39 @@ test_install_creates_links_and_units() {
 }
 
 t install_creates_links_and_units test_install_creates_links_and_units
+
+test_wd_self_clear_baseline_sequence() {
+  setup; src_watchdog
+  echo "%1 100" > "$TMUX_SHIM_DIR/panes"
+  printf '> \n' > "$TMUX_SHIM_DIR/content-%1"            # idle at prompt
+  local f; f=$(mk_deadline %1 300 -60 "awaiting suite")   # set 1 min ago, due in 5
+  touch "$TMP/transcript.jsonl"                           # turn-end write, seconds after set
+  # tick 1 (pre-expiry, fresh transcript, idle): must NOT archive; stamps baseline
+  process_deadline "$f" || { echo "tick1 failed"; return 1; }
+  [[ -f "$f" ]] || { echo "archived at first idle tick (the production bug)"; return 1; }
+  grep -q '^baseline=' "$f" || { echo "no baseline stamped"; return 1; }
+  # deadline passes, transcript frozen (the stall): tier 1 must fire
+  set_field "$f" deadline "$(( $(date +%s) - 60 ))"
+  process_deadline "$f" || { echo "tick2 failed"; return 1; }
+  grep -q 'deadline MISSED' "$SHIM_LOG_DIR/curl.log" || { echo "tier1 did not fire"; return 1; }
+  [[ -f "$f" ]] || { echo "file gone after tier1"; return 1; }
+  # session resumes: write past baseline -> self-clears
+  sleep 1.1; touch "$TMP/transcript.jsonl"
+  process_deadline "$f" || { echo "tick3 failed"; return 1; }
+  [[ ! -f "$f" ]] || { echo "did not self-clear after resumed activity"; return 1; }
+}
+
+test_wd_notify_json_escapes_hostile_reason() {
+  setup; src_watchdog
+  notify 'path a\b and "quotes" here'
+  local payload
+  payload=$(grep -o '{.*}' "$SHIM_LOG_DIR/curl.log" | head -1)
+  python3 -c 'import json,sys; d=json.loads(sys.argv[1]); assert "a\\b" in d["text"] and "quotes" in d["text"]' "$payload" \
+    || { echo "payload not valid JSON with escaped content: $payload"; return 1; }
+}
+
+t wd_self_clear_baseline_sequence test_wd_self_clear_baseline_sequence
+t wd_notify_json_escapes_hostile_reason test_wd_notify_json_escapes_hostile_reason
 
 # --- tests appended by later tasks above this line ---
 

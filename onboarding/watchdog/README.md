@@ -66,6 +66,9 @@ Optional overrides in the same file: `GRACE_MIN`, `BACKSTOP_HOURS`,
 
 Recommended first deployment: `WATCHDOG_DRY=1` in the config for 2–3 days;
 watch `~/.cc-watchdog/log` for what it *would* have done, then remove the flag.
+When you remove the flag to arm for real, also clear dry-run artifacts:
+`rm -f ~/.cc-watchdog/state/pane-*.last-recovery` (dry runs stamp recoveries
+too, and a stale stamp would wrongly back off the first real recovery).
 
 ## Unit tests
 
