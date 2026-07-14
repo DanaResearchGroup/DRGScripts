@@ -10,9 +10,9 @@
 ## What you're building
 
 - **One real environment, on your office Linux PC** — the agent stack (Claude Code,
-  agent-skills, superpowers, tmux) lives here and only here.
+  agent-skills, superpowers, Herdr) lives here and only here.
 - **Your laptop (Win/Mac) is a thin client + Obsidian** — you SSH/mosh into the Linux PC
-  and `tmux attach`, and you run Obsidian locally on the Dropbox-synced vault.
+  and attach your Herdr session (or tmux), and you run Obsidian locally on the Dropbox-synced vault.
 - This is **your own independent setup**: your own Tailscale tailnet, your own Obsidian
   vault, your own Claude account. Nothing here grants access to anyone else's machines.
 
@@ -77,11 +77,42 @@ folders there; those are **git-ignored** — don't commit them. Update gstack la
 "use `/browse` for all web browsing" rule) comes from the CLAUDE.global.md merge in step 8, so
 you don't add it by hand here.
 
-### 7. tmux config
+### 7. Terminal multiplexer — Herdr (tmux also supported)
+A multiplexer keeps your panes (and long agent sessions) alive across
+disconnects, and is what the cc-watchdog guard (step 13) drives.
+**Use [Herdr](https://herdr.dev)** — it's the group's recommended default because
+it's agent-aware (shows each agent's live state in a sidebar) and the cc-watchdog
+guard and the PI's watchers gate on that state natively. tmux is also fully
+supported if you deliberately prefer a keyboard-first, ubiquitous multiplexer.
+
+**Herdr** (recommended):
+```bash
+curl -fsSL https://herdr.dev/install.sh | sh     # installs the `herdr` binary
+herdr integration install claude                 # wires the agent-state hook into ~/.claude/settings.json
+mkdir -p ~/.config/herdr                          # ensure the config dir exists before copying
+cp <path-to-this-DRGScripts-clone>/onboarding/dotfiles/herdr-config.toml ~/.config/herdr/config.toml
+```
+The `/herdr` control skill ships in the agent-skills clone from step 5, so
+Claude Code can drive panes/tabs directly. Launch with `herdr`, then start
+`claude` inside a pane; detach with `prefix+q` (prefix is `ctrl+b`), `prefix+?`
+lists all bindings.
+
+**tmux** (alternative — if you deliberately prefer it):
 ```bash
 cp <path-to-this-DRGScripts-clone>/onboarding/dotfiles/tmux.conf ~/.tmux.conf
 ```
 Prefix is `C-a`. (Optional persistence plugins need `tpm` — see the comments in the file.)
+
+The cc-watchdog stall-guard (step 13) works under both Herdr and tmux. (The PI's optional
+auto-handoff / Phoenix watchers — deferred for members, see MAINTAINING — are
+likewise multiplexer-aware if you enable them later.)
+
+Optional remote-attach aliases (add to `~/.bashrc`), to connect and attach on a
+workstation named `ol`:
+```bash
+alias olh='herdr --remote ol'                       # Herdr (needs herdr installed on ol)
+alias olt='ssh -t ol "tmux attach || tmux new"'   # tmux
+```
 
 ### 8. Global CLAUDE.md
 Merge [CLAUDE.global.md](./CLAUDE.global.md) into your `~/.claude/CLAUDE.md` (have Claude
@@ -218,7 +249,12 @@ rules are the prevention. Details: `onboarding/watchdog/README.md`.
    ```
    (macOS: skip — use the native Terminal; `brew install mosh` if you want mosh.)
 2. **Tailscale** — install the GUI app, sign in to the same tailnet, confirm *Connected*.
-3. **Terminal into the Linux PC** (run agents on the remote, never the laptop):
+3. **Terminal into the Linux PC** (run agents on the remote, never the laptop). With Herdr
+   (recommended) one command attaches your remote session — start `claude` inside a pane:
+   ```bash
+   herdr --remote <office-pc>      # your user + tailnet host name; needs herdr on both ends
+   ```
+   Prefer tmux? Attach the classic way instead:
    ```bash
    ssh <you>@<office-pc>      # your user + tailnet host name
    tmux attach -t cc || tmux new -s cc
@@ -236,7 +272,8 @@ rules are the prevention. Details: `onboarding/watchdog/README.md`.
 ## C. Verification smoke test
 
 - [ ] `tailscale status` shows your tailnet and this host.
-- [ ] From the laptop: `ssh`/`mosh` into the Linux PC, `tmux attach` works.
+- [ ] From the laptop: `ssh`/`mosh` into the Linux PC and attach your session
+      (`herdr --remote`, or `tmux attach`) works.
 - [ ] A Claude Code session lists the gstack skills from step 6 (type `/` and look for
       `/browse`, `/review`, `/ship`, …); superpowers loads.
 - [ ] The status line shows the model name + context-window %.
