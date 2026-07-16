@@ -123,6 +123,17 @@ Merge [CLAUDE.global.md](./CLAUDE.global.md) into your `~/.claude/CLAUDE.md` (ha
 Code merge it, preserving any lines you've already added). Fix the **Obsidian Vault path**
 to match your Dropbox layout (step 10).
 
+The merged file's **"Subagent model routing"** section refers to four role agents
+(`snippet-classifier`, `code-implementer`, `architecture-reviewer`, `project-executor`).
+Install them by symlinking this repo's copies into `~/.claude/agents/` — symlinks (not
+copies) so a plain `git pull` keeps them current:
+```bash
+mkdir -p ~/.claude/agents
+for f in <path-to-this-DRGScripts-clone>/onboarding/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
+```
+They become dispatchable in your **next** Claude Code session — agent definitions load at
+session start, so a running session won't see them until you restart.
+
 ### 9. ARC project guide
 When you set up an ARC working copy, copy this repo's [ARC/CLAUDE.md](../ARC/CLAUDE.md)
 into it so Claude Code has the ARC conventions in context.

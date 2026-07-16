@@ -31,6 +31,7 @@ not by copying secrets or by being granted access to the PI's machines.
 | `SETUP.md` (new-member section) | agent-skills | Minimal clone→symlink→statusline path. | Install steps change. |
 | `onboarding/ONBOARDING.md` | DRGScripts | Master CC-executable runbook the member points CC at. | Any step in the end-to-end flow changes. |
 | `onboarding/CLAUDE.global.md` | DRGScripts | Genericized global CLAUDE.md to merge into `~/.claude/CLAUDE.md`. | The PI's `~/.claude/CLAUDE.md` gains durable guidance worth sharing. |
+| `onboarding/agents/*.md` | DRGScripts | Four subagent role definitions (snippet-classifier/haiku, code-implementer/sonnet, architecture-reviewer/opus, project-executor/fable), symlinked into `~/.claude/agents/` in ONBOARDING step 8. Paired with the "Subagent model routing" section in `CLAUDE.global.md`. | The role set, model/effort assignments, or the routing boundary changes — keep the agent files and the `CLAUDE.global.md` routing section in lockstep. |
 | `onboarding/vault-structure.md` | DRGScripts | Vault tree + scaffold + which seeds go where. | The vault layout changes. |
 | `onboarding/vault-seeds/**` | DRGScripts | Real files copied into the member's vault (operating manual, wiki index, cheatsheets, tmux.conf). | The seeds drift from the PI's (sanitized) originals. |
 | `onboarding/dotfiles/tmux.conf` | DRGScripts | The group tmux config. | The PI's `~/.tmux.conf` changes. |
