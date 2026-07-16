@@ -51,6 +51,19 @@ Your Obsidian knowledge vault is at: `$HOME/Dropbox/Vault`
 
 Always prefer dispatching subagents (Agent tool, subagent-driven plan execution) over inline execution when possible, to keep the mother session's context window reasonably low.
 
+## Subagent model routing (applies from ANY mother model)
+
+Regardless of which model THIS session runs on, when dispatching a subagent prefer one of the four group role agents (installed in `~/.claude/agents/`, see ONBOARDING step 8) over the generic `general-purpose`/`claude` agent, matching the work to the role. Each role pins its own model + effort, so the routing holds no matter the mother model — a Sonnet, Opus, Fable, or Haiku mother that dispatches `code-implementer` still gets Sonnet, etc.
+
+- **snippet-classifier** (haiku, low) — trivial, low-risk mechanical work: classification, extraction, search/summarization, simple lookups. The cheap janitor.
+- **code-implementer** (sonnet, medium) — the DEFAULT worker: well-scoped code changes of known shape, test fixes, routine refactors.
+- **architecture-reviewer** (opus, high) — senior judgment: architecture/API design review, cross-cutting tradeoffs, hard tactical review, strategy. "Is this the right design?" not "make this change."
+- **project-executor** (fable, high) — a LARGE multi-step mission given as a rough goal (plan → sequence → implement → self-check) that fits within a single session's context.
+
+Boundary — **implementer vs executor** is decided on the scope/autonomy axis: a single well-scoped change of known shape → `code-implementer`; a rough goal that itself needs planning, sequencing, and self-checking → `project-executor`. When unsure, default to `code-implementer`.
+
+Ceiling — `project-executor` is still one subagent dispatch: no `/handoff`, no Phoenix resume, no context-management loop. For genuinely unbounded long-horizon autonomy, use the `autodev` skill on a mother session instead, not this role.
+
 # Superpowers working files (global, all repos)
 
 `docs/superpowers/` (brainstorming specs, implementation plans, and other superpowers
