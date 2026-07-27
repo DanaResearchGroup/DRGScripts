@@ -1,7 +1,7 @@
-# Onboarding — mirror the group's Claude-Code setup
+# Onboarding — mirror the group's Antigravity (AGY) setup
 
-> **How to use this file:** open Claude Code on your **office Linux PC** and say
-> *"read onboarding/ONBOARDING.md and walk me through it, one step at a time."* Claude Code
+> **How to use this file:** open the Antigravity CLI (`agy`) on your **office Linux PC** and say
+> *"read onboarding/ONBOARDING.md and walk me through it, one step at a time."* Antigravity
 > will run the commands with you and stop for anything that needs your input (logins, tokens).
 > Maintainers: see [MAINTAINING.md](./MAINTAINING.md).
 >
@@ -9,14 +9,14 @@
 
 ## What you're building
 
-- **One real environment, on your office Linux PC** — the agent stack (Claude Code,
-  agent-skills, superpowers, Herdr) lives here and only here.
+- **One real environment, on your office Linux PC** — the agent stack (Antigravity CLI,
+  skills, plugins, Herdr) lives here and only here.
 - **Your laptop (Win/Mac) is a thin client + Obsidian** — you SSH/mosh into the Linux PC
   and attach your Herdr session (or tmux), and you run Obsidian locally on the Dropbox-synced vault.
 - This is **your own independent setup**: your own Tailscale tailnet, your own Obsidian
-  vault, your own Claude account. Nothing here grants access to anyone else's machines.
+  vault, your own Antigravity account. Nothing here grants access to anyone else's machines.
 
-First pass is **Claude Code only**, plus the **Headroom** token-compression layer (step 12),
+First pass is **Antigravity only**, plus the **Headroom** token-compression layer (step 11),
 which also pre-wires the Codex proxy. Codex CLI itself, Slack, MCP connectors, and cluster
 compute are deferred — see [MAINTAINING.md](./MAINTAINING.md) for how to add them later.
 
@@ -38,67 +38,41 @@ sudo tailscale up
 Log in with your account, give this host a clear name (e.g. `office-pc`). This joins
 **your own** tailnet — it's how your laptop will reach this machine later.
 
-### 3. Claude Code
-Install Claude Code and log in with **your own** account. Confirm it runs: `claude`.
+### 3. Antigravity CLI
+Install the Antigravity CLI (`agy`) and authenticate with your account. Confirm it runs: `agy`.
 
-### 4. superpowers
-Install the official superpowers plugin in Claude Code (its skills back this runbook).
+### 4. Customizations & Plugins
+Antigravity natively supports many advanced functionalities without third-party plugins. Custom rules, hooks, plugins, and MCP servers are managed via `~/.gemini/config/` (global) or `.agents/` (per-project).
 
-### 5. agent-skills
-Follow the **"New member — Claude Code only"** path in
-<https://github.com/DanaResearchGroup/agent-skills/blob/main/SETUP.md>:
-```bash
-git clone https://github.com/DanaResearchGroup/agent-skills ~/Code/agent-skills
-ln -s ~/Code/agent-skills ~/.claude/skills
-```
-Then wire up the status line — it shows the model, a **colour-coded
-context-window %** (green → yellow → red as it fills), and your **git location**
-(repo, branch, worktree name, and a dirty flag). The installer patches
-`~/.claude/settings.json` surgically (backs it up first, idempotent):
-```bash
-<path-to-this-DRGScripts-clone>/onboarding/statusline/install.sh
-```
-See [statusline/README.md](./statusline/README.md) for what each segment means
-and how to customise the colours. Updates later: tell Claude Code *"update my
-agent-skills"* (see
-[UPDATING.md](https://github.com/DanaResearchGroup/agent-skills/blob/main/UPDATING.md)).
+### 5. agent-skills & gstack skills
+The `agent-skills` and `gstack` suites (e.g. `/review`, `/ship`, `/qa`, `/browse`) have been **natively ported to Antigravity**. 
+You do **not** need to `git clone` them manually. They are automatically available in `~/.gemini/antigravity-cli/skills/`.
+AGY uses progressive disclosure to only inject skill descriptions into context until they are needed, keeping your sessions lightweight.
+You can update your global skills later by asking Antigravity to *"upgrade gstack skills"*.
 
-### 6. gstack skills
-[gstack](https://github.com/garrytan/gstack) is a **separate** suite of ~23 Claude-Code skills
-(`/review`, `/qa`, `/ship`, `/browse`, `/design-review`, …) that the global CLAUDE.md (step 8)
-and the smoke test below both expect. It is *not* part of the agent-skills clone from step 5 —
-it's a different repo that installs **into** that clone, so you have to add it explicitly here.
-Easiest path — paste this to a Claude Code session and let it run:
+**Status line — not yet ported.** The installer in this repo
+(`onboarding/statusline/install.sh`) patches Claude Code's `settings.json` and does **not**
+apply to Antigravity. Skip it and use AGY's built-in CLI telemetry for now; porting it to an
+AGY hook is tracked in [MAINTAINING.md](./MAINTAINING.md).
 
-> Install gstack: run `git clone --single-branch --depth 1 https://github.com/garrytan/gstack.git ~/.claude/skills/gstack && cd ~/.claude/skills/gstack && ./setup`.
-
-`./setup` builds gstack's headless browser and registers the skills; it needs **`bun`**
-(install from <https://bun.sh>) — if `bun` is missing the script stops and prints the exact
-install command, so run that first and re-run `./setup`. Because `~/.claude/skills` *is* your
-agent-skills repo, gstack lands in `agent-skills/gstack/` and its skills sync into top-level
-folders there; those are **git-ignored** — don't commit them. Update gstack later with
-`/gstack-upgrade`. The `gstack` section in your `~/.claude/CLAUDE.md` (the skill list and the
-"use `/browse` for all web browsing" rule) comes from the CLAUDE.global.md merge in step 8, so
-you don't add it by hand here.
-
-### 7. Terminal multiplexer — Herdr (tmux also supported)
+### 6. Terminal multiplexer — Herdr (tmux also supported)
 A multiplexer keeps your panes (and long agent sessions) alive across
-disconnects, and is what the cc-watchdog guard (step 13) drives.
+disconnects.
 **Use [Herdr](https://herdr.dev)** — it's the group's recommended default because
-it's agent-aware (shows each agent's live state in a sidebar) and the cc-watchdog
-guard and the PI's watchers gate on that state natively. tmux is also fully
+it's agent-aware (shows each agent's live state in a sidebar), which is what the
+PI's watchers gate on natively. tmux is also fully
 supported if you deliberately prefer a keyboard-first, ubiquitous multiplexer.
 
 **Herdr** (recommended):
 ```bash
 curl -fsSL https://herdr.dev/install.sh | sh     # installs the `herdr` binary
-herdr integration install claude                 # wires the agent-state hook into ~/.claude/settings.json
+herdr integration install agy                    # wires the agent-state hook into AGY (if supported, otherwise hooks.json)
 mkdir -p ~/.config/herdr                          # ensure the config dir exists before copying
 cp <path-to-this-DRGScripts-clone>/onboarding/dotfiles/herdr-config.toml ~/.config/herdr/config.toml
 ```
-The `/herdr` control skill ships in the agent-skills clone from step 5, so
-Claude Code can drive panes/tabs directly. Launch with `herdr`, then start
-`claude` inside a pane; detach with `prefix+q` (prefix is `ctrl+b`), `prefix+?`
+The `/herdr` control skill is ported to AGY, so
+Antigravity can drive panes/tabs directly. Launch with `herdr`, then start
+`agy` inside a pane; detach with `prefix+q` (prefix is `ctrl+b`), `prefix+?`
 lists all bindings.
 
 **tmux** (alternative — if you deliberately prefer it):
@@ -107,9 +81,9 @@ cp <path-to-this-DRGScripts-clone>/onboarding/dotfiles/tmux.conf ~/.tmux.conf
 ```
 Prefix is `C-a`. (Optional persistence plugins need `tpm` — see the comments in the file.)
 
-The cc-watchdog stall-guard (step 13) works under both Herdr and tmux. (The PI's optional
-auto-handoff / Phoenix watchers — deferred for members, see MAINTAINING — are
-likewise multiplexer-aware if you enable them later.)
+The stall guard (step 12) is AGY-native and needs no multiplexer support of its own. (The PI's
+optional auto-handoff / Phoenix watchers — deferred for members, see MAINTAINING — are
+multiplexer-aware if you enable them later.)
 
 Optional remote-attach aliases (add to `~/.bashrc`), to connect and attach on a
 workstation named `ol`:
@@ -118,42 +92,40 @@ alias olh='herdr --remote ol'                       # Herdr (needs herdr install
 alias olt='ssh -t ol "tmux attach || tmux new"'   # tmux
 ```
 
-### 8. Global CLAUDE.md
-Merge [CLAUDE.global.md](./CLAUDE.global.md) into your `~/.claude/CLAUDE.md` (have Claude
-Code merge it, preserving any lines you've already added). Fix the **Obsidian Vault path**
-to match your Dropbox layout (step 10).
+### 7. Global Rules and Subagents (GEMINI.md)
+Migrate [CLAUDE.global.md](./CLAUDE.global.md) rules into your global Antigravity config (`~/.gemini/config/GEMINI.md`). Fix the **Obsidian Vault path** to match your Dropbox layout.
 
-The merged file's **"Subagent model routing"** section refers to four role agents
-(`snippet-classifier`, `code-implementer`, `architecture-reviewer`, `project-executor`).
-Install them by symlinking this repo's copies into `~/.claude/agents/` — symlinks (not
-copies) so a plain `git pull` keeps them current:
+In Antigravity, **Subagents** are spawned dynamically via the `define_subagent` and `invoke_subagent` tools.
+Our four group roles live in [`onboarding/agents/`](./agents/) as one Markdown file each —
+`snippet-classifier.md`, `code-implementer.md`, `architecture-reviewer.md`,
+`project-executor.md`. Each carries the role's name, description, pinned model, and effort in
+its front-matter, plus the system prompt in its body. Point Antigravity at them and ask it to
+register each as a subagent:
+
+> "Read `<path-to-this-DRGScripts-clone>/onboarding/agents/*.md` and register each as a
+> subagent with `define_subagent`, using the front-matter for name, description, and model."
+
+AGY has no persistent subagent registry yet, so this is a per-session step until it does.
+
+### 8. ARC project guide
+When you set up an ARC working copy, copy this repo's rules to it so Antigravity has the ARC conventions in context:
 ```bash
-mkdir -p ~/.claude/agents
-for f in <path-to-this-DRGScripts-clone>/onboarding/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
+mkdir -p <arc-path>/.agents/rules
+cp <path-to-this-DRGScripts-clone>/ARC/CLAUDE.md <arc-path>/.agents/rules/arc-rules.md
 ```
-They become dispatchable in your **next** Claude Code session — agent definitions load at
-session start, so a running session won't see them until you restart.
 
-### 9. ARC project guide
-When you set up an ARC working copy, copy this repo's [ARC/CLAUDE.md](../ARC/CLAUDE.md)
-into it so Claude Code has the ARC conventions in context.
-
-### 10. Dropbox + Obsidian
+### 9. Dropbox + Obsidian
 Install the **Dropbox desktop client** (it syncs your vault at the filesystem level — no
 remotely-save plugin). Install **Obsidian**. Decide your vault path, e.g.
 `$HOME/Dropbox/Vault`.
 
-### 11. Scaffold the vault
+### 10. Scaffold the vault
 Follow [vault-structure.md](./vault-structure.md): create the folder tree and copy the
 seed files (operating manual, wiki index, tools cheatsheets) into place. Then open the
 folder in Obsidian ("Open folder as vault").
 
-### 12. Headroom token compression (Claude Code + Codex)
-[Headroom](https://github.com/headroomlabs-ai/headroom) compresses what your agent *reads*
-(tool outputs, logs, files, history) before it reaches the model — typically **12–90% fewer
-tokens, same answers**, and reversible (the model can pull originals back on demand). It runs
-as two local proxies (one per provider) that your agents route through. Your data stays on
-this PC.
+### 11. Headroom token compression (AGY + Codex)
+[Headroom](https://github.com/headroomlabs-ai/headroom) compresses what your agent *reads* before it reaches the model — typically **12–90% fewer tokens, same answers**.
 
 **a. Install** — the `headroom` CLI ships via pip; `pipx` keeps it isolated and on `PATH`:
 ```bash
@@ -163,25 +135,28 @@ pipx ensurepath                     # puts ~/.local/bin on PATH for future shell
 export PATH="$HOME/.local/bin:$PATH" && headroom --version   # this shell
 ```
 
-**b. Set up both proxies** — one per backend (a single proxy can't serve Anthropic *and*
-OpenAI). `--scope provider` writes each redirect into that tool's own config, **not** your
-shell profiles:
+**b. Set up both proxies** — For Antigravity (`agy`), we manually route its traffic through Headroom using environment variables until it receives official installer support.
 ```bash
+# Start a systemd service for AGY proxy (using generic or Google backend depending on Headroom support)
 headroom install apply --preset persistent-service --runtime python --scope provider \
-  --providers manual --target claude --backend anthropic --port 8787 --profile claude
+  --providers manual --target generic --backend google --port 8787 --profile agy
+  
+# Setup Codex CLI proxy
 headroom install apply --preset persistent-service --runtime python --scope provider \
   --providers manual --target codex  --backend openai    --port 8788 --profile codex
 ```
-This points Claude Code (`~/.claude/settings.json`) at `127.0.0.1:8787` and Codex
-(`~/.codex/config.toml`) at `127.0.0.1:8788`, each as a systemd **user** service. The Codex
-proxy is wired now even though Codex CLI is deferred — it's harmless until you install Codex,
-then it just works.
+Then, inject the Base URL into your bash profile for Antigravity. The guard keeps a re-run from
+appending a second copy:
+```bash
+grep -qxF 'export GEMINI_BASE_URL="http://127.0.0.1:8787"' ~/.bashrc \
+  || echo 'export GEMINI_BASE_URL="http://127.0.0.1:8787"' >> ~/.bashrc
+```
 
 **c. Apply the group's "Balanced" tuning** — compress tool/user context, keep the last 2 turns
 verbatim, strict accuracy guard. Do **not** set `HEADROOM_SAVINGS_PROFILE`: its only valid
 values re-impose the conservative defaults.
 ```bash
-for svc in claude codex; do
+for svc in agy codex; do
   d="$HOME/.config/systemd/user/headroom-$svc.service.d"; mkdir -p "$d"
   cat > "$d/tuning.conf" <<'EOF'
 [Service]
@@ -192,62 +167,43 @@ Environment=HEADROOM_ACCURACY_GUARD=strict
 EOF
 done
 systemctl --user daemon-reload
-systemctl --user restart headroom-claude headroom-codex
+systemctl --user restart headroom-agy headroom-codex
 sudo loginctl enable-linger "$USER"   # keep proxies up across logout/reboot
 ```
 
 **d. Verify:**
 ```bash
-headroom install status --profile claude   # Status: running · Healthy: yes
+headroom install status --profile agy   # Status: running · Healthy: yes
 headroom install status --profile codex
 headroom perf                              # savings, once traffic has flowed
 ```
 
-> **Restart to take effect.** A running `claude`/`codex` reads its base URL at launch, so any
-> already-open session keeps going direct until restarted. Start a fresh session (or
-> `claude --continue` to keep your history) and it routes through the proxy. Subscription
-> login and claude.ai connectors are unaffected.
+> **Restart to take effect.** Any open `agy` session keeps going direct until restarted. Start a fresh session and it routes through the proxy.
 
-> **To reverse it entirely:** `headroom install remove --profile claude && headroom install
-> remove --profile codex`, then `rm -f ~/.config/systemd/user/headroom-{claude,codex}.service.d/tuning.conf
-> && systemctl --user daemon-reload`. Optionally `sudo loginctl disable-linger "$USER"` to undo the
-> linger from step **c** — but only if no *other* systemd user service relies on it (linger keeps
-> all your user services alive across logout, not just Headroom's).
+> **To reverse it entirely:** `headroom install remove --profile agy && headroom install
+> remove --profile codex`, then `rm -f ~/.config/systemd/user/headroom-{agy,codex}.service.d/tuning.conf
+> && systemctl --user daemon-reload`. Don't forget to remove `GEMINI_BASE_URL` from your `~/.bashrc`.
 
-### 13. cc-watchdog — silent-stall guard for long agent sessions
+### 12. Silent-stall guard for long agent sessions
 
-Long autonomous Claude Code runs can die out silently: the session waits on
-background work (a test suite, a build) whose owner died, and nothing ever
-wakes it — it looks exactly like "done, waiting for you". cc-watchdog is a
-dead-man's switch that catches this.
+Long autonomous sessions can die out silently when waiting on background work (e.g. test suites) whose owner died.
+**With Antigravity, we no longer need the bash-based `cc-watchdog`.**
+AGY natively supports background tasks and a `/schedule` slash command. 
 
-Before a session goes quiet while waiting on something, it declares a deadline
-(`cc-deadman set 40 "full test suite, ~25 min"`). A systemd user timer checks
-every 5 minutes; if the deadline passes you get a Slack ping, and if nothing
-recovers within an hour the watchdog nudges the session itself ("your awaited
-work likely died — check honest status and continue").
-
-Install:
+Before a session goes quiet while waiting on something, the agent must simply set an early-termination timer:
 ```bash
-cd ~/Code/DRGScripts/onboarding/watchdog
-./install.sh
+# Agent sets a timer to check back if stalled (natively handled within AGY):
+call:default_api:schedule{"DurationSeconds":"2400", "Prompt":"Check on the command status. If it stalled, ping Slack.", "TimerCondition":"any"}
 ```
-Then put your Slack incoming-webhook URL in `~/.cc-watchdog/config`:
-```bash
-SLACK_WEBHOOK_URL=https://hooks.slack.com/services/...
-```
-(Create one: api.slack.com/apps → your app → Incoming Webhooks → add to your
-own DM or a private channel.)
+The agent's rules (`GEMINI.md`) instruct it to always set a `TimerCondition: any` timer before long waits. If the background tasks finish early, the timer is aborted. If the deadline passes, the timer fires a high-priority message directly into the agent's context, and the agent uses the `slack-notify` skill to ping you. 
 
-Works for agent sessions under tmux and under Herdr alike (inside a Herdr pane
-the deadline keys itself to the Herdr pane id and recovery uses `herdr pane
-run`; see the README's "tmux and Herdr" section and run its smoke test once
-from inside Herdr).
+*You do not need to install `watchdog/install.sh` anymore.*
 
-The session-side habit lives in the global CLAUDE.md you merged in step 8
-(silent-stall prevention rules): agents declare deadlines before long waits and
-run final gates in the mother session. The watchdog is the enforcement; the
-rules are the prevention. Details: `onboarding/watchdog/README.md`.
+The Slack ping is **optional** — Slack is deferred in this first pass (section D). If you do want
+it, the `slack-notify` skill authenticates with a bot token, not a webhook: follow the Slack row
+in [MAINTAINING.md](./MAINTAINING.md) to create the token and write it to
+`~/.claude/.slack-bot-token`. Without it the timer still fires into the agent's context; you just
+don't get the push notification.
 
 ---
 
@@ -265,7 +221,7 @@ rules are the prevention. Details: `onboarding/watchdog/README.md`.
    (macOS: skip — use the native Terminal; `brew install mosh` if you want mosh.)
 2. **Tailscale** — install the GUI app, sign in to the same tailnet, confirm *Connected*.
 3. **Terminal into the Linux PC** (run agents on the remote, never the laptop). With Herdr
-   (recommended) one command attaches your remote session — start `claude` inside a pane:
+   (recommended) one command attaches your remote session — start `agy` inside a pane:
    ```bash
    herdr --remote <office-pc>      # your user + tailnet host name; needs herdr on both ends
    ```
@@ -273,7 +229,7 @@ rules are the prevention. Details: `onboarding/watchdog/README.md`.
    ```bash
    ssh <you>@<office-pc>      # your user + tailnet host name
    tmux attach -t cc || tmux new -s cc
-   claude
+   agy
    ```
    Add the SSH alias from the seeded `tools/Remote Dev — Pattern` note to `~/.ssh/config`
    (sets `User` and `Compression yes`) so plain `ssh <office-pc>` works too.
@@ -289,25 +245,22 @@ rules are the prevention. Details: `onboarding/watchdog/README.md`.
 - [ ] `tailscale status` shows your tailnet and this host.
 - [ ] From the laptop: `ssh`/`mosh` into the Linux PC and attach your session
       (`herdr --remote`, or `tmux attach`) works.
-- [ ] A Claude Code session lists the gstack skills from step 6 (type `/` and look for
-      `/browse`, `/review`, `/ship`, …); superpowers loads.
-- [ ] The status line shows the model name, a colour-coded context-window %, and
-      your git location (repo, branch, worktree/`[primary]` marker).
+- [ ] An Antigravity session lists the group skills (type `/` and look for
+      `/browse`, `/review`, `/ship`, …).
+- [ ] The status line (if installed) shows the model name, context-window %, and
+      your git location.
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
-- [ ] `headroom install status --profile claude` and `--profile codex` both show *running /
-      healthy*; in a **freshly started** Claude Code session, typing `!env | grep ANTHROPIC_BASE_URL`
-      at the Claude Code prompt (the leading `!` tells Claude Code to run the rest as a shell
-      command) prints `http://127.0.0.1:8787`.
-- [ ] `systemctl --user status cc-stall-watchdog.timer` shows *active (waiting)*.
-- [ ] In a tmux Claude Code session: `cc-deadman set 1 "smoke test"` → Slack ping within
-      ~6 min (then `cc-deadman clear`).
+- [ ] `headroom install status --profile agy` and `--profile codex` both show *running /
+      healthy*. In a **freshly started** Antigravity session, running `!echo $GEMINI_BASE_URL`
+      prints `http://127.0.0.1:8787`.
+- [ ] Launch `agy` and test the native schedule tool: `/schedule 300 Check if tests finished`. Ensure the scheduled task runs in the background.
 
 ---
 
 ## D. Later (deferred)
 
-Codex CLI (its Headroom proxy is already set up in step 12 — just install Codex and it routes),
+Codex CLI (its Headroom proxy is already set up in step 11 — just install Codex and it routes),
 Slack notifications, MCP connectors, gbrain, and cluster/PBS compute are intentionally out of
 this first pass. When you're ready, [MAINTAINING.md](./MAINTAINING.md) lists each and
 how to un-defer it.
