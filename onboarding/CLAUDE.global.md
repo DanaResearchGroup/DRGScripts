@@ -1,46 +1,14 @@
 <!-- Generic group global CLAUDE.md. Merge into ~/.claude/CLAUDE.md. Adjust the vault path to your Dropbox layout. -->
 
-# gstack
+# Skills
 
-For all web browsing, use the `/browse` skill from gstack. Never use `mcp__claude-in-chrome__*` tools.
+Skills live in `~/.claude/skills`, a symlink to your clone of the group's `agent-skills`
+repo (ONBOARDING step 5). They are model-invoked and carry their own descriptions, so they
+do not need listing here to be found.
 
-Available gstack skills:
-
-- `/office-hours`
-- `/plan-ceo-review`
-- `/plan-eng-review`
-- `/plan-design-review`
-- `/design-consultation`
-- `/design-shotgun`
-- `/design-html`
-- `/review`
-- `/ship`
-- `/land-and-deploy`
-- `/canary`
-- `/benchmark`
-- `/browse`
-- `/connect-chrome`
-- `/qa`
-- `/qa-only`
-- `/design-review`
-- `/setup-browser-cookies`
-- `/setup-deploy`
-- `/setup-gbrain`
-- `/retro`
-- `/investigate`
-- `/document-release`
-- `/document-generate`
-- `/codex`
-- `/cso`
-- `/autoplan`
-- `/plan-devex-review`
-- `/devex-review`
-- `/careful`
-- `/freeze`
-- `/guard`
-- `/unfreeze`
-- `/gstack-upgrade`
-- `/learn`
+That is deliberate. This section used to hold a list of ~35 skills; it went stale, and an
+agent reading a stale list keeps trying to invoke skills that no longer exist. Let the repo
+be the source of truth.
 
 # Obsidian Vault
 
