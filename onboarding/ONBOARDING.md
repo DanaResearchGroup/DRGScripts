@@ -137,7 +137,7 @@ export PATH="$HOME/.local/bin:$PATH" && headroom --version   # this shell
 
 **b. Set up both proxies** — For Antigravity (`agy`), we manually route its traffic through Headroom using environment variables until it receives official installer support.
 ```bash
-# Start a systemd service for AGY proxy (using generic or Google backend depending on Headroom support)
+# Start a systemd service for the AGY proxy (generic target, Google backend)
 headroom install apply --preset persistent-service --runtime python --scope provider \
   --providers manual --target generic --backend google --port 8787 --profile agy
   
@@ -190,9 +190,17 @@ Long autonomous sessions can die out silently when waiting on background work (e
 **With Antigravity, we no longer need the bash-based `cc-watchdog`.**
 AGY natively supports background tasks and a `/schedule` slash command. 
 
-Before a session goes quiet while waiting on something, the agent must simply set an early-termination timer:
-```bash
-# Agent sets a timer to check back if stalled (natively handled within AGY):
+Before a session goes quiet while waiting on something, the agent must simply set an
+early-termination timer. There are two forms of this, and they are not interchangeable.
+
+**What you type**, in an AGY session:
+```text
+/schedule 2400 Check on the command status. If it stalled, ping Slack.
+```
+
+**What the agent emits internally** — shown so you recognise it in a transcript. Do not paste
+this anywhere; it is not a shell command and not a slash command:
+```text
 call:default_api:schedule{"DurationSeconds":"2400", "Prompt":"Check on the command status. If it stalled, ping Slack.", "TimerCondition":"any"}
 ```
 The agent's rules (`GEMINI.md`) instruct it to always set a `TimerCondition: any` timer before long waits. If the background tasks finish early, the timer is aborted. If the deadline passes, the timer fires a high-priority message directly into the agent's context, and the agent uses the `slack-notify` skill to ping you. 
@@ -202,8 +210,10 @@ The agent's rules (`GEMINI.md`) instruct it to always set a `TimerCondition: any
 The Slack ping is **optional** — Slack is deferred in this first pass (section D). If you do want
 it, the `slack-notify` skill authenticates with a bot token, not a webhook: follow the Slack row
 in [MAINTAINING.md](./MAINTAINING.md) to create the token and write it to
-`~/.claude/.slack-bot-token`. Without it the timer still fires into the agent's context; you just
-don't get the push notification.
+`~/.claude/.slack-bot-token`. That path is the skill's own default and is **not** a typo for a
+`~/.gemini/` one — the skill predates AGY and reads it regardless of which agent invokes it; set
+`CC_SLACK_TOKEN_FILE` if you want it elsewhere. Without a token the timer still fires into the
+agent's context; you just don't get the push notification.
 
 ### 13. Contract gate — define the work before editing (Claude Code only)
 
@@ -307,8 +317,9 @@ Add repos only where the log shows it catching real definition gaps.
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
 - [ ] `headroom install status --profile agy` and `--profile codex` both show *running /
-      healthy*. In a **freshly started** Antigravity session, running `!echo $GEMINI_BASE_URL`
-      prints `http://127.0.0.1:8787`.
+      healthy*. In the shell you'll launch AGY from, `echo $GEMINI_BASE_URL` prints
+      `http://127.0.0.1:8787` — open a **new** shell first, since step 11 only appended it to
+      `~/.bashrc`.
 - [ ] Launch `agy` and test the native schedule tool: `/schedule 300 Check if tests finished`. Ensure the scheduled task runs in the background.
 - [ ] *(Claude Code only, step 13)* In a repo you enabled, `contract status` prints
       `enabled=yes`, and asking Claude Code to edit a file there is denied with instructions

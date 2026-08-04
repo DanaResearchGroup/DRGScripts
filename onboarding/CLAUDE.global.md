@@ -53,7 +53,7 @@ Always prefer dispatching subagents (Agent tool, subagent-driven plan execution)
 
 ## Subagent model routing (applies from ANY mother model)
 
-Regardless of which model THIS session runs on, when dispatching a subagent prefer one of the four group role agents (installed in `~/.claude/agents/`, see ONBOARDING step 7) over the generic `general-purpose`/`claude` agent, matching the work to the role. Each role pins its own model + effort, so the routing holds no matter the mother model — a Sonnet, Opus, Fable, or Haiku mother that dispatches `code-implementer` still gets Sonnet, etc.
+Regardless of which model THIS session runs on, when dispatching a subagent prefer one of the four group role agents (registered per ONBOARDING step 7 — with `define_subagent` on AGY, or from `~/.claude/agents/` under Claude Code) over the generic `general-purpose`/`claude` agent, matching the work to the role. Each role pins its own model + effort, so the routing holds no matter the mother model — a Sonnet, Opus, Fable, or Haiku mother that dispatches `code-implementer` still gets Sonnet, etc.
 
 - **snippet-classifier** (haiku, low) — trivial, low-risk mechanical work: classification, extraction, search/summarization, simple lookups. The cheap janitor.
 - **code-implementer** (sonnet, medium) — the DEFAULT worker: well-scoped code changes of known shape, test fixes, routine refactors.
