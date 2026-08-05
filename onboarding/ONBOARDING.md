@@ -44,16 +44,66 @@ Install the Antigravity CLI (`agy`) and authenticate with your account. Confirm 
 ### 4. Customizations & Plugins
 Antigravity natively supports many advanced functionalities without third-party plugins. Custom rules, hooks, plugins, and MCP servers are managed via `~/.gemini/config/` (global) or `.agents/` (per-project).
 
-### 5. agent-skills & gstack skills
-The `agent-skills` and `gstack` suites (e.g. `/review`, `/ship`, `/qa`, `/browse`) have been **natively ported to Antigravity**. 
-You do **not** need to `git clone` them manually. They are automatically available in `~/.gemini/antigravity-cli/skills/`.
-AGY uses progressive disclosure to only inject skill descriptions into context until they are needed, keeping your sessions lightweight.
-You can update your global skills later by asking Antigravity to *"upgrade gstack skills"*.
+### 5. agent-skills
+The group's skills live in one repo — [`DanaResearchGroup/agent-skills`](https://github.com/DanaResearchGroup/agent-skills).
+Clone it and point your skills directory at the clone, so `git pull` is the only update step:
+```bash
+git clone https://github.com/DanaResearchGroup/agent-skills.git ~/Code/agent-skills
+mkdir -p ~/.claude
+# If ~/.claude/skills already exists as a real directory, `ln -s` would create the link
+# INSIDE it rather than replacing it. Move it aside first, then link. The backup name is
+# timestamped for the same reason: `mv dir existing-dir` nests too, so a fixed .bak name
+# would bury your skills inside an older backup the second time you ran this.
+[ -e ~/.claude/skills ] && [ ! -L ~/.claude/skills ] \
+  && mv ~/.claude/skills ~/.claude/skills.bak."$(date +%Y%m%d%H%M%S)"
+ln -sfn ~/Code/agent-skills ~/.claude/skills
+ls -ld ~/.claude/skills     # must print: ~/.claude/skills -> .../Code/agent-skills
+```
+That symlink is the whole install. Skills are self-describing — each carries its own
+description, so the agent finds the right one without a list to maintain. Read
+`agent-skills/README.md` for what's in there; `git -C ~/Code/agent-skills pull` updates
+everything at once.
+
+We **do not use gstack.** It was a third-party suite we ran for a while and removed in
+August 2026: most of its skills went unused, and the ones we wanted couldn't be fixed
+durably because the repo was upstream-owned. `/review` was rewritten as ours inside
+`agent-skills`; the rest were dropped. If you see `gstack` in an older doc or in your own
+setup, see *Already installed gstack?* below.
 
 **Status line — not yet ported.** The installer in this repo
 (`onboarding/statusline/install.sh`) patches Claude Code's `settings.json` and does **not**
 apply to Antigravity. Skip it and use AGY's built-in CLI telemetry for now; porting it to an
 AGY hook is tracked in [MAINTAINING.md](./MAINTAINING.md).
+
+#### Already installed gstack? (migrating an existing setup)
+
+Skip this if you're setting up fresh. If you followed an earlier version of this runbook you
+have a `~/.claude/skills/gstack` clone (~1.6 GB) and a `~/.gstack` state directory. Removing
+them is safe, but **do the state copy first** — `~/.gstack/projects/` holds accumulated
+per-project learnings that the skills still read, just from a new path:
+
+```bash
+# 1. Keep the learnings. ~/.skills is where the current skills read this state from.
+mkdir -p ~/.skills
+cp -rn ~/.gstack/* ~/.skills/ 2>/dev/null || true
+diff -r ~/.gstack/projects ~/.skills/projects && echo "state copied intact"
+```
+
+Only once that `diff` prints `state copied intact`:
+
+```bash
+# 2. Drop the suite and the old state directory.
+rm -rf ~/.claude/skills/gstack ~/.gstack
+
+# 3. Point the skills directory at the group repo (step 5 above). If ~/.claude/skills is a
+#    real directory rather than a symlink, move your own skills into the clone first.
+ls -ld ~/.claude/skills
+```
+
+Finally, remove the `# gstack` section from your `~/.claude/CLAUDE.md` (or `GEMINI.md`) if you
+copied an older `CLAUDE.global.md` — it lists ~35 skills that no longer exist, and an agent
+reading it will keep trying to invoke them. `/browse` in particular is gone; use the agent's
+own web tools.
 
 ### 6. Terminal multiplexer — Herdr (tmux also supported)
 A multiplexer keeps your panes (and long agent sessions) alive across
@@ -137,7 +187,7 @@ export PATH="$HOME/.local/bin:$PATH" && headroom --version   # this shell
 
 **b. Set up both proxies** — For Antigravity (`agy`), we manually route its traffic through Headroom using environment variables until it receives official installer support.
 ```bash
-# Start a systemd service for AGY proxy (using generic or Google backend depending on Headroom support)
+# Start a systemd service for the AGY proxy (generic target, Google backend)
 headroom install apply --preset persistent-service --runtime python --scope provider \
   --providers manual --target generic --backend google --port 8787 --profile agy
   
@@ -190,9 +240,17 @@ Long autonomous sessions can die out silently when waiting on background work (e
 **With Antigravity, we no longer need the bash-based `cc-watchdog`.**
 AGY natively supports background tasks and a `/schedule` slash command. 
 
-Before a session goes quiet while waiting on something, the agent must simply set an early-termination timer:
-```bash
-# Agent sets a timer to check back if stalled (natively handled within AGY):
+Before a session goes quiet while waiting on something, the agent must simply set an
+early-termination timer. There are two forms of this, and they are not interchangeable.
+
+**What you type**, in an AGY session:
+```text
+/schedule 2400 Check on the command status. If it stalled, ping Slack.
+```
+
+**What the agent emits internally** — shown so you recognise it in a transcript. Do not paste
+this anywhere; it is not a shell command and not a slash command:
+```text
 call:default_api:schedule{"DurationSeconds":"2400", "Prompt":"Check on the command status. If it stalled, ping Slack.", "TimerCondition":"any"}
 ```
 The agent's rules (`GEMINI.md`) instruct it to always set a `TimerCondition: any` timer before long waits. If the background tasks finish early, the timer is aborted. If the deadline passes, the timer fires a high-priority message directly into the agent's context, and the agent uses the `slack-notify` skill to ping you. 
@@ -202,8 +260,10 @@ The agent's rules (`GEMINI.md`) instruct it to always set a `TimerCondition: any
 The Slack ping is **optional** — Slack is deferred in this first pass (section D). If you do want
 it, the `slack-notify` skill authenticates with a bot token, not a webhook: follow the Slack row
 in [MAINTAINING.md](./MAINTAINING.md) to create the token and write it to
-`~/.claude/.slack-bot-token`. Without it the timer still fires into the agent's context; you just
-don't get the push notification.
+`~/.claude/.slack-bot-token`. That path is the skill's own default and is **not** a typo for a
+`~/.gemini/` one — the skill predates AGY and reads it regardless of which agent invokes it; set
+`CC_SLACK_TOKEN_FILE` if you want it elsewhere. Without a token the timer still fires into the
+agent's context; you just don't get the push notification.
 
 ### 13. Contract gate — define the work before editing (Claude Code only)
 
@@ -301,14 +361,15 @@ Add repos only where the log shows it catching real definition gaps.
 - [ ] From the laptop: `ssh`/`mosh` into the Linux PC and attach your session
       (`herdr --remote`, or `tmux attach`) works.
 - [ ] An Antigravity session lists the group skills (type `/` and look for
-      `/browse`, `/review`, `/ship`, …).
+      `/review`, `/handoff`, `/obsidian-vault`, …).
 - [ ] The status line (if installed) shows the model name, context-window %, and
       your git location.
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
 - [ ] `headroom install status --profile agy` and `--profile codex` both show *running /
-      healthy*. In a **freshly started** Antigravity session, running `!echo $GEMINI_BASE_URL`
-      prints `http://127.0.0.1:8787`.
+      healthy*. In the shell you'll launch AGY from, `echo $GEMINI_BASE_URL` prints
+      `http://127.0.0.1:8787` — open a **new** shell first, since step 11 only appended it to
+      `~/.bashrc`.
 - [ ] Launch `agy` and test the native schedule tool: `/schedule 300 Check if tests finished`. Ensure the scheduled task runs in the background.
 - [ ] *(Claude Code only, step 13)* In a repo you enabled, `contract status` prints
       `enabled=yes`, and asking Claude Code to edit a file there is denied with instructions
