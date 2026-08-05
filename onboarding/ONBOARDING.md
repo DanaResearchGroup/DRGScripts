@@ -205,6 +205,61 @@ in [MAINTAINING.md](./MAINTAINING.md) to create the token and write it to
 `~/.claude/.slack-bot-token`. Without it the timer still fires into the agent's context; you just
 don't get the push notification.
 
+### 13. Contract gate — define the work before editing (Claude Code only)
+
+> **Not yet ported to Antigravity.** The gate is a Claude Code `PreToolUse` hook wired into
+> `~/.claude/settings.json`; AGY manages hooks under `~/.gemini/config/`. On a first-pass AGY
+> setup this step installs nothing — skip it, and see the port row in
+> [MAINTAINING.md](./MAINTAINING.md).
+
+The `contract` skill (in `agent-skills`) exists to catch **correct code, wrong thing**: a clean
+implementation of a misread request, discovered only after the tokens are spent. It denies the
+first `Edit`/`Write`/`NotebookEdit` in an opted-in repo until a durable note records Intent,
+Verifier, Non-goals and Gates. `Read`, `Grep` and `Bash` are never gated, so exploration is
+untouched.
+
+**a. Wire the two hooks** — type `/hooks` in Claude Code and add both. They fail open: with no
+repo enabled they exit 0 and change nothing, so wiring them is safe before any repo opts in.
+
+- **`PreToolUse`** — matcher `Edit|Write|NotebookEdit`, command
+  `~/.claude/skills/contract/hooks/contract-gate.sh`
+- **`SessionStart`** — no matcher, command
+  `~/.claude/skills/contract/hooks/contract-inject.sh`
+
+Copy the matcher exactly as written: three tool names separated by plain `|`, no backslashes.
+
+**b. Ask which repos to gate — never assume a list.**
+
+> **Agent running this onboarding, on Claude Code: stop here and ask.** Use `AskUserQuestion`,
+> multi-select, offering the repos the member has actually cloned as options. Enabling a repo
+> changes how every future session behaves in it, so the list is the member's call, not yours —
+> and a list you guessed is one they will disable in a week. Recommend starting with two or
+> three where a misread request costs the most to unwind.
+>
+> **On Antigravity, do not stop and do not ask** — this whole step is unported (see the banner
+> above). Skip straight to section B.
+
+Then, for each repo they chose:
+```bash
+cd <repo> && ~/.claude/skills/contract/bin/contract enable
+```
+Enabling is keyed on the shared git dir, so one call covers every worktree of that repo.
+
+**c. Put the CLI on your PATH** — optional, for typing `contract new <slug>` by hand. The hooks
+call it by absolute path, so nothing breaks without this. Safe to re-run:
+```bash
+mkdir -p ~/.local/bin
+ln -sfn ~/.claude/skills/contract/bin/contract ~/.local/bin/contract
+```
+(`~/.local/bin` is already on `PATH` if you ran `pipx ensurepath` in step 11.)
+
+**d. Expand on evidence, not enthusiasm.** The skip log is the instrument:
+```bash
+cat "$(git rev-parse --git-common-dir)/contract-skips.log"
+```
+A repo where skips dominate is a repo where the gate is noise — run `contract disable` there.
+Add repos only where the log shows it catching real definition gaps.
+
 ---
 
 ## B. Laptop (Windows / macOS) — thin client + Obsidian
@@ -255,6 +310,10 @@ don't get the push notification.
       healthy*. In a **freshly started** Antigravity session, running `!echo $GEMINI_BASE_URL`
       prints `http://127.0.0.1:8787`.
 - [ ] Launch `agy` and test the native schedule tool: `/schedule 300 Check if tests finished`. Ensure the scheduled task runs in the background.
+- [ ] *(Claude Code only, step 13)* In a repo you enabled, `contract status` prints
+      `enabled=yes`, and asking Claude Code to edit a file there is denied with instructions
+      naming `contract new` and `contract skip`. In a repo you did **not** enable, editing is
+      unaffected.
 
 ---
 
