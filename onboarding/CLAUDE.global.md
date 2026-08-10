@@ -131,6 +131,8 @@ Treat unverified premises as likely-wrong, not likely-right. Across long arcs of
 
 Corollary — don't build to pass the check. When a guard / test / tripwire refuses your construct, do not reshape the construct to slip under it; a thing built only to make a check go green validates nothing that transfers. Ask first whether the guard caught a real defect (then fix the defect) or exposed a false-positive in itself (then record it as a finding) — not how to get past it.
 
+The procedure this doctrine implies lives in the `probe` skill: which premise to pick, trying to refute it by one line of arithmetic before commissioning a search, re-running prior art from scratch when the framing moves fields, and reporting what the probe could NOT reach alongside what it found. If the skill isn't installed (ONBOARDING step 5), that sentence is the checklist — run it inline rather than treating the procedure as unavailable.
+
 # Always capture stderr from long-running python tools (global, all repos)
 
 Launch any long-running or log-generating python tool (RMG, ARC, T3, benchmark/simulation runs,
