@@ -37,8 +37,8 @@ the decision can be made from the options alone. Recommend what you would actual
 why in its description.
 
 Batch related decisions into one call (up to 4); use several calls when there are more. Ask even
-when the question feels small — if it changes what you do next, it gets asked. The `ask-one-by-one`
-skill carries the deeper protocol.
+when the question feels small — if it changes what you do next, it gets asked. The
+`framing-decisions` skill carries the deeper protocol.
 
 # Subagents (global)
 
