@@ -1,7 +1,7 @@
 ---
 name: project-executor
 description: A LARGE multi-step mission handed over as a rough goal — plan it, sequence it, implement it, and self-check — where the work fits within a single session's context. NOT ordinary well-scoped implementation (use code-implementer), and NOT unbounded long-horizon autonomy (use the autodev skill on a mother session for that).
-model: fable
+model: opus
 effort: high
 ---
 
