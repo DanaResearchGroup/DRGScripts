@@ -1,0 +1,105 @@
+diff --git a/codex-rs/tui/src/chatwidget.rs b/codex-rs/tui/src/chatwidget.rs
+index 3cbe365..e13b693 100644
+--- a/codex-rs/tui/src/chatwidget.rs
++++ b/codex-rs/tui/src/chatwidget.rs
+@@ -438,6 +438,7 @@ mod windows_sandbox_prompts;
+ use self::status_state::StatusIndicatorState;
+ use self::status_state::StatusState;
+ use self::status_state::TerminalTitleStatusKind;
++mod context_usage_display;
+ mod status_controls;
+ mod status_surfaces;
+ mod streaming;
+diff --git a/codex-rs/tui/src/chatwidget/context_usage_display.rs b/codex-rs/tui/src/chatwidget/context_usage_display.rs
+new file mode 100644
+index 0000000..523e190
+--- /dev/null
++++ b/codex-rs/tui/src/chatwidget/context_usage_display.rs
+@@ -0,0 +1,60 @@
++//! Display the current context against the model maximum and the runtime budget.
++
++/// Published model limits are distinct from Codex's effective input budget.
++/// Keep unknown models explicit instead of presenting their runtime budget as a maximum.
++fn model_maximum(model: &str) -> Option<i64> {
++    match model {
++        "gpt-6-astra" | "gpt-5.6-sol" | "gpt-5.6-terra" | "gpt-5.6-luna" => Some(1_050_000),
++        _ => None,
++    }
++}
++
++fn thousands(tokens: i64) -> String {
++    let value = format!("{:.1}", tokens.max(0) as f64 / 1_000.0);
++    format!("{}k", value.strip_suffix(".0").unwrap_or(&value))
++}
++
++fn usage_against(used: i64, budget: Option<i64>) -> String {
++    let used_k = thousands(used);
++    match budget.filter(|budget| *budget > 0) {
++        Some(budget) => {
++            let budget_k = thousands(budget);
++            let percent = used.max(0) as f64 / budget as f64 * 100.0;
++            format!("{used_k}/{budget_k} {percent:.1}%")
++        }
++        None => format!("{used_k}/? ?%"),
++    }
++}
++
++pub(super) fn context_usage_display(
++    model: &str,
++    usage: Option<(i64, Option<i64>)>,
++) -> Option<String> {
++    let (used, effective_budget) = usage?;
++    let model_usage = usage_against(used, model_maximum(model));
++    let effective_usage = usage_against(used, effective_budget);
++    Some(format!("Context {model_usage} ({effective_usage})"))
++}
++
++#[cfg(test)]
++mod tests {
++    use super::context_usage_display;
++    use pretty_assertions::assert_eq;
++
++    #[test]
++    fn reports_model_and_effective_budgets() {
++        assert_eq!(
++            context_usage_display("gpt-6-astra", Some((188_300, Some(258_400)))),
++            Some("Context 188.3k/1050k 17.9% (188.3k/258.4k 72.9%)".to_string())
++        );
++        assert_eq!(
++            context_usage_display("unknown-model", Some((106_000, None))),
++            Some("Context 106k/? ?% (106k/? ?%)".to_string())
++        );
++    }
++
++    #[test]
++    fn omits_usage_before_the_first_token_snapshot() {
++        assert_eq!(context_usage_display("gpt-6-astra", None), None);
++    }
++}
+diff --git a/codex-rs/tui/src/chatwidget/status_surfaces.rs b/codex-rs/tui/src/chatwidget/status_surfaces.rs
+index af547ce..676c1b8 100644
+--- a/codex-rs/tui/src/chatwidget/status_surfaces.rs
++++ b/codex-rs/tui/src/chatwidget/status_surfaces.rs
+@@ -749,9 +749,19 @@ impl ChatWidget {
+             StatusLineItem::ContextRemaining => self
+                 .status_line_context_remaining_percent()
+                 .map(|remaining| format!("Context {remaining}% left")),
+-            StatusLineItem::ContextUsed => self
+-                .status_line_context_used_percent()
+-                .map(|used| format!("Context {used}% used")),
++            StatusLineItem::ContextUsed => {
++                let usage = if self.token_usage_pending {
++                    None
++                } else {
++                    self.token_info.as_ref().map(|info| {
++                        (
++                            info.last_token_usage.tokens_in_context_window(),
++                            info.model_context_window,
++                        )
++                    })
++                };
++                super::context_usage_display::context_usage_display(self.current_model(), usage)
++            }
+             StatusLineItem::FiveHourLimit => {
+                 let (window, is_secondary) = self
+                     .rate_limit_snapshots_by_limit_id

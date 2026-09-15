@@ -1,25 +1,25 @@
 # Maintaining the onboarding kit
 
 This documents *why* the onboarding kit is shaped the way it is, so a future maintainer
-(or a future Claude Code session) can update it for the next member without re-deriving the
+(or a future coding-agent session) can update it for the next member without re-deriving the
 decisions. The member-facing runbook is [ONBOARDING.md](./ONBOARDING.md); this file is for
 whoever maintains it.
 
 ## Purpose
 
 Let a new Dana Research Group member stand up an **independent mirror** of the PI's
-Claude-Code working environment from a small set of committed, self-documenting artifacts —
+coding-agent working environment from a small set of committed, self-documenting artifacts —
 not by copying secrets or by being granted access to the PI's machines.
 
 ## Architecture (the mental model the kit assumes)
 
-- **One real environment, on Linux** (the member's office PC). The agent stack — Claude
-  Code, agent-skills, superpowers, and a multiplexer (tmux or Herdr) — lives here and only here.
+- **One real environment, on Linux** (the member's office PC). Antigravity, Codex, OpenCode,
+  agent-skills, Headroom, and a multiplexer (tmux or Herdr) live here and only here.
 - **Laptops are dual-role ("mixed by purpose"):** thin client (ssh/mosh + `tmux attach`)
   into the Linux box for heavy work, *plus* native Obsidian for notes. A laptop needs only
   tailscale + a terminal + Obsidian.
 - **Independent mirror, not shared infra:** the member gets their own tailnet, own Obsidian
-  vault, own Claude account. We hand them a recipe, not access.
+  vault, and own provider accounts. We hand them a recipe, not access.
 
 ## Artifact map
 
@@ -27,11 +27,13 @@ not by copying secrets or by being granted access to the PI's machines.
 |---|---|---|---|
 | `bin/cc-statusline.sh` + `bin/lib/cc-statusline-lib.sh` | agent-skills | Status line: model + colour-coded context-% + git location (repo/branch/worktree/dirty). Shares the lib with the PI's autodev variant. | The statusline JSON schema changes, or the colours/format need tuning. |
 | `onboarding/statusline/{install.sh,README.md}` | DRGScripts | Installer that wires `bin/cc-statusline.sh` into `~/.claude/settings.json` (surgical `.statusLine` patch, backup, idempotent) + the member-facing doc. | The install/settings wiring changes. |
+| `onboarding/statusline/codex/**` | DRGScripts | Pinned Codex TUI patch and build instructions for the dual model/effective context display. | Upstream Codex changes the affected TUI code, group model limits change, or stock Codex gains equivalent support. |
 | `UPDATING.md` | agent-skills | CC-executable "update my skills" runbook (plain `git pull`). | The update flow changes. |
 | `SETUP.md` (new-member section) | agent-skills | Minimal clone→symlink→statusline path. | Install steps change. |
-| `onboarding/ONBOARDING.md` | DRGScripts | Master CC-executable runbook the member points CC at. | Any step in the end-to-end flow changes. |
+| `onboarding/ONBOARDING.md` | DRGScripts | Master agent-executable runbook for Antigravity, Codex, and OpenCode. | Any step in the end-to-end flow changes. |
 | `onboarding/CLAUDE.global.md` | DRGScripts | Genericized global CLAUDE.md to merge into `~/.claude/CLAUDE.md`. Every byte is loaded into every session the member ever runs, so it is kept near the size of the PI's own file — see "Keeping it small" below. | The PI's `~/.claude/CLAUDE.md` gains durable guidance worth sharing. |
-| `onboarding/agents/*.md` | DRGScripts | Four subagent role definitions (snippet-classifier/haiku, code-implementer/sonnet, architecture-reviewer/opus, project-executor/fable). On AGY the member registers them per-session with `define_subagent` (ONBOARDING step 7); under Claude Code they were symlinked into `~/.claude/agents/`. **Sole source of truth for what each role is for and which model/effort it pins** — `CLAUDE.global.md` carries only the routing boundary and points here. | The role set, model/effort assignments, or the routing boundary changes. The per-role descriptions no longer need lockstep with `CLAUDE.global.md`; only the boundary sentence does. |
+| `onboarding/AGENTS.global.md` | DRGScripts | Client-neutral global instructions copied to Codex and OpenCode. | Shared policy changes or either client changes its instruction path. |
+| `onboarding/agents/*.md` + `install.py` | DRGScripts | Canonical subagent roles plus the Codex TOML/OpenCode Markdown translator. AGY registers the source roles per session. | A role, model tier mapping, native agent schema, or routing boundary changes. |
 | `onboarding/vault-structure.md` | DRGScripts | Vault tree + scaffold + which seeds go where. | The vault layout changes. |
 | `onboarding/vault-seeds/**` | DRGScripts | Real files copied into the member's vault (operating manual, wiki index, cheatsheets, tmux.conf). | The seeds drift from the PI's (sanitized) originals. |
 | `onboarding/dotfiles/tmux.conf` | DRGScripts | The group tmux config. | The PI's `~/.tmux.conf` changes. |
@@ -46,13 +48,16 @@ not by copying secrets or by being granted access to the PI's machines.
 | agent-skills | **clone**, not fork | Members track upstream with a plain `git pull`; no fork divergence to manage. |
 | User-specific paths | `/home/alon` → **`$HOME`** in agent-skills prose **and** the PI's `~/.claude/CLAUDE.md` | An agent reading prose expands `$HOME`; works identically for the PI; removes any "personalize" step. |
 | `~/.claude/settings.json` | **left literal**, except `.statusLine` | Its paths are personal infra (`~/agents` auto-handoff, gitkraken marketplace) the member never gets; Claude Code does **not** reliably shell-expand `$HOME` in non-command fields (e.g. `extraKnownMarketplaces.path`). Risk > benefit. The **one** key the member does get is `.statusLine` — a *command* field (absolute path is safe), written surgically by `onboarding/statusline/install.sh` (backup + idempotent), not by copying the PI's file. **NB:** the settings.json *hooks* stay PI-only — but the **skills** themselves *are* member-facing (ONBOARDING step 5). |
-| Skills | **member clones `agent-skills` and symlinks `~/.claude/skills` at it** (ONBOARDING step 5) | One repo, one symlink, `git pull` to update. gstack was removed in August 2026 — ten of its skills had zero recorded invocations over eight weeks, and the ones worth keeping could not be fixed durably in an upstream-owned repo whose files were regenerated from templates. `/review` was rewritten as ours inside `agent-skills`; the rest were dropped. Members migrating from the old runbook follow *Already installed gstack?* in step 5. |
+| Skills | **one clone exposed at `~/.agents/skills` and `~/.claude/skills`** (ONBOARDING step 5) | Codex and OpenCode share the agent-standard path; the Claude-compatible path preserves Claude Code and older skill assumptions. One `git pull` updates both. |
 | Obsidian sync | **Dropbox desktop client only; no remotely-save** | No mobile/phone requirement → filesystem sync is enough. One fewer plugin. |
 | Statusline | the **group `bin/cc-statusline.sh`** (model + colour-coded context-% + git location), not the PI's `~/agents` auto-handoff variant | Both variants share `bin/lib/cc-statusline-lib.sh` so model/context/location never drift between them; the member gets the clean one — no `~/agents` infra to stand up. Wired by `onboarding/statusline/install.sh`. |
 | Seeds | **sanitized**, real files under `vault-seeds/` | Easy `cp` into place; the PI's real remote-dev note (tailnet IPs, VPN endpoint, cluster/exit-node config) is excluded — a generic `Remote Dev — Pattern` replaces it. |
-| First pass | **Antigravity (AGY) only** | Smaller surface; the deferred list below grows it later. |
+| Supported clients | **Antigravity, Codex, and OpenCode** | Members choose their client and provider while sharing project `AGENTS.md`, skills, Headroom, Herdr, and the Linux host. |
+| Headroom profiles | **one service per client** (`agy:8787`, `codex:8788`, `opencode:8789`) | Each integration can be inspected, tuned, restarted, and removed independently. Codex and OpenCode use native targets; AGY uses `GEMINI_BASE_URL`. |
+| Codex context footer | **native status line by default; optional pinned source build for both budgets** | Stock Codex exposes `context-used` but no arbitrary footer command. The small patch is tested against one commit and installed beside the official binary as `codex-drg`. |
+| Cross-client skills | **shared discovery path, explicit compatibility** | A symlink makes a skill visible; it does not translate Claude tool names or hook protocols. Each client-specific skill must be ported or marked with an honest compatibility constraint in `agent-skills`. |
 | Multiplexer | **Herdr recommended; tmux also supported** (ONBOARDING step 6) | Herdr is agent-state-aware (mouse-first sidebar showing each agent's live state), which the cc-watchdog guard and the agent-skills auto-handoff/Phoenix watchers gate on natively — so it's the recommended default. (Members on AGY no longer install cc-watchdog; it stays PI-side, and the watchers remain deferred.) tmux stays fully supported for members who deliberately prefer a keyboard-first multiplexer. |
-| Herdr `settings.json` hook | **member runs `herdr integration install claude`** | Unlike the PI's literal settings.json, the herdr agent-state hook is generated by the installer into the member's own `~/.claude/settings.json` — no personal infra to copy. |
+| Herdr integrations | **members run the installer for each supported client** | `herdr integration install codex` and `herdr integration install opencode` generate client-native hooks without copying PI-specific configuration. AGY currently has no Herdr integration target and simply runs inside a pane. |
 | Contract gate — repo list | **the onboarding agent asks; no default list ships** | Which repos to gate is a judgment about where a misread request is expensive, and that varies per member — a list we guessed is one they disable in a week. ONBOARDING step 13 directs the agent to `AskUserQuestion` (multi-select) over the repos the member actually cloned. This is also the *second* member-facing `~/.claude/settings.json` hook after herdr's: it follows the herdr precedent (member runs an installer against their own file) rather than the "left literal" rule, because the hook paths are `~/.claude/skills/...` and carry no PI-personal infra. |
 | Silent-stall detection | **cc-watchdog** (`onboarding/watchdog/`): timer-driven dead-man's switch, not hook-driven heuristics | CC-hook watchers only wake at turn ends, so they share the session's blind spot (a 36 h TA die-out in 2026-07 motivated this). Deadlines declared by the session itself make false positives ~zero (a 2.75 h quiet suite run is legitimate work); a 6 h notify-only backstop covers sessions that never declared. It shipped to members while the first pass was Claude Code; on AGY they use the native `/schedule` timer instead (ONBOARDING step 12) and cc-watchdog stays PI-side. It remains standalone (tmux/Herdr + coreutils + systemd user timer + one Slack webhook) for anyone still on Claude Code. |
 
@@ -82,7 +87,6 @@ have no `cc-deadman`, so it had been pointing at commands they never installed),
 
 | Deferred | How to add when ready |
 |---|---|
-| **Codex** | Re-introduce the `~/.codex/skills` wiring; add a Codex section to ONBOARDING. The agent-skills repo is already agent-agnostic (see `ADAPTATION.md`). |
 | **Slack skills** (`slack-ask`/`slack-notify`) | Follow the existing Slack section in agent-skills `SETUP.md`: create a bot token, set `~/.claude/.slack-bot-token`, add the `#cc-comm`-style channel + allowlist. |
 | **MCP servers** (Gmail/Calendar/Drive/Slack) | The member re-authenticates each connector with their own accounts in Claude Code; nothing to copy. |
 | **gbrain** | Run the `/setup-gbrain` skill on the member's host. |
@@ -96,8 +100,11 @@ have no `cc-deadman`, so it had been pointing at commands they never installed),
    ```bash
    grep -rnEi 'xoxb-|/home/alon|alondana|100\.118|132\.68|zeus|technion|export [A-Z_]*KEY=[A-Za-z0-9]' onboarding/
    ```
-2. If the PI's `~/.claude/CLAUDE.md`, `~/.tmux.conf`, or vault operating manual changed,
+2. If the PI's global instructions, `~/.tmux.conf`, or vault operating manual changed,
    re-sync the genericized copies here.
-3. Keep the design spec (PI-local, not tracked:
+3. Audit `agent-skills` for client-specific tool names and paths. Test changed skills once in
+   Codex and OpenCode, and update their `compatibility` metadata instead of assuming discovery
+   means support.
+4. Keep the design spec (PI-local, not tracked:
    `docs/superpowers/specs/2026-06-30-mirror-setup-onboarding-design.md`) as the source of
    truth for the decisions above.

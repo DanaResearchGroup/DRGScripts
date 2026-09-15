@@ -1,4 +1,10 @@
-# statusline — an informative Claude Code status line
+# Status lines
+
+This directory contains the Claude Code status-line installer below and the optional
+[Codex dual-budget enhancement](./codex/README.md). OpenCode currently exposes usage through
+its TUI and `opencode stats` rather than a configurable footer command.
+
+## Claude Code
 
 A one-line status line that tells you, at a glance, **which model** you're on,
 **how full the context window is** (colour-coded), and **where you are in git**
