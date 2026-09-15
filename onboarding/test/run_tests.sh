@@ -42,6 +42,10 @@ agent_tmp=$(mktemp -d)
 trap 'rm -rf "$agent_tmp"' EXIT
 python3 "$onboarding/agents/install.py" codex --output "$agent_tmp/codex" >/dev/null
 python3 "$onboarding/agents/install.py" opencode --output "$agent_tmp/opencode" >/dev/null
+if python3 "$onboarding/agents/install.py" codex --output "$agent_tmp/codex" >/dev/null 2>&1; then
+  echo 'agent installer overwrote existing Codex definitions' >&2
+  exit 1
+fi
 python3 - "$agent_tmp" <<'PY'
 import pathlib
 import sys

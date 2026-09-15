@@ -70,6 +70,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: shellcheck
-        run: shellcheck onboarding/test/run_tests.sh
+        run: |
+          shellcheck onboarding/test/run_tests.sh \
+                     onboarding/statusline/codex/verify.sh
       - name: verify supported clients and local links
         run: onboarding/test/run_tests.sh

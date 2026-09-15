@@ -7,6 +7,10 @@ import argparse
 import json
 import pathlib
 import sys
+from collections.abc import Callable
+
+
+Renderer = Callable[[dict[str, str], str], str]
 
 
 CODEX_MODELS = {
@@ -63,10 +67,12 @@ def render_opencode(metadata: dict[str, str], body: str) -> str:
     )
 
 
-def default_destination(client: str) -> pathlib.Path:
+def client_configuration(client: str) -> tuple[pathlib.Path, Renderer, str]:
     if client == "codex":
-        return pathlib.Path.home() / ".codex" / "agents"
-    return pathlib.Path.home() / ".config" / "opencode" / "agents"
+        return pathlib.Path.home() / ".codex" / "agents", render_codex, ".toml"
+    if client == "opencode":
+        return pathlib.Path.home() / ".config" / "opencode" / "agents", render_opencode, ".md"
+    raise ValueError(f"unsupported client {client!r}")
 
 
 def main() -> int:
@@ -76,11 +82,10 @@ def main() -> int:
     args = parser.parse_args()
 
     source_dir = pathlib.Path(__file__).resolve().parent
-    destination = (args.output or default_destination(args.client)).expanduser()
+    default_destination, renderer, suffix = client_configuration(args.client)
+    destination = (args.output or default_destination).expanduser()
     destination.mkdir(parents=True, exist_ok=True)
 
-    renderer = render_codex if args.client == "codex" else render_opencode
-    suffix = ".toml" if args.client == "codex" else ".md"
     rendered = []
     for source in sorted(source_dir.glob("*.md")):
         metadata, body = parse_role(source)

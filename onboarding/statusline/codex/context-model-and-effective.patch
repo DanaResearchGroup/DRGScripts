@@ -76,6 +76,17 @@ index 0000000..523e190
 +        assert_eq!(context_usage_display("gpt-6-astra", None), None);
 +    }
 +}
+diff --git a/codex-rs/tui/src/chatwidget/status_controls.rs b/codex-rs/tui/src/chatwidget/status_controls.rs
+index 6dc0ab9..0c88428 100644
+--- a/codex-rs/tui/src/chatwidget/status_controls.rs
++++ b/codex-rs/tui/src/chatwidget/status_controls.rs
+@@ -432,6 +432,1 @@ impl ChatWidget {
+-    pub(super) fn status_line_context_used_percent(&self) -> Option<i64> {
+-        self.status_line_context_remaining_percent()
+-            .map(|remaining| (100 - remaining).clamp(0, 100))
+-    }
+-
+     pub(super) fn status_line_total_usage(&self) -> TokenUsage {
 diff --git a/codex-rs/tui/src/chatwidget/status_surfaces.rs b/codex-rs/tui/src/chatwidget/status_surfaces.rs
 index af547ce..676c1b8 100644
 --- a/codex-rs/tui/src/chatwidget/status_surfaces.rs

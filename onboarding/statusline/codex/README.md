@@ -41,15 +41,10 @@ Then build a separate binary:
 git clone https://github.com/openai/codex.git ~/Code/codex-context-status
 cd ~/Code/codex-context-status
 git checkout fc269b66adc37f3c855df222ad80b02733355c46
-git apply ~/Code/DRGScripts/onboarding/statusline/codex/context-model-and-effective.patch
-
-cd codex-rs
-cargo fmt -- --check
-cargo test -p codex-tui context_usage_display --lib
-cargo build -p codex-cli --bin codex --release
+~/Code/DRGScripts/onboarding/statusline/codex/verify.sh "$PWD"
 
 mkdir -p ~/.local/bin
-install -m 0755 target/release/codex ~/.local/bin/codex-drg
+install -m 0755 codex-rs/target/release/codex ~/.local/bin/codex-drg
 ~/.local/bin/codex-drg --version
 ```
 
@@ -59,7 +54,8 @@ build. The TOML status-line setting above is still required.
 
 ## Updating Codex
 
-The TUI changes often. When moving to a newer upstream release, create a fresh checkout, apply the
-patch with `git apply --check`, resolve any source changes deliberately, and run the focused test
-and build again. Update the pinned commit in this document only after those checks pass. Also
-review `model_maximum()` whenever the group's model catalog changes.
+The verifier requires a clean checkout because it applies the patch in place. The TUI changes
+often. When moving to a newer upstream release, create a fresh checkout, update the verifier's
+expected commit, resolve any source changes deliberately, and run it again. Update the pinned
+commit in this document only after those checks pass. Also review `model_maximum()` whenever the
+group's model catalog changes.
