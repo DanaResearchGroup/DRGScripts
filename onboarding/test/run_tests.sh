@@ -6,7 +6,7 @@ onboarding="$root/onboarding"
 
 require_text() {
   local pattern=$1 file=$2
-  if ! rg -q --fixed-strings -- "$pattern" "$file"; then
+  if ! grep -Fq -- "$pattern" "$file"; then
     printf 'missing required text in %s: %s\n' "$file" "$pattern" >&2
     return 1
   fi
@@ -25,7 +25,7 @@ require_text 'Context 188.3k/1050k 17.9% (188.3k/258.4k 72.9%)' "$onboarding/ONB
 require_text 'Context 188.3k/1050k 17.9% (188.3k/258.4k 72.9%)' \
   "$onboarding/statusline/codex/context-model-and-effective.patch"
 
-if rg -q --fixed-strings -- '--target generic' "$onboarding/ONBOARDING.md"; then
+if grep -Fq -- '--target generic' "$onboarding/ONBOARDING.md"; then
   echo 'obsolete Headroom generic target remains in ONBOARDING.md' >&2
   exit 1
 fi
