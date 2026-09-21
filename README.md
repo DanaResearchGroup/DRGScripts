@@ -28,6 +28,7 @@ Most scripts assume you already have RMG-Py / ARC / T3 installed and on your `PY
 | [`Servers/`](Servers/) | Per-server (Atlas / Azure / Zeus) ARC & T3 `settings.py`, `submit.py`, and submit-script templates. **Placeholders only** — copy into `~/.arc` / `~/.t3` and fill in your own values. |
 | [`bashrc/`](bashrc/.bashrc) | Example `.bashrc` aliases for the RMG / ARC / T3 workflow. |
 | [`data/`](data/) | Shared reference data used by some of the notebooks. |
+| [`onboarding/`](onboarding/ONBOARDING.md) | Group workstation setup for Antigravity, Codex, OpenCode, shared skills, Headroom, Herdr, and Obsidian. |
 
 ## Usage notes
 

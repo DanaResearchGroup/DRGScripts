@@ -1,24 +1,26 @@
-# Onboarding — mirror the group's Antigravity (AGY) setup
+# Onboarding — mirror the group's coding-agent setup
 
-> **How to use this file:** open the Antigravity CLI (`agy`) on your **office Linux PC** and say
-> *"read onboarding/ONBOARDING.md and walk me through it, one step at a time."* Antigravity
-> will run the commands with you and stop for anything that needs your input (logins, tokens).
+> **How to use this file:** open Antigravity (`agy`), Codex (`codex`), or OpenCode
+> (`opencode`) on your **office Linux PC** and say *"read onboarding/ONBOARDING.md and walk
+> me through it, one step at a time."* The agent will run the commands with you and stop for
+> account logins, API keys, and other input only you can provide.
 > Maintainers: see [MAINTAINING.md](./MAINTAINING.md).
 >
 > Written by Alon Grinberg Dana ([@alongd](https://github.com/alongd)).
 
 ## What you're building
 
-- **One real environment, on your office Linux PC** — the agent stack (Antigravity CLI,
-  skills, plugins, Herdr) lives here and only here.
+- **One real environment, on your office Linux PC** — the agent clients, shared skills,
+  instructions, Headroom proxies, and Herdr live here and only here.
 - **Your laptop (Win/Mac) is a thin client + Obsidian** — you SSH/mosh into the Linux PC
   and attach your Herdr session (or tmux), and you run Obsidian locally on the Dropbox-synced vault.
 - This is **your own independent setup**: your own Tailscale tailnet, your own Obsidian
-  vault, your own Antigravity account. Nothing here grants access to anyone else's machines.
+  vault, and your own model-provider accounts. Nothing here grants access to anyone else's
+  machines or credentials.
 
-First pass is **Antigravity only**, plus the **Headroom** token-compression layer (step 11),
-which also pre-wires the Codex proxy. Codex CLI itself, Slack, MCP connectors, and cluster
-compute are deferred — see [MAINTAINING.md](./MAINTAINING.md) for how to add them later.
+Install any combination of **Antigravity, Codex, and OpenCode**. The group configuration is
+shared where the clients support common standards (`AGENTS.md` and `~/.agents/skills`) and
+kept client-specific where their formats differ.
 
 ---
 
@@ -38,31 +40,73 @@ sudo tailscale up
 Log in with your account, give this host a clear name (e.g. `office-pc`). This joins
 **your own** tailnet — it's how your laptop will reach this machine later.
 
-### 3. Antigravity CLI
-Install the Antigravity CLI (`agy`) and authenticate with your account. Confirm it runs: `agy`.
+### 3. Coding-agent clients
 
-### 4. Customizations & Plugins
-Antigravity natively supports many advanced functionalities without third-party plugins. Custom rules, hooks, plugins, and MCP servers are managed via `~/.gemini/config/` (global) or `.agents/` (per-project).
+Install at least one client. Installing all three is useful for cross-checking difficult work;
+each client uses your own account or provider credentials.
+
+**Antigravity:** install the `agy` CLI and authenticate with your account. Confirm it starts
+with `agy`.
+
+**Codex:** install the official CLI, start it, and sign in with your ChatGPT account:
+
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+codex
+```
+
+**OpenCode:** install the official CLI, start it, and run `/connect` to choose a provider and
+enter that provider's API key:
+
+```bash
+curl -fsSL https://opencode.ai/install | bash
+opencode
+```
+
+OpenCode stores provider credentials in `~/.local/share/opencode/auth.json`. Keep that file
+local and out of Git. In each project, `/init` can create or improve a project `AGENTS.md`;
+review it and commit it with the project. See OpenCode's official
+[configuration](https://opencode.ai/docs/config/), [rules](https://opencode.ai/docs/rules/),
+and [skills](https://opencode.ai/docs/skills/) references when its format changes.
+
+### 4. Client configuration locations
+
+| Client | Global instructions | Global config | Project instructions |
+|---|---|---|---|
+| Antigravity | `~/.gemini/config/GEMINI.md` | `~/.gemini/config/` | `.agents/rules/` |
+| Codex | `~/.codex/AGENTS.md` | `~/.codex/config.toml` | `AGENTS.md` |
+| OpenCode | `~/.config/opencode/AGENTS.md` | `~/.config/opencode/opencode.json` | `AGENTS.md` |
+
+Codex can fall back to existing `CLAUDE.md` and `GEMINI.md` files when configured to do so.
+OpenCode uses `CLAUDE.md` only when no `AGENTS.md` exists. Prefer adding `AGENTS.md` to each
+project over maintaining three copies of the same project rules.
 
 ### 5. agent-skills
 The group's skills live in one repo — [`DanaResearchGroup/agent-skills`](https://github.com/DanaResearchGroup/agent-skills).
-Clone it and point your skills directory at the clone, so `git pull` is the only update step:
+Clone it once and expose the same checkout through the shared agent-standard path and the
+Claude-compatible path. Codex and OpenCode discover `~/.agents/skills` directly; the second
+link preserves Claude Code and older skill assumptions:
 ```bash
 git clone https://github.com/DanaResearchGroup/agent-skills.git ~/Code/agent-skills
-mkdir -p ~/.claude
-# If ~/.claude/skills already exists as a real directory, `ln -s` would create the link
-# INSIDE it rather than replacing it. Move it aside first, then link. The backup name is
-# timestamped for the same reason: `mv dir existing-dir` nests too, so a fixed .bak name
-# would bury your skills inside an older backup the second time you ran this.
-[ -e ~/.claude/skills ] && [ ! -L ~/.claude/skills ] \
-  && mv ~/.claude/skills ~/.claude/skills.bak."$(date +%Y%m%d%H%M%S)"
+mkdir -p ~/.agents ~/.claude
+for path in ~/.agents/skills ~/.claude/skills; do
+  [ -e "$path" ] && [ ! -L "$path" ] \
+    && mv "$path" "$path.bak.$(date +%Y%m%d%H%M%S)"
+done
+ln -sfn ~/Code/agent-skills ~/.agents/skills
 ln -sfn ~/Code/agent-skills ~/.claude/skills
-ls -ld ~/.claude/skills     # must print: ~/.claude/skills -> .../Code/agent-skills
+ls -ld ~/.agents/skills ~/.claude/skills
 ```
 That symlink is the whole install. Skills are self-describing — each carries its own
 description, so the agent finds the right one without a list to maintain. Read
 `agent-skills/README.md` for what's in there; `git -C ~/Code/agent-skills pull` updates
 everything at once.
+
+Discovery does not guarantee client compatibility. A skill that names Claude-only tools,
+`~/.claude` hooks, or Claude hook response JSON may remain Claude-specific even though Codex or
+OpenCode can see it. Treat the skill's `compatibility` field and its own setup section as
+authoritative. Maintainers should port the workflow or mark the limitation rather than relying
+on path aliases to hide it.
 
 We **do not use gstack.** It was a third-party suite we ran for a while and removed in
 August 2026: most of its skills went unused, and the ones we wanted couldn't be fixed
@@ -70,10 +114,11 @@ durably because the repo was upstream-owned. `/review` was rewritten as ours ins
 `agent-skills`; the rest were dropped. If you see `gstack` in an older doc or in your own
 setup, see *Already installed gstack?* below.
 
-**Status line — not yet ported.** The installer in this repo
-(`onboarding/statusline/install.sh`) patches Claude Code's `settings.json` and does **not**
-apply to Antigravity. Skip it and use AGY's built-in CLI telemetry for now; porting it to an
-AGY hook is tracked in [MAINTAINING.md](./MAINTAINING.md).
+Status displays differ by client. Claude Code users can install the script under
+[`statusline/`](./statusline/). Codex users should configure the native status line and can
+optionally build the group's dual-budget enhancement under
+[`statusline/codex/`](./statusline/codex/). OpenCode reports session usage through its TUI and
+`opencode stats`; it does not currently expose a Codex-style configurable footer.
 
 #### Already installed gstack? (migrating an existing setup)
 
@@ -116,14 +161,16 @@ supported if you deliberately prefer a keyboard-first, ubiquitous multiplexer.
 **Herdr** (recommended):
 ```bash
 curl -fsSL https://herdr.dev/install.sh | sh     # installs the `herdr` binary
-herdr integration install agy                    # wires the agent-state hook into AGY (if supported, otherwise hooks.json)
+herdr integration install codex
+herdr integration install opencode
 mkdir -p ~/.config/herdr                          # ensure the config dir exists before copying
 cp <path-to-this-DRGScripts-clone>/onboarding/dotfiles/herdr-config.toml ~/.config/herdr/config.toml
 ```
-The `/herdr` control skill is ported to AGY, so
-Antigravity can drive panes/tabs directly. Launch with `herdr`, then start
-`agy` inside a pane; detach with `prefix+q` (prefix is `ctrl+b`), `prefix+?`
-lists all bindings.
+If a client is not installed, skip its integration command. Herdr does not currently publish an
+`agy` integration target; AGY still runs normally inside a Herdr pane. Confirm the installed
+hooks with `herdr integration status`. The `/herdr` control skill lets supported agents drive
+panes and tabs. Launch with `herdr`, start your chosen agent inside a pane, detach with `prefix+q`
+(prefix is `ctrl+b`), and use `prefix+?` to list all bindings.
 
 **tmux** (alternative — if you deliberately prefer it):
 ```bash
@@ -142,8 +189,35 @@ alias olh='herdr --remote ol'                       # Herdr (needs herdr install
 alias olt='ssh -t ol "tmux attach || tmux new"'   # tmux
 ```
 
-### 7. Global Rules and Subagents (GEMINI.md)
-Migrate [CLAUDE.global.md](./CLAUDE.global.md) rules into your global Antigravity config (`~/.gemini/config/GEMINI.md`). Fix the **Obsidian Vault path** to match your Dropbox layout.
+### 7. Global instructions and subagents
+
+Copy the client-neutral group instructions, then edit the **Obsidian Vault path** to match
+your Dropbox layout:
+
+```bash
+mkdir -p ~/.codex ~/.config/opencode ~/.gemini/config
+cp <path-to-this-DRGScripts-clone>/onboarding/AGENTS.global.md ~/.codex/AGENTS.md
+cp <path-to-this-DRGScripts-clone>/onboarding/AGENTS.global.md ~/.config/opencode/AGENTS.md
+cp <path-to-this-DRGScripts-clone>/onboarding/CLAUDE.global.md ~/.gemini/config/GEMINI.md
+```
+
+For Codex, merge the following into `~/.codex/config.toml` so repositories that have not
+migrated yet still load their existing guides. Keep `project_doc_fallback_filenames` at the TOML
+top level, before any `[section]` header:
+
+```toml
+project_doc_fallback_filenames = ["CLAUDE.md", "GEMINI.md"]
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir", "git-branch", "context-used"]
+```
+
+The native `context-used` item prints a percentage. To reproduce the PI's exact dual-budget
+footer — for example `Context 188.3k/1050k 17.9% (188.3k/258.4k 72.9%)` — follow
+[`statusline/codex/README.md`](./statusline/codex/README.md). The first denominator is the
+model's published maximum; the parenthesized denominator is Codex's effective runtime budget.
+That enhanced text requires the documented source patch because stock Codex does not expose a
+custom status-line command.
 
 In Antigravity, **Subagents** are spawned dynamically via the `define_subagent` and `invoke_subagent` tools.
 Our four group roles live in [`onboarding/agents/`](./agents/) as one Markdown file each —
@@ -157,9 +231,23 @@ register each as a subagent:
 
 AGY has no persistent subagent registry yet, so this is a per-session step until it does.
 
-### 8. ARC project guide
-When you set up an ARC working copy, copy this repo's rules to it so Antigravity has the ARC conventions in context:
+Install equivalent native definitions from the same canonical role files:
+
 ```bash
+python3 <path-to-this-DRGScripts-clone>/onboarding/agents/install.py codex
+python3 <path-to-this-DRGScripts-clone>/onboarding/agents/install.py opencode
+```
+
+The installer maps the four cost tiers to current Codex models. OpenCode provider model IDs vary,
+so its generated roles inherit the active model; add a valid `provider/model` field later if you
+want a provider-specific pin. The installer refuses to overwrite an existing role. Verify with
+Codex's `/agent` picker and `opencode agent list`; invoke an OpenCode subagent with `@name`.
+
+### 8. ARC project guide
+When you set up an ARC working copy, copy this repo's rules into the standard project guide.
+Antigravity also gets its native rule copy:
+```bash
+cp <path-to-this-DRGScripts-clone>/ARC/CLAUDE.md <arc-path>/AGENTS.md
 mkdir -p <arc-path>/.agents/rules
 cp <path-to-this-DRGScripts-clone>/ARC/CLAUDE.md <arc-path>/.agents/rules/arc-rules.md
 ```
@@ -174,8 +262,11 @@ Follow [vault-structure.md](./vault-structure.md): create the folder tree and co
 seed files (operating manual, wiki index, tools cheatsheets) into place. Then open the
 folder in Obsidian ("Open folder as vault").
 
-### 11. Headroom token compression (AGY + Codex)
-[Headroom](https://github.com/headroomlabs-ai/headroom) compresses what your agent *reads* before it reaches the model — typically **12–90% fewer tokens, same answers**.
+### 11. Headroom token compression (AGY + Codex + OpenCode)
+
+[Headroom](https://github.com/headroomlabs-ai/headroom) compresses selected context before it
+reaches the model. Savings depend on the workload, so treat `headroom perf` as the evidence for
+your setup rather than assuming a fixed percentage.
 
 **a. Install** — the `headroom` CLI ships via pip; `pipx` keeps it isolated and on `PATH`:
 ```bash
@@ -185,18 +276,26 @@ pipx ensurepath                     # puts ~/.local/bin on PATH for future shell
 export PATH="$HOME/.local/bin:$PATH" && headroom --version   # this shell
 ```
 
-**b. Set up both proxies** — For Antigravity (`agy`), we manually route its traffic through Headroom using environment variables until it receives official installer support.
+**b. Set up one proxy per client.** Separate ports and profiles make each integration easy to
+inspect, restart, or remove. Headroom has native Codex and OpenCode targets. Antigravity still
+uses a provider-only service plus `GEMINI_BASE_URL`. Run only the command blocks for clients you
+are onboarding.
 ```bash
-# Start a systemd service for the AGY proxy (generic target, Google backend)
+# AGY service: no direct client mutation; the shell variable below performs the routing.
 headroom install apply --preset persistent-service --runtime python --scope provider \
-  --providers manual --target generic --backend google --port 8787 --profile agy
-  
-# Setup Codex CLI proxy
+  --providers manual --backend google --port 8787 --profile agy
+
+# Codex and OpenCode: Headroom writes reversible, client-native provider configuration.
 headroom install apply --preset persistent-service --runtime python --scope provider \
   --providers manual --target codex  --backend openai    --port 8788 --profile codex
+headroom install apply --preset persistent-service --runtime python --scope provider \
+  --providers manual --target opencode --backend openai --port 8789 --profile opencode
 ```
-Then, inject the Base URL into your bash profile for Antigravity. The guard keeps a re-run from
-appending a second copy:
+If OpenCode uses an Anthropic provider, set its Headroom backend to `anthropic` instead. The
+installer preserves unrelated OpenCode settings and records a backup for removal.
+
+If you installed the AGY profile, inject its base URL into your shell profile. The guard keeps a
+re-run from appending a second copy:
 ```bash
 grep -qxF 'export GEMINI_BASE_URL="http://127.0.0.1:8787"' ~/.bashrc \
   || echo 'export GEMINI_BASE_URL="http://127.0.0.1:8787"' >> ~/.bashrc
@@ -206,9 +305,11 @@ grep -qxF 'export GEMINI_BASE_URL="http://127.0.0.1:8787"' ~/.bashrc \
 verbatim, strict accuracy guard. Do **not** set `HEADROOM_SAVINGS_PROFILE`: its only valid
 values re-impose the conservative defaults.
 ```bash
-for svc in agy codex; do
-  d="$HOME/.config/systemd/user/headroom-$svc.service.d"; mkdir -p "$d"
-  cat > "$d/tuning.conf" <<'EOF'
+# Keep only the profiles you installed in step b, for example: services=(codex opencode)
+services=(agy codex opencode)
+for svc in "${services[@]}"; do
+  dropin_dir="$HOME/.config/systemd/user/headroom-$svc.service.d"; mkdir -p "$dropin_dir"
+  cat > "$dropin_dir/tuning.conf" <<'EOF'
 [Service]
 Environment=HEADROOM_COMPRESS_USER_MESSAGES=1
 Environment=HEADROOM_PROTECT_RECENT=2
@@ -217,22 +318,26 @@ Environment=HEADROOM_ACCURACY_GUARD=strict
 EOF
 done
 systemctl --user daemon-reload
-systemctl --user restart headroom-agy headroom-codex
+for svc in "${services[@]}"; do
+  systemctl --user restart "headroom-$svc"
+done
 sudo loginctl enable-linger "$USER"   # keep proxies up across logout/reboot
 ```
 
-**d. Verify:**
+**d. Verify** the same profiles selected in `services`:
 ```bash
-headroom install status --profile agy   # Status: running · Healthy: yes
-headroom install status --profile codex
-headroom perf                              # savings, once traffic has flowed
+for profile in "${services[@]}"; do
+  headroom install status --profile "$profile"   # Status: running · Healthy: yes
+done
+headroom perf                                    # savings, once traffic has flowed
 ```
 
-> **Restart to take effect.** Any open `agy` session keeps going direct until restarted. Start a fresh session and it routes through the proxy.
+> **Restart to take effect.** Open agent sessions retain their old provider settings. Start fresh
+> sessions for the clients whose profiles you installed.
 
-> **To reverse it entirely:** `headroom install remove --profile agy && headroom install
-> remove --profile codex`, then `rm -f ~/.config/systemd/user/headroom-{agy,codex}.service.d/tuning.conf
-> && systemctl --user daemon-reload`. Don't forget to remove `GEMINI_BASE_URL` from your `~/.bashrc`.
+> **To reverse it entirely:** run `headroom install remove --profile <name>` and remove
+> `tuning.conf` for each profile in `services`, then run `systemctl --user daemon-reload`. If AGY
+> was selected, also remove `GEMINI_BASE_URL` from `~/.bashrc`.
 
 ### 12. Silent-stall guard for long agent sessions
 
@@ -360,14 +465,18 @@ Add repos only where the log shows it catching real definition gaps.
 - [ ] `tailscale status` shows your tailnet and this host.
 - [ ] From the laptop: `ssh`/`mosh` into the Linux PC and attach your session
       (`herdr --remote`, or `tmux attach`) works.
-- [ ] An Antigravity session lists the group skills (type `/` and look for
-      `/review`, `/handoff`, `/obsidian-vault`, …).
-- [ ] The status line (if installed) shows the model name, context-window %, and
-      your git location.
+- [ ] Each installed client sees the shared skills: ask it to list `review`, `handoff`, and
+      `obsidian-vault`, and confirm `ls -ld ~/.agents/skills` points at the group clone.
+- [ ] Codex: `/statusline` includes `context-used`. With the optional group build, it renders
+      both budgets in the form `Context used/model % (used/effective %)`. OpenCode:
+      `opencode stats` returns session/token statistics.
+- [ ] `herdr integration status` reports current Codex and OpenCode integrations for the
+      clients you installed.
 - [ ] Obsidian opens the synced vault on the Linux PC **and** on the laptop; the scaffolded
       tree (`Code/`, `knowledge/`, `tools/`, …) is present with the seed notes.
-- [ ] `headroom install status --profile agy` and `--profile codex` both show *running /
-      healthy*. In the shell you'll launch AGY from, `echo $GEMINI_BASE_URL` prints
+- [ ] `headroom install status --profile agy`, `--profile codex`, and `--profile opencode`
+      show *running / healthy* for the clients you installed. In the shell you'll launch AGY
+      from, `echo $GEMINI_BASE_URL` prints
       `http://127.0.0.1:8787` — open a **new** shell first, since step 11 only appended it to
       `~/.bashrc`.
 - [ ] Launch `agy` and test the native schedule tool: `/schedule 300 Check if tests finished`. Ensure the scheduled task runs in the background.
@@ -380,7 +489,5 @@ Add repos only where the log shows it catching real definition gaps.
 
 ## D. Later (deferred)
 
-Codex CLI (its Headroom proxy is already set up in step 11 — just install Codex and it routes),
-Slack notifications, MCP connectors, gbrain, and cluster/PBS compute are intentionally out of
-this first pass. When you're ready, [MAINTAINING.md](./MAINTAINING.md) lists each and
-how to un-defer it.
+Slack notifications, MCP connectors, gbrain, and cluster/PBS compute remain outside the first
+pass. When you're ready, [MAINTAINING.md](./MAINTAINING.md) lists each and how to add it.
